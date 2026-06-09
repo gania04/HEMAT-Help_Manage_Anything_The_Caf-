@@ -129,9 +129,10 @@ export default function WasteClient({
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Jumlah yang Dibuang</label> // NOSONAR
+                <label htmlFor="waste_quantity" className="block text-sm font-bold text-gray-700 mb-1">Jumlah yang Dibuang</label>
                 <div className="relative">
                   <input 
+                    id="waste_quantity"
                     required 
                     type="number" 
                     step="0.01" 
