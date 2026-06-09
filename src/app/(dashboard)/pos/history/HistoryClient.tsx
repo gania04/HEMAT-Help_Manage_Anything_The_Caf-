@@ -53,7 +53,7 @@ const handleVoid = async (id: string) => {
                 <td className="p-4">
                   <ul className="text-sm text-gray-600 list-disc pl-4">
                     {trx.transaction_items?.map((item: any, idx: number) => (
-                      <li key={`key-${idx}`}>
+                      <li key={`history-${item.id || idx}`}>
                         {item.quantity}x {item.menus?.menu_name || 'Item'}
                       </li>
                     ))}

@@ -15,7 +15,7 @@ type InventoryItem = {
 };
 
 export default function InventoryClient({ initialItems }: Readonly<{ initialItems: InventoryItem[] }>) {
-  const [items, setItems] = useState<InventoryItem[]>(initialItems);
+  const [items] = useState<InventoryItem[]>(initialItems);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);

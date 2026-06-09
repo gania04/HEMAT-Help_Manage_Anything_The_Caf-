@@ -14,7 +14,7 @@ type ZakatProps = {
   };
 };
 
-export function ZakatWidget({ initialData }: ZakatProps) {
+export function ZakatWidget({ initialData }: Readonly<ZakatProps>) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [newPrice, setNewPrice] = useState(initialData.goldPrice.toString());
   const [isLoading, setIsLoading] = useState(false);

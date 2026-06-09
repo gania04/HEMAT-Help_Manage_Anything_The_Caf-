@@ -115,16 +115,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
     }));
 
     try {
-      if (!navigator.onLine) {
-        const { saveOfflineTransaction } = await import('@/lib/idb-store');
-        await saveOfflineTransaction(checkoutCart, method, totalHarga);
-        
-        setCart([]);
-        setNotification({
-          type: 'success',
-          message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
-        });
-      } else {
+      if (navigator.onLine) {
         const result = await processOrder(checkoutCart, method, totalHarga, activeChannel);
         
         if (result.success) {
@@ -141,9 +132,18 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             message: result.error || 'Terjadi kesalahan'
           });
         }
+      } else {
+        const { saveOfflineTransaction } = await import('@/lib/idb-store');
+        await saveOfflineTransaction(checkoutCart, method, totalHarga);
+        
+        setCart([]);
+        setNotification({
+          type: 'success',
+          message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
+        });
       }
     } catch (_error: unknown) {
-      
+      console.error('POS Checkout Error:', _error);
       setNotification({
         type: 'error',
         message: 'Gagal memproses pembayaran'
@@ -279,15 +279,14 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           const currentPrice = getPrice(item);
 
           return (
-            <div 
+            <button 
+              type="button"
               key={item.id}
               onClick={() => {
                 if (!isProcessing && !isOutOfStock) addToCart(item);
               }}
               className={`bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center transition relative ${
-                isProcessing ? 'opacity-50 cursor-not-allowed' : 
-                isOutOfStock ? 'opacity-50 cursor-not-allowed grayscale' : 
-                'hover:shadow-md hover:border-[#00875A] hover:bg-green-50/30 cursor-pointer active:scale-95'
+                isProcessing ? 'opacity-50 cursor-not-allowed' : (isOutOfStock ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:shadow-md hover:border-[#00875A] hover:bg-green-50/30 cursor-pointer active:scale-95')
               }`}
             >
               <div className="absolute top-2 right-2 bg-gray-100 text-xs font-bold px-2 py-1 rounded border border-gray-200">
@@ -307,7 +306,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                   </span>
                 </div>
               )}
-            </div>
+            </button>
           );
         })}
       </div>
