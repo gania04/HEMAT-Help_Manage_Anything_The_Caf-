@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { calculateHppSummary } from '@/lib/hpp-calculator';
 
 type Ingredient = {
   id: string;
@@ -40,10 +41,7 @@ export default function HppCalculatorPage() {
   };
 
   // Kalkulasi Otomatis
-  const totalMaterialCost = ingredients.reduce((total, ing) => total + (ing.quantity * ing.pricePerUnit), 0);
-  const overheadCost = totalMaterialCost * 0.1; // 10% Overhead margin
-  const totalHPP = totalMaterialCost + overheadCost;
-  const recommendedSellingPrice = totalHPP * 2.5; // Markup 150%
+  const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients);
 
   return (
     <main className="h-full overflow-y-auto p-10 bg-soft-gray">

@@ -7,7 +7,7 @@ import { processOrder, getPosMenusWithStock } from '@/lib/pos-actions';
 type MenuItem = {
   id: string;
   name: string;
-  price: number;
+  prices: Record<string, number>;
   icon: string;
   maxPortions?: number;
 };
@@ -16,28 +16,52 @@ type CartItem = MenuItem & {
   quantity: number;
 };
 
+const CHANNELS = [
+  { id: 'dine_in', label: 'Dine-in (Kasir)' },
+  { id: 'takeaway', label: 'Takeaway' },
+  { id: 'gofood', label: 'GoFood' },
+  { id: 'grabfood', label: 'GrabFood' },
+  { id: 'shopeefood', label: 'ShopeeFood' }
+];
+
 export default function PosPage() {
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
+  const [activeChannel, setActiveChannel] = useState('dine_in');
 
   const fetchMenus = async () => {
     const data = await getPosMenusWithStock();
     setMenus(data);
   };
 
-  // Ambil menu dan stok saat pertama kali komponen dimuat
   useEffect(() => {
     fetchMenus();
+    
+    setIsOffline(!navigator.onLine);
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
+
+  const getPrice = (item: MenuItem) => {
+    return item.prices[activeChannel] || item.prices['dine_in'] || 0;
+  };
 
   const addToCart = (item: MenuItem) => {
     setNotification(null);
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
       
-      // Validasi Stok
       const currentQty = existingItem ? existingItem.quantity : 0;
       if (item.maxPortions !== undefined && currentQty >= item.maxPortions) {
         setNotification({ type: 'error', message: `Stok ${item.name} tidak mencukupi!` });
@@ -61,13 +85,10 @@ export default function PosPage() {
       return prevCart.map((item) => {
         if (item.id === id) {
           const newQuantity = item.quantity + delta;
-          
-          // Validasi Stok saat ditambah
           if (delta > 0 && item.maxPortions !== undefined && newQuantity > item.maxPortions) {
              setNotification({ type: 'error', message: `Stok ${item.name} hanya tersisa ${item.maxPortions} porsi!` });
              return item;
           }
-
           return { ...item, quantity: newQuantity > 0 ? newQuantity : 0 };
         }
         return item;
@@ -83,7 +104,7 @@ export default function PosPage() {
     }).format(number);
   };
 
-  const totalHarga = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.quantity), 0);
 
   const handleCheckout = async (method: string) => {
     if (cart.length === 0) return;
@@ -91,24 +112,41 @@ export default function PosPage() {
     setIsProcessing(true);
     setNotification(null);
 
+    // Siapkan cart dengan format price statis saat checkout
+    const checkoutCart = cart.map(c => ({
+      ...c,
+      price: getPrice(c)
+    }));
+
     try {
-      const result = await processOrder(cart, method, totalHarga);
-      
-      if (result.success) {
+      if (!navigator.onLine) {
+        const { saveOfflineTransaction } = await import('@/lib/idb-store');
+        await saveOfflineTransaction(checkoutCart, method, totalHarga);
+        
         setCart([]);
         setNotification({
           type: 'success',
-          message: `${result.message} (Order ID: ${result.orderId})`
+          message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
         });
-        // REFRESH MENU & STOK setelah checkout sukses!
-        fetchMenus();
       } else {
-        setNotification({
-          type: 'error',
-          message: result.error || 'Terjadi kesalahan'
-        });
+        const result = await processOrder(checkoutCart, method, totalHarga, activeChannel);
+        
+        if (result.success) {
+          setCart([]);
+          setNotification({
+            type: 'success',
+            message: `${result.message} (Order ID: ${result.orderId})`
+          });
+          fetchMenus();
+        } else {
+          setNotification({
+            type: 'error',
+            message: result.error || 'Terjadi kesalahan'
+          });
+        }
       }
     } catch (error) {
+      console.error(error);
       setNotification({
         type: 'error',
         message: 'Gagal memproses pembayaran'
@@ -120,7 +158,7 @@ export default function PosPage() {
 
   const cartPanel = (
     <div className="flex flex-col h-full p-4 relative">
-      <h2 className="text-xl font-bold mb-4 text-[#00875A]">Keranjang</h2>
+      <h2 className="text-xl font-bold mb-4 text-[#00875A]">Keranjang ({CHANNELS.find(c => c.id === activeChannel)?.label})</h2>
       
       {notification && (
         <div className={`mb-4 p-3 rounded-lg text-sm font-bold shadow-sm flex items-center justify-between ${
@@ -142,7 +180,7 @@ export default function PosPage() {
             <div key={item.id} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm flex items-center justify-between">
               <div className="flex-1 pr-2">
                 <p className="font-bold text-sm leading-tight mb-1">{item.name}</p>
-                <p className="text-xs text-[#00875A] font-bold">{formatRupiah(item.price)}</p>
+                <p className="text-xs text-[#00875A] font-bold">{formatRupiah(getPrice(item))}</p>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1 border border-gray-100">
                 <button 
@@ -207,7 +245,7 @@ export default function PosPage() {
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-10 rounded-lg flex items-center justify-center">
           <div className="bg-white p-4 rounded-xl shadow-lg border border-gray-100 flex items-center gap-3">
              <div className="w-5 h-5 border-2 border-[#00875A] border-t-transparent rounded-full animate-spin"></div>
-             <span className="font-bold text-[#00875A]">Memproses Pembayaran...</span>
+             <span className="font-bold text-[#00875A]">Memproses...</span>
           </div>
         </div>
       )}
@@ -218,15 +256,30 @@ export default function PosPage() {
     <PosLayout cartPanel={cartPanel}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[#00875A]">Pilih Menu</h2>
-        <span className="text-sm font-bold text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-100">
-          Stok Realtime Terhubung 🟢
-        </span>
+        <div className="flex items-center gap-4">
+          <select
+            value={activeChannel}
+            onChange={(e) => setActiveChannel(e.target.value)}
+            className="px-4 py-2 bg-white border border-[#00875A] text-[#00875A] font-bold rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+          >
+            {CHANNELS.map(c => (
+              <option key={c.id} value={c.id}>{c.label}</option>
+            ))}
+          </select>
+          <span className={`text-sm font-bold px-3 py-2 rounded-lg shadow-sm border ${
+            isOffline ? 'bg-yellow-100 text-yellow-700 border-yellow-200' : 'bg-[#E6F4EA] text-[#00875A] border-[#00875A]/20'
+          }`}>
+            {isOffline ? 'Offline Mode 🔴' : 'Online 🟢'}
+          </span>
+        </div>
       </div>
+      
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-y-auto pb-10">
         {menus.length === 0 ? (
            <p className="text-gray-400 font-bold col-span-4 text-center mt-10">Memuat menu dan stok...</p>
         ) : menus.map((item) => {
           const isOutOfStock = item.maxPortions === 0;
+          const currentPrice = getPrice(item);
 
           return (
             <div 
@@ -248,7 +301,7 @@ export default function PosPage() {
                 <span className="text-5xl">{item.icon}</span>
               </div>
               <span className="font-bold text-center text-sm leading-tight mb-1">{item.name}</span>
-              <span className="text-sm font-bold text-[#00875A]">{formatRupiah(item.price)}</span>
+              <span className="text-sm font-bold text-[#00875A]">{formatRupiah(currentPrice)}</span>
               
               {isOutOfStock && (
                 <div className="absolute inset-0 bg-white/70 rounded-xl flex items-center justify-center">

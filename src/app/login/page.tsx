@@ -1,20 +1,17 @@
 'use client'
 
 import { useActionState } from 'react';
+import Image from 'next/image';
 import { loginUser } from '@/lib/auth-actions';
 
 export default function LoginPage() {
-  const [state, formAction, isPending] = useActionState(
-    async (prevState: any, formData: FormData) => {
-      return await loginUser(formData);
-    },
-    null
-  );
+  const [state, formAction, isPending] = useActionState(loginUser, null);
 
   return (
     <div className="flex h-screen items-center justify-center bg-soft-gray">
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Image src="/icon-192x192.png" alt="HEMAT Logo" width={80} height={80} className="mb-4" unoptimized={true} />
           <h1 className="text-4xl font-bold text-[#00875A] tracking-tight">HEMAT</h1>
           <p className="text-gray-500 mt-2">Help Manage Anything The Café</p>
         </div>

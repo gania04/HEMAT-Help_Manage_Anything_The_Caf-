@@ -1,11 +1,17 @@
 import { Card } from "@/components/ui/Card";
-import { getDashboardStats } from "@/lib/dashboard-actions";
+import { getDashboardStats, getRevenueTrend, getPaymentRatios } from "@/lib/dashboard-actions";
+import { RevenueChart, PaymentRatioChart } from "@/components/charts/DashboardCharts";
+import { calculateZakatNisab } from "@/lib/zakat-actions";
+import { ZakatWidget } from "@/components/dashboard/ZakatWidget";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
   const stats = await getDashboardStats();
+  const trendData = await getRevenueTrend();
+  const ratioData = await getPaymentRatios();
+  const zakatData = await calculateZakatNisab();
 
   const formatRupiah = (number: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -18,6 +24,7 @@ export default async function Home() {
   return (
     <main className="h-full overflow-y-auto p-10">
       <h1 className="text-3xl font-bold text-primary-green mb-6">DASHBOARD PERFORMA</h1>
+      
       <div className="grid grid-cols-4 gap-6 mb-8">
         <Card className="border-l-4 border-l-[#00875A] shadow-sm">
           <h3 className="text-gray-500 text-sm font-medium mb-1">Total Kas</h3>
@@ -37,17 +44,33 @@ export default async function Home() {
         </Card>
       </div>
 
-      <Card variant="audit" className="mb-8 border-2 border-dashed border-[#00875A] bg-[#E6F4EA]/30 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-bold text-primary-green flex items-center gap-2 mb-1">
-              <span>✨</span> Audit Kilat AI
-            </h3>
-            <p className="text-sm text-gray-700">{stats.audit.message}</p>
-          </div>
-          <button className="text-sm text-primary-green font-bold underline">Lihat Detail</button>
+      <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="col-span-2">
+          <Card variant="audit" className="h-full border-2 border-dashed border-[#00875A] bg-[#E6F4EA]/30 shadow-sm flex flex-col justify-center">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-primary-green flex items-center gap-2 mb-1">
+                  <span>✨</span> Audit Kilat AI
+                </h3>
+                <p className="text-sm text-gray-700">{stats.audit.message}</p>
+              </div>
+              <button className="text-sm text-primary-green font-bold underline">Lihat Detail</button>
+            </div>
+          </Card>
         </div>
-      </Card>
+        <div className="col-span-1">
+          <ZakatWidget initialData={zakatData} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6 pb-10">
+        <div className="col-span-2">
+          <RevenueChart data={trendData} />
+        </div>
+        <div className="col-span-1">
+          <PaymentRatioChart data={ratioData} />
+        </div>
+      </div>
     </main>
   );
 }
