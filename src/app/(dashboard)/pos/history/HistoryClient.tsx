@@ -15,7 +15,7 @@ const handleVoid = async (id: string) => {
     try {
       await requestVoid(id);
       alert('Berhasil diajukan! Menunggu persetujuan Manajer.');
-      window.location.reload();
+      globalThis.location.reload();
     } catch (_err: unknown) {
       alert('Gagal: ' + (_err as Error).message);
     } finally {

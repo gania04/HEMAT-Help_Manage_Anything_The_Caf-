@@ -9,7 +9,7 @@ export function OfflineSyncManager() {
   useEffect(() => {
     // Registrasi Service Worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
+      globalThis.addEventListener('load', function() {
         navigator.serviceWorker.register('/sw.js').then(
           function(_registration) {
             
@@ -37,8 +37,8 @@ export function OfflineSyncManager() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOffline(!navigator.onLine);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    globalThis.addEventListener('online', handleOnline);
+    globalThis.addEventListener('offline', handleOffline);
 
     // Coba sync saat aplikasi pertama kali dimuat jika online
     if (navigator.onLine) {
@@ -46,8 +46,8 @@ export function OfflineSyncManager() {
     }
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      globalThis.removeEventListener('online', handleOnline);
+      globalThis.removeEventListener('offline', handleOffline);
     };
   }, []);
 

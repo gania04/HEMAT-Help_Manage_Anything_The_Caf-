@@ -47,7 +47,7 @@ export default function InventoryClient({ initialItems }: { initialItems: Invent
         await addInventoryItem(formData);
       }
       handleCloseModal();
-      window.location.reload(); // Simple refresh to get new server data after revalidate
+      globalThis.location.reload(); // Simple refresh to get new server data after revalidate
     } catch (_error: unknown) {
       alert('Terjadi kesalahan saat menyimpan data');
     } finally {
@@ -60,7 +60,7 @@ export default function InventoryClient({ initialItems }: { initialItems: Invent
       setIsProcessing(true);
       try {
         await deleteInventoryItem(id);
-        window.location.reload();
+        globalThis.location.reload();
       } catch (_error: unknown) {
         alert('Gagal menghapus data');
       } finally {

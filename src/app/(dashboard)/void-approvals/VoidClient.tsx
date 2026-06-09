@@ -15,7 +15,7 @@ const handleApprove = async (id: string) => {
     try {
       await approveVoid(id);
       alert('Void berhasil disetujui! Stok telah dikembalikan.');
-      window.location.reload();
+      globalThis.location.reload();
     } catch (_err: unknown) {
       alert('Gagal menyetujui void: ' + (_err as Error).message);
     } finally {

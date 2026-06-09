@@ -82,10 +82,10 @@ declare global {
 if (!globalThis._globalDb) {
   // Deep clone agar state aman saat re-inisialisasi
   globalThis._globalDb = {
-    inventory: JSON.parse(JSON.stringify(initialInventory)),
-    menus: JSON.parse(JSON.stringify(initialMenus)),
-    recipes: JSON.parse(JSON.stringify(initialRecipes)),
-    debts: JSON.parse(JSON.stringify(initialDebts))
+    inventory: structuredClone(initialInventory),
+    menus: structuredClone(initialMenus),
+    recipes: structuredClone(initialRecipes),
+    debts: structuredClone(initialDebts)
   };
 }
 

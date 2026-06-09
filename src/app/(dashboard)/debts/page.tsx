@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getDebts, payDebt } from '@/lib/debt-actions';
-import type { DebtItem } from '@/lib/mock-db';
+
 import { formatRupiah } from '@/lib/utils';
 
 export default function DebtsPage() {

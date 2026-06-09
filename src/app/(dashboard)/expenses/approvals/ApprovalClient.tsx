@@ -20,7 +20,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
         await rejectExpense(id);
         alert('Pengeluaran ditolak!');
       }
-      window.location.reload();
+      globalThis.location.reload();
     } catch (_err: unknown) {
       alert('Gagal: ' + (_err as Error).message);
     } finally {
