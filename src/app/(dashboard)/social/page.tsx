@@ -141,7 +141,7 @@ return (
                         <td className="p-3 font-bold text-[#8E24AA]">{formatRupiah(report.amount)}</td>
                         <td className="p-3 text-center">
                           {report.proof_image_url ? (
-                            <a href={report.proof_image_url} target="_blank" rel="noreferrer" className="text-xs font-bold text-blue-500 hover:underline">
+                            <a href={report.proof_image_url} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-blue-500 hover:underline">
                               Lihat Struk
                             </a>
                           ) : (

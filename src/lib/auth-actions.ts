@@ -34,6 +34,7 @@ export async function loginUser(prevState: any, formData: FormData) {
   cookieStore.set('hemat_session', JSON.stringify({ role: user.role, name: user.name, username: user.username }), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
     maxAge: 60 * 60 * 24, // 1 Hari
     path: '/',
   });
