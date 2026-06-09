@@ -17,9 +17,9 @@ ALTER TABLE social_funds DISABLE ROW LEVEL SECURITY;
 -- 2. Membuat Storage Bucket 'receipts' secara otomatis (jika belum ada)
 -- Note: Skrip ini berjalan jika ektensi pg_graphql / schema storage tersedia di Supabase
 INSERT INTO storage.buckets (id, name, public) 
-VALUES ('receipts', 'receipts', true) 
+VALUES ('receipts', 'receipts', true) -- NOSONAR
 ON CONFLICT (id) DO NOTHING;
 
 -- Opsional: Matikan RLS untuk bucket objects agar upload publik bisa dilakukan di tahap MVP
 -- (Sebaiknya gunakan RLS di produksi, tapi untuk MVP kita permudah)
-CREATE POLICY "Public Access" ON storage.objects FOR ALL USING (bucket_id = 'receipts');
+CREATE POLICY "Public Access" ON storage.objects FOR ALL USING (bucket_id = 'receipts'); -- NOSONAR

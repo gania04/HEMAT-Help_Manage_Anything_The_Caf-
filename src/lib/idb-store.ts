@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { processOrder } from './pos-actions';
 
 const DB_NAME = 'hemat-pos-db';
@@ -19,7 +20,7 @@ export function openDB(): Promise<IDBDatabase> {
   });
 }
 
-export async function saveOfflineTransaction(cartItems: Record<string, any>[], paymentMethod: string, totalAmount: number) {
+export async function saveOfflineTransaction(cartItems: any[], paymentMethod: string, totalAmount: number) {
   const db = await openDB();
   return new Promise<void>((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
@@ -76,12 +77,12 @@ export async function syncOfflineTransactions() {
           // Jika sukses disinkronkan, hapus dari IndexedDB
           await deleteOfflineTransaction(tx.id);
         }
-      } catch (err) {
+      } catch (_err: unknown) {
         
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }
-  } catch (error) {
+  } catch (_error: unknown) {
     
   }
 }

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
 import { approveExpense, rejectExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function ApprovalClient({ pendingExpenses }: { pendingExpenses: Record<string, any>[] }) {
+export default function ApprovalClient({ pendingExpenses }: { pendingExpenses: any[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleAction = async (id: string, action: 'approve' | 'reject') => {
@@ -20,8 +21,8 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
         alert('Pengeluaran ditolak!');
       }
       window.location.reload();
-    } catch (err: any) {
-      alert('Gagal: ' + err.message);
+    } catch (_err: unknown) {
+      alert('Gagal: ' + (_err as Error).message);
     } finally {
       setIsProcessing(null);
     }

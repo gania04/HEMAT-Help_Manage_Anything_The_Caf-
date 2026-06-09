@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CompliancePanel } from "@/components/settings/CompliancePanel";

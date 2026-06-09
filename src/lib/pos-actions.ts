@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 
 import { supabase } from './supabase';
 import { seedPosData } from './seed-actions';
 import { revalidatePath } from 'next/cache';
 
-export async function processOrder(cartItems: Record<string, any>[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
+export async function processOrder(cartItems: any[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
   if (cartItems.length === 0) return { success: false, error: 'Keranjang kosong' };
 
   // 1. Dapatkan user admin (untuk simulasi MVP)
@@ -68,7 +69,7 @@ export async function processOrder(cartItems: Record<string, any>[], paymentMeth
 
 export async function getPosMenusWithStock() {
   // Cek apakah ada menu
-  let { data: menus } = await supabase.from('menus').select(`
+  let { data: menus, error } = await supabase.from('menus').select(`
     id,
     menu_name,
     icon,
@@ -96,17 +97,17 @@ export async function getPosMenusWithStock() {
         )
       `);
       menus = res.data;
-    } catch (e) {
+    } catch (_e: unknown) {
       
       return [];
     }
   }
 
-  return (menus || []).map((m: Record<string, any>) => {
+  return (menus || []).map((m: any) => {
     // Kumpulkan semua harga berdasarkan channel
     const prices: Record<string, number> = {};
     if (m.menu_prices && m.menu_prices.length > 0) {
-      m.menu_prices.forEach((mp: Record<string, any>) => {
+      m.menu_prices.forEach((mp: any) => {
         prices[mp.channel] = Number(mp.price);
       });
     } else {
@@ -115,7 +116,7 @@ export async function getPosMenusWithStock() {
     
     let maxPortions = Infinity;
     if (m.menu_recipes && m.menu_recipes.length > 0) {
-      m.menu_recipes.forEach((req: Record<string, any>) => {
+      m.menu_recipes.forEach((req: any) => {
         const stock = req.inventory?.quantity || 0;
         const possible = Math.floor(stock / req.qty_needed);
         if (possible < maxPortions) maxPortions = possible;

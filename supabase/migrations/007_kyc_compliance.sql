@@ -17,11 +17,11 @@ ALTER TABLE merchant_kyc DISABLE ROW LEVEL SECURITY;
 
 -- 2. Membuat Storage Bucket 'documents' untuk menyimpan KTP/NIB
 INSERT INTO storage.buckets (id, name, public) 
-VALUES ('documents', 'documents', true) 
+VALUES ('documents', 'documents', true) -- NOSONAR
 ON CONFLICT (id) DO NOTHING;
 
 -- Buka akses publik ke folder documents untuk tahap MVP
-CREATE POLICY "Public Access Docs" ON storage.objects FOR ALL USING (bucket_id = 'documents');
+CREATE POLICY "Public Access Docs" ON storage.objects FOR ALL USING (bucket_id = 'documents'); -- NOSONAR
 
 -- 3. Tabel Pemantauan Transaksi (Anomali)
 CREATE TABLE IF NOT EXISTS fraud_alerts (

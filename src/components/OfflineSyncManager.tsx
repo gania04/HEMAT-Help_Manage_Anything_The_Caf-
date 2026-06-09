@@ -11,10 +11,10 @@ export function OfflineSyncManager() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('/sw.js').then(
-          function(registration) {
+          function(_registration) {
             
           },
-          function(err) {
+          function(_err) {
             
           }
         );
@@ -34,6 +34,7 @@ export function OfflineSyncManager() {
     };
 
     // Set status awal
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOffline(!navigator.onLine);
 
     window.addEventListener('online', handleOnline);

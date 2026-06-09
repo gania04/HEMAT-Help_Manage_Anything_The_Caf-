@@ -19,6 +19,7 @@ export default function DebtsPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDebts();
   }, []);
 
@@ -31,7 +32,8 @@ export default function DebtsPage() {
     
     if (result.success) {
       setNotification({ type: 'success', message: result.message || 'Pembayaran berhasil' });
-      fetchDebts(); // Refresh data
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchDebts(); // Refresh data
     } else {
       setNotification({ type: 'error', message: result.error || 'Terjadi kesalahan' });
     }

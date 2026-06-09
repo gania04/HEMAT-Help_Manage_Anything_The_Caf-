@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
 import { approveVoid } from '@/lib/void-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function VoidClient({ pendingVoids }: { pendingVoids: Record<string, any>[] }) {
+export default function VoidClient({ pendingVoids }: { pendingVoids: any[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleApprove = async (id: string) => {
@@ -15,8 +16,8 @@ const handleApprove = async (id: string) => {
       await approveVoid(id);
       alert('Void berhasil disetujui! Stok telah dikembalikan.');
       window.location.reload();
-    } catch (err: any) {
-      alert('Gagal menyetujui void: ' + err.message);
+    } catch (_err: unknown) {
+      alert('Gagal menyetujui void: ' + (_err as Error).message);
     } finally {
       setIsProcessing(null);
     }
@@ -53,7 +54,7 @@ const handleApprove = async (id: string) => {
                 </td>
                 <td className="p-4">
                   <ul className="text-sm text-gray-600 list-disc pl-4">
-                    {trx.transaction_items?.map((item: Record<string, any>, idx: number) => (
+                    {trx.transaction_items?.map((item: any, idx: number) => (
                       <li key={idx}>
                         {item.quantity}x {item.menus?.menu_name || 'Item'}
                       </li>

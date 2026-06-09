@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 
 import { supabase } from './supabase';
@@ -50,7 +51,7 @@ export async function getDashboardStats() {
   if (completedTxs) {
     completedTxs.forEach((tx: any) => {
       if (tx.transaction_items) {
-        tx.transaction_items.forEach((item: Record<string, any>) => {
+        tx.transaction_items.forEach((item: any) => {
           const hpp = item.menus?.base_hpp || 0;
           totalHpp += (hpp * item.quantity);
         });

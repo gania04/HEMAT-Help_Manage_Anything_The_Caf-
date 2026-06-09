@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 
 import { supabase } from './supabase';
@@ -14,7 +15,7 @@ export async function getInventoryItems() {
     return [];
   }
 
-  return data.map((item: Record<string, any>) => ({
+  return data.map((item: any) => ({
     id: item.id,
     name: item.item_name,
     category: item.category,

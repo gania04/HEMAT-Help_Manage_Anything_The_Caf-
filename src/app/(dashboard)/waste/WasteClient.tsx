@@ -42,8 +42,8 @@ export default function WasteClient({
       await addWasteLog(formData);
       setIsModalOpen(false);
       window.location.reload(); // Refresh the data
-    } catch (error: any) {
-      alert(error.message || 'Terjadi kesalahan saat mencatat limbah');
+    } catch (_error: unknown) {
+      alert((_error as Error).message || 'Terjadi kesalahan saat mencatat limbah');
     } finally {
       setIsProcessing(false);
     }
