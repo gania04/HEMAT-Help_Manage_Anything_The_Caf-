@@ -24,7 +24,7 @@ const formatRupiah = (value: number) => {
   }).format(value);
 };
 
-export function RevenueChart({ data }: { data: any[] }) {
+export function RevenueChart({ data }: { data: Record<string, any>[] }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 w-full flex flex-col">
       <h3 className="font-bold text-gray-700 mb-4">Tren Omzet 7 Hari Terakhir</h3>
@@ -61,7 +61,7 @@ export function RevenueChart({ data }: { data: any[] }) {
 
 const COLORS = ['#00875A', '#E3A300', '#1E88E5', '#8E24AA'];
 
-export function PaymentRatioChart({ data }: { data: any[] }) {
+export function PaymentRatioChart({ data }: { data: Record<string, any>[] }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 w-full flex flex-col">
       <h3 className="font-bold text-gray-700 mb-4">Rasio Metode Pembayaran</h3>

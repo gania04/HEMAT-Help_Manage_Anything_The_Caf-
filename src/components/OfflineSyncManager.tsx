@@ -12,10 +12,10 @@ export function OfflineSyncManager() {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('/sw.js').then(
           function(registration) {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            
           },
           function(err) {
-            console.log('ServiceWorker registration failed: ', err);
+            
           }
         );
       });
@@ -24,13 +24,13 @@ export function OfflineSyncManager() {
     // Fungsi untuk handle online/offline status
     const handleOnline = async () => {
       setIsOffline(false);
-      console.log('Koneksi kembali! Memulai sinkronisasi background...');
+      
       await syncOfflineTransactions();
     };
 
     const handleOffline = () => {
       setIsOffline(true);
-      console.log('Koneksi terputus! Beralih ke Offline Mode.');
+      
     };
 
     // Set status awal

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { requestVoid } from '@/lib/pos-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function HistoryClient({ history }: { history: any[] }) {
+export default function HistoryClient({ history }: { history: Record<string, any>[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleVoid = async (id: string) => {
@@ -51,7 +51,7 @@ const handleVoid = async (id: string) => {
                 </td>
                 <td className="p-4">
                   <ul className="text-sm text-gray-600 list-disc pl-4">
-                    {trx.transaction_items?.map((item: any, idx: number) => (
+                    {trx.transaction_items?.map((item: Record<string, any>, idx: number) => (
                       <li key={idx}>
                         {item.quantity}x {item.menus?.menu_name || 'Item'}
                       </li>

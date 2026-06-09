@@ -4,7 +4,7 @@ import { supabase } from './supabase';
 import { seedPosData } from './seed-actions';
 import { revalidatePath } from 'next/cache';
 
-export async function processOrder(cartItems: any[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
+export async function processOrder(cartItems: Record<string, any>[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
   if (cartItems.length === 0) return { success: false, error: 'Keranjang kosong' };
 
   // 1. Dapatkan user admin (untuk simulasi MVP)
@@ -68,7 +68,7 @@ export async function processOrder(cartItems: any[], paymentMethod: string, tota
 
 export async function getPosMenusWithStock() {
   // Cek apakah ada menu
-  let { data: menus, error } = await supabase.from('menus').select(`
+  let { data: menus } = await supabase.from('menus').select(`
     id,
     menu_name,
     icon,
@@ -97,16 +97,16 @@ export async function getPosMenusWithStock() {
       `);
       menus = res.data;
     } catch (e) {
-      console.error('Seeder gagal:', e);
+      
       return [];
     }
   }
 
-  return (menus || []).map((m: any) => {
+  return (menus || []).map((m: Record<string, any>) => {
     // Kumpulkan semua harga berdasarkan channel
     const prices: Record<string, number> = {};
     if (m.menu_prices && m.menu_prices.length > 0) {
-      m.menu_prices.forEach((mp: any) => {
+      m.menu_prices.forEach((mp: Record<string, any>) => {
         prices[mp.channel] = Number(mp.price);
       });
     } else {
@@ -115,7 +115,7 @@ export async function getPosMenusWithStock() {
     
     let maxPortions = Infinity;
     if (m.menu_recipes && m.menu_recipes.length > 0) {
-      m.menu_recipes.forEach((req: any) => {
+      m.menu_recipes.forEach((req: Record<string, any>) => {
         const stock = req.inventory?.quantity || 0;
         const possible = Math.floor(stock / req.qty_needed);
         if (possible < maxPortions) maxPortions = possible;
@@ -154,7 +154,7 @@ export async function getPosHistory() {
     .limit(50);
 
   if (error) {
-    console.error('Error fetching POS history:', error);
+    
     return [];
   }
 

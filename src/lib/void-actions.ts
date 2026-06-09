@@ -22,7 +22,7 @@ export async function getPendingVoids() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching pending voids:', error);
+    
     return [];
   }
 

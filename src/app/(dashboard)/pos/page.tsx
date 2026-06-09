@@ -139,7 +139,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         }
       }
     } catch (error) {
-      console.error(error);
+      
       setNotification({
         type: 'error',
         message: 'Gagal memproses pembayaran'

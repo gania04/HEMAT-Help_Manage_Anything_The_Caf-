@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { addExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function ExpenseClient({ expenses, budgetAlerts }: { expenses: any[], budgetAlerts: any[] }) {
+export default function ExpenseClient({ expenses, budgetAlerts }: { expenses: Record<string, any>[], budgetAlerts: Record<string, any>[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 const handleAddExpense = async (e: React.FormEvent<HTMLFormElement>) => {

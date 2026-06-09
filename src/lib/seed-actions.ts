@@ -3,7 +3,7 @@
 import { supabase } from './supabase';
 
 export async function seedPosData() {
-  console.log('Memulai seeder data POS...');
+  
 
   // 1. Cek apakah inventory kosong
   const { data: invData, error: invError } = await supabase.from('inventory').select('id, item_name').limit(10);
@@ -13,7 +13,7 @@ export async function seedPosData() {
   let coffeeId, milkId, cupId;
 
   if (!invData || invData.length === 0) {
-    console.log('Inventory kosong. Membuat data bahan baku awal...');
+    
     const { data: newInv, error: insertInvError } = await supabase.from('inventory').insert([
       { item_name: 'Biji Kopi Arabica', category: 'Bahan Baku', quantity: 15, unit: 'Kg', unit_price: 200000, min_stock: 2 },
       { item_name: 'Susu UHT', category: 'Bahan Baku', quantity: 10, unit: 'Liter', unit_price: 20000, min_stock: 5 },
@@ -45,7 +45,7 @@ export async function seedPosData() {
   // 2. Cek apakah menus kosong
   const { data: menuData } = await supabase.from('menus').select('id').limit(1);
   if (!menuData || menuData.length === 0) {
-    console.log('Menus kosong. Membuat menu awal...');
+    
     const { data: newMenus, error: menuErr } = await supabase.from('menus').insert([
       { menu_name: 'Kopi Susu Gula Aren', base_hpp: 8000, icon: '☕' },
       { menu_name: 'Americano Dingin', base_hpp: 5000, icon: '🥤' }
@@ -75,6 +75,6 @@ export async function seedPosData() {
     ]);
   }
 
-  console.log('Seeder selesai!');
+  
   return { success: true };
 }

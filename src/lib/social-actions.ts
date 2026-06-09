@@ -63,7 +63,7 @@ export async function getSocialReport() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching social funds:', error);
+    
     return [];
   }
 

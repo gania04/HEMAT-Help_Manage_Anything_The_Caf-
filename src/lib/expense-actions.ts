@@ -19,7 +19,7 @@ export async function addExpense(category: string, amount: number, description: 
   });
 
   if (error) {
-    console.error('Add expense error:', error);
+    
     throw new Error('Gagal mencatat pengeluaran: ' + error.message);
   }
 

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { approveExpense, rejectExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function ApprovalClient({ pendingExpenses }: { pendingExpenses: any[] }) {
+export default function ApprovalClient({ pendingExpenses }: { pendingExpenses: Record<string, any>[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleAction = async (id: string, action: 'approve' | 'reject') => {

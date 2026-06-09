@@ -10,11 +10,11 @@ export async function getInventoryItems() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching inventory:', error);
+    
     return [];
   }
 
-  return data.map((item: any) => ({
+  return data.map((item: Record<string, any>) => ({
     id: item.id,
     name: item.item_name,
     category: item.category,

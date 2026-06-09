@@ -16,7 +16,7 @@ export async function getWasteLogs() {
     .order('date', { ascending: false });
 
   if (error) {
-    console.error('Error fetching waste logs:', error);
+    
     return [];
   }
 

@@ -19,7 +19,7 @@ export function openDB(): Promise<IDBDatabase> {
   });
 }
 
-export async function saveOfflineTransaction(cartItems: any[], paymentMethod: string, totalAmount: number) {
+export async function saveOfflineTransaction(cartItems: Record<string, any>[], paymentMethod: string, totalAmount: number) {
   const db = await openDB();
   return new Promise<void>((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
@@ -77,11 +77,11 @@ export async function syncOfflineTransactions() {
           await deleteOfflineTransaction(tx.id);
         }
       } catch (err) {
-        console.error('Gagal sync transaksi ID', tx.id, err);
+        
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }
   } catch (error) {
-    console.error('Error saat membaca IndexedDB', error);
+    
   }
 }
