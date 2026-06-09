@@ -26,47 +26,30 @@ export async function getInventoryItems() {
   }));
 }
 
-export async function addInventoryItem(formData: FormData) {
-  const name = formData.get('name') as string;
-  const category = formData.get('category') as string;
-  const stock = Number(formData.get('stock'));
-  const unit = formData.get('unit') as string;
-  const threshold = Number(formData.get('threshold'));
-  const unitPrice = Number(formData.get('unitPrice')) || 0;
+function parseInventoryFormData(formData: FormData) {
+  return {
+    item_name: formData.get('name') as string,
+    category: formData.get('category') as string,
+    quantity: Number(formData.get('stock')),
+    unit: formData.get('unit') as string,
+    min_stock: Number(formData.get('threshold')),
+    unit_price: Number(formData.get('unitPrice')) || 0
+  };
+}
 
+export async function addInventoryItem(formData: FormData) {
   const { error } = await supabase
     .from('inventory')
-    .insert({
-      item_name: name,
-      category,
-      quantity: stock,
-      unit,
-      min_stock: threshold,
-      unit_price: unitPrice
-    });
+    .insert(parseInventoryFormData(formData));
 
   if (error) throw new Error(error.message);
   revalidatePath('/inventory');
 }
 
 export async function updateInventoryItem(id: string, formData: FormData) {
-  const name = formData.get('name') as string;
-  const category = formData.get('category') as string;
-  const stock = Number(formData.get('stock'));
-  const unit = formData.get('unit') as string;
-  const threshold = Number(formData.get('threshold'));
-  const unitPrice = Number(formData.get('unitPrice')) || 0;
-
   const { error } = await supabase
     .from('inventory')
-    .update({
-      item_name: name,
-      category,
-      quantity: stock,
-      unit,
-      min_stock: threshold,
-      unit_price: unitPrice
-    })
+    .update(parseInventoryFormData(formData))
     .eq('id', id);
 
   if (error) throw new Error(error.message);
