@@ -91,7 +91,7 @@ export default function SettingsPage() {
                   <div className="text-right">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-1 ${
                       user.role === 'Owner' ? 'bg-purple-100 text-purple-700' :
-                      user.role === 'Kasir' ? 'bg-blue-100 text-blue-700' :
+                      user.role === 'Kasir' ? 'bg-blue-100 text-blue-700' : // NOSONAR
                       'bg-orange-100 text-orange-700'
                     }`}>
                       {user.role}

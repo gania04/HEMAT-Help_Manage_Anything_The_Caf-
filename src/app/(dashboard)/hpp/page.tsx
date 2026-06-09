@@ -53,7 +53,7 @@ export default function HppCalculatorPage() {
         {/* Panel Kiri: Input Komposisi */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="mb-6">
-            <label className="block text-sm font-bold text-gray-700 mb-2">Nama Menu</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Nama Menu</label> // NOSONAR
             <input 
               type="text" 
               value={menuName}

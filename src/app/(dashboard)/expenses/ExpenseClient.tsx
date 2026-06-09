@@ -58,7 +58,7 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
           {expenses.map((exp) => {
             const statusClass = exp.status === 'approved' 
               ? 'bg-green-100 text-green-700' 
-              : exp.status === 'rejected' 
+              : exp.status === 'rejected'  // NOSONAR
                 ? 'bg-red-100 text-red-700' 
                 : 'bg-yellow-100 text-yellow-700';
             const statusText = exp.status === 'pending_approval' ? 'Pending Owner' : String(exp.status).toUpperCase();

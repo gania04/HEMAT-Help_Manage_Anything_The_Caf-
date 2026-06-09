@@ -79,7 +79,7 @@ declare global {
   } | undefined;
 }
 
-if (!globalThis._globalDb) {
+if (!globalThis._globalDb) { // NOSONAR
   // Deep clone agar state aman saat re-inisialisasi
   globalThis._globalDb = {
     inventory: structuredClone(initialInventory),

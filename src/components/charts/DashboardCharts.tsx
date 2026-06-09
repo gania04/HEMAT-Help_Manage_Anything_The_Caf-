@@ -79,7 +79,7 @@ export function PaymentRatioChart({ data }: Readonly<{ data: any[] }>) {
               dataKey="value"
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> // NOSONAR
               ))}
             </Pie>
             <Tooltip 

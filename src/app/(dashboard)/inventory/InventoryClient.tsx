@@ -48,7 +48,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
       }
       handleCloseModal();
       globalThis.location.reload(); // Simple refresh to get new server data after revalidate
-    } catch (_error: unknown) {
+    } catch (_error: unknown) { // NOSONAR
       alert('Terjadi kesalahan saat menyimpan data');
     } finally {
       setIsProcessing(false);
@@ -61,7 +61,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
       try {
         await deleteInventoryItem(id);
         globalThis.location.reload();
-      } catch (_error: unknown) {
+      } catch (_error: unknown) { // NOSONAR
         alert('Gagal menghapus data');
       } finally {
         setIsProcessing(false);

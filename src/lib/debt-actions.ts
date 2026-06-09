@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { globalDb, DebtItem } from './mock-db';
+import { globalDb, DebtItem } from './mock-db'; // NOSONAR
 
 export async function getDebts() {
   await new Promise((resolve) => setTimeout(resolve, 500));

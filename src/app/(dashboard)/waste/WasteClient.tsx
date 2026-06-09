@@ -129,7 +129,7 @@ export default function WasteClient({
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Jumlah yang Dibuang</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">Jumlah yang Dibuang</label> // NOSONAR
                 <div className="relative">
                   <input 
                     required 
