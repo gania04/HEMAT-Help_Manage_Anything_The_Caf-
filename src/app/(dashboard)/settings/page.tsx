@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
