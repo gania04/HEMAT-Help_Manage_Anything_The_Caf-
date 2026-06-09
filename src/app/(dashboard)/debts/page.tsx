@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getDebts, payDebt } from '@/lib/debt-actions';
 import type { DebtItem } from '@/lib/mock-db';
+import { formatRupiah } from '@/lib/utils';
 
 export default function DebtsPage() {
   const [debts, setDebts] = useState<DebtItem[]>([]);
@@ -38,11 +39,7 @@ export default function DebtsPage() {
     setProcessingId(null);
   };
 
-  const formatRupiah = (num: number) => {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
-  };
-
-  const filteredData = debts.filter(d => d.type === activeTab);
+const filteredData = debts.filter(d => d.type === activeTab);
   const totalAmount = filteredData.reduce((sum, item) => sum + item.amount, 0);
   const totalUnpaid = filteredData.reduce((sum, item) => sum + (item.amount - item.paidAmount), 0);
 

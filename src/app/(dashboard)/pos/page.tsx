@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PosLayout } from "@/components/layout/PosLayout";
 import { processOrder, getPosMenusWithStock } from '@/lib/pos-actions';
+import { formatRupiah } from '@/lib/utils';
 
 type MenuItem = {
   id: string;
@@ -96,15 +97,7 @@ export default function PosPage() {
     });
   };
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.quantity), 0);
+const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.quantity), 0);
 
   const handleCheckout = async (method: string) => {
     if (cart.length === 0) return;

@@ -2,19 +2,12 @@
 
 import { useState } from 'react';
 import { addExpense } from '@/lib/expense-actions';
+import { formatRupiah } from '@/lib/utils';
 
 export default function ExpenseClient({ expenses, budgetAlerts }: { expenses: any[], budgetAlerts: any[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  const handleAddExpense = async (e: React.FormEvent<HTMLFormElement>) => {
+const handleAddExpense = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const category = formData.get('category') as string;

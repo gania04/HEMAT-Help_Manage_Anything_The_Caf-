@@ -3,6 +3,7 @@ import { getDashboardStats, getRevenueTrend, getPaymentRatios } from "@/lib/dash
 import { RevenueChart, PaymentRatioChart } from "@/components/charts/DashboardCharts";
 import { calculateZakatNisab } from "@/lib/zakat-actions";
 import { ZakatWidget } from "@/components/dashboard/ZakatWidget";
+import { formatRupiah } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -13,15 +14,7 @@ export default async function Home() {
   const ratioData = await getPaymentRatios();
   const zakatData = await calculateZakatNisab();
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  return (
+return (
     <main className="h-full overflow-y-auto p-10">
       <h1 className="text-3xl font-bold text-primary-green mb-6">DASHBOARD PERFORMA</h1>
       

@@ -2,19 +2,12 @@
 
 import { useState } from 'react';
 import { approveExpense, rejectExpense } from '@/lib/expense-actions';
+import { formatRupiah } from '@/lib/utils';
 
 export default function ApprovalClient({ pendingExpenses }: { pendingExpenses: any[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  const handleAction = async (id: string, action: 'approve' | 'reject') => {
+const handleAction = async (id: string, action: 'approve' | 'reject') => {
     if (!confirm(`Apakah Anda yakin ingin ${action === 'approve' ? 'MENYETUJUI' : 'MENOLAK'} pengeluaran ini?`)) return;
     
     setIsProcessing(id);

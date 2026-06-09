@@ -1,17 +1,10 @@
 import { getFinancialReports } from "@/lib/report-actions";
+import { formatRupiah } from '@/lib/utils';
 
 export default async function ReportsPage() {
   const reports = await getFinancialReports();
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  return (
+return (
     <main className="h-full overflow-y-auto p-10">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-[#00875A]">LAPORAN KEUANGAN</h1>

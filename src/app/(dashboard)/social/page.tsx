@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/Card";
 import { distributeFund, getSocialReport } from "@/lib/social-actions";
+import { formatRupiah } from '@/lib/utils';
 
 export default function SocialFundsPage() {
   const [reports, setReports] = useState<any[]>([]);
@@ -37,15 +38,7 @@ export default function SocialFundsPage() {
     setIsSubmitting(false);
   };
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  return (
+return (
     <main className="h-full overflow-y-auto p-10 bg-soft-gray">
       <div className="flex justify-between items-center mb-6">
         <div>

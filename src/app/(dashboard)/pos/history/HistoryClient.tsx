@@ -2,19 +2,12 @@
 
 import { useState } from 'react';
 import { requestVoid } from '@/lib/pos-actions';
+import { formatRupiah } from '@/lib/utils';
 
 export default function HistoryClient({ history }: { history: any[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  const handleVoid = async (id: string) => {
+const handleVoid = async (id: string) => {
     if (!confirm('Apakah Anda yakin ingin mengajukan pembatalan (Void) untuk transaksi ini?')) return;
     
     setIsProcessing(id);

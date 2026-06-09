@@ -2,19 +2,12 @@
 
 import { useState } from 'react';
 import { approveVoid } from '@/lib/void-actions';
+import { formatRupiah } from '@/lib/utils';
 
 export default function VoidClient({ pendingVoids }: { pendingVoids: any[] }) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
-  const formatRupiah = (number: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-    }).format(number);
-  };
-
-  const handleApprove = async (id: string) => {
+const handleApprove = async (id: string) => {
     if (!confirm('Persetujuan ini akan mengembalikan stok bahan baku dan membatalkan pendapatan. Lanjutkan?')) return;
     
     setIsProcessing(id);

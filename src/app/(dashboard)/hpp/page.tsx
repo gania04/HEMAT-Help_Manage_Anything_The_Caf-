@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { calculateHppSummary } from '@/lib/hpp-calculator';
+import { formatRupiah } from '@/lib/utils';
 
 type Ingredient = {
   id: string;
@@ -36,11 +37,7 @@ export default function HppCalculatorPage() {
     setIngredients(ingredients.filter(ing => ing.id !== id));
   };
 
-  const formatRupiah = (num: number) => {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
-  };
-
-  // Kalkulasi Otomatis
+// Kalkulasi Otomatis
   const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients);
 
   return (
