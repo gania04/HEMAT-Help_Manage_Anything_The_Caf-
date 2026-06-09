@@ -108,10 +108,10 @@ export default function WasteClient({
             
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Pilih Bahan Baku</label>
-                <select 
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="inventory_id">Pilih Bahan Baku</label>
+              <select 
                   required 
-                  name="inventory_id" 
+                  name="inventory_id" id="inventory_id" 
                   value={selectedInventory}
                   onChange={(e) => setSelectedInventory(e.target.value)}
                   className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
@@ -145,8 +145,8 @@ export default function WasteClient({
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Alasan Pembuangan</label>
-                <select name="reason" className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 outline-none mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="reason">Alasan Pembuangan</label>
+              <select name="reason" id="reason" className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 outline-none mb-2">
                   <option>Kadaluarsa (Expired)</option>
                   <option>Tumpah / Jatuh</option>
                   <option>Rusak (Basi / Kualitas Buruk)</option>

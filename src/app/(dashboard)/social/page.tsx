@@ -64,8 +64,8 @@ return (
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Kategori</label>
-                <select name="category" required className="w-full border border-gray-300 rounded-lg p-2 bg-gray-50 text-gray-700 focus:outline-none focus:border-[#8E24AA]">
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="category">Kategori</label>
+              <select name="category" id="category" required className="w-full border border-gray-300 rounded-lg p-2 bg-gray-50 text-gray-700 focus:outline-none focus:border-[#8E24AA]">
                   <option value="Zakat">Zakat Maal</option>
                   <option value="Infaq">Infaq</option>
                   <option value="Sedekah">Sedekah</option>
@@ -74,23 +74,23 @@ return (
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Nama Penerima / Lembaga</label>
-                <input type="text" name="recipient_name" required placeholder="Contoh: BAZNAS / Panti Asuhan Yatim" className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-[#8E24AA]"/>
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="recipient_name">Nama Penerima / Lembaga</label>
+              <input type="text" name="recipient_name" id="recipient_name" required placeholder="Contoh: BAZNAS / Panti Asuhan Yatim" className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-[#8E24AA]"/>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Nominal (Rp)</label>
-                <input type="number" name="amount" required min="1000" placeholder="Contoh: 1500000" className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-[#8E24AA]"/>
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="amount">Nominal (Rp)</label>
+              <input type="number" name="amount" id="amount" required min="1000" placeholder="Contoh: 1500000" className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-[#8E24AA]"/>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Catatan Tambahan</label>
-                <textarea name="notes" rows={2} placeholder="Keterangan..." className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-[#8E24AA]"></textarea>
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="notes">Catatan Tambahan</label>
+              <textarea name="notes" id="notes" rows={2} placeholder="Keterangan..." className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-[#8E24AA]"></textarea>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Unggah Struk / Bukti Transfer</label>
-                <input type="file" name="receipt" accept="image/*" className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer border border-gray-200 rounded-lg p-1"/>
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="receipt">Unggah Struk / Bukti Transfer</label>
+              <input type="file" name="receipt" id="receipt" accept="image/*" className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer border border-gray-200 rounded-lg p-1"/>
               </div>
 
               <button 

@@ -15,7 +15,7 @@ return (
 
       <div className="grid grid-cols-1 gap-4">
         {reports.map((report, index) => (
-          <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition">
+          <div key={String(index) + Math.random()} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition">
             <div>
               <h3 className="text-lg font-bold text-gray-800 mb-1">{report.period}</h3>
               <div className="flex items-center gap-2 text-sm">

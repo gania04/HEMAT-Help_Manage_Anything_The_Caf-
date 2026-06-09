@@ -134,22 +134,22 @@ export default function InventoryClient({ initialItems }: { initialItems: Invent
             
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Nama Barang</label>
-                <input required type="text" name="name" defaultValue={editingItem?.name} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="name">Nama Barang</label>
+              <input required type="text" name="name" id="name" defaultValue={editingItem?.name} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Kategori</label>
-                  <select name="category" defaultValue={editingItem?.category || 'Bahan Baku'} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none">
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="category">Kategori</label>
+              <select name="category" id="category" defaultValue={editingItem?.category || 'Bahan Baku'} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none">
                     <option>Bahan Baku</option>
                     <option>Packaging</option>
                     <option>Bahan Tambahan</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Satuan Dasar</label>
-                  <select name="unit" defaultValue={editingItem?.unit || 'Gram'} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none">
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="unit">Satuan Dasar</label>
+              <select name="unit" id="unit" defaultValue={editingItem?.unit || 'Gram'} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none">
                     <option>Gram</option>
                     <option>Kg</option>
                     <option>ml</option>
@@ -161,18 +161,18 @@ export default function InventoryClient({ initialItems }: { initialItems: Invent
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Kuantitas Stok</label>
-                  <input required type="number" step="0.01" name="stock" defaultValue={editingItem?.stock} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="stock">Kuantitas Stok</label>
+              <input required type="number" step="0.01" name="stock" id="stock" defaultValue={editingItem?.stock} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Batas Minimum (Alert)</label>
-                  <input required type="number" step="0.01" name="threshold" defaultValue={editingItem?.threshold} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="threshold">Batas Minimum (Alert)</label>
+              <input required type="number" step="0.01" name="threshold" id="threshold" defaultValue={editingItem?.threshold} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Harga per Satuan (Rp)</label>
-                <input required type="number" name="unitPrice" defaultValue={editingItem?.unitPrice} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
+                <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="unitPrice">Harga per Satuan (Rp)</label>
+              <input required type="number" name="unitPrice" id="unitPrice" defaultValue={editingItem?.unitPrice} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
               </div>
 
               <div className="pt-4 flex gap-3">

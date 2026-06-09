@@ -23,7 +23,7 @@ function BudgetAlertCard({ budget, idx }: { budget: any, idx: number }) {
   }
 
   return (
-    <div key={idx} className={`p-4 rounded-xl border shadow-sm ${cardStyle}`}>
+    <div key={String(idx) + Math.random()} className={`p-4 rounded-xl border shadow-sm ${cardStyle}`}>
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-bold text-sm">{String(budget.category)}</h3>
         <span>{icon}</span>
@@ -136,7 +136,7 @@ export default function ExpenseClient({ expenses, budgetAlerts }: { expenses: an
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {budgetAlerts.map((budget, idx) => (
-            <BudgetAlertCard key={idx} budget={budget} idx={idx} />
+            <BudgetAlertCard key={String(budget.category) || String(idx)} budget={budget} idx={idx} />
           ))}
           {budgetAlerts.length === 0 && (
             <p className="text-gray-400 text-sm">Belum ada pagu anggaran yang diatur di database.</p>
@@ -150,21 +150,21 @@ export default function ExpenseClient({ expenses, budgetAlerts }: { expenses: an
           <h2 className="text-lg font-bold text-[#00875A] mb-4">Catat Baru</h2>
           <form onSubmit={handleAddExpense} className="space-y-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Kategori</label>
-              <select name="category" className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:border-transparent outline-none">
+              <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="category">Kategori</label>
+              <select name="category" id="category" className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:border-transparent outline-none">
                 <option value="Operasional (Listrik, Air)">Operasional (Listrik, Air)</option>
                 <option value="Gaji Karyawan">Gaji Karyawan</option>
                 <option value="Lain-lain">Lain-lain</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Nominal (Rp)</label>
-              <input type="number" name="amount" required min="1" placeholder="Contoh: 150000" className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:border-transparent outline-none" />
+              <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="amount">Nominal (Rp)</label>
+              <input type="number" name="amount" id="amount" required min="1" placeholder="Contoh: 150000" className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:border-transparent outline-none" />
               <p className="text-xs text-gray-400 mt-1">*Lebih dari Rp 5.000.000 butuh persetujuan Owner</p>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">Keterangan</label>
-              <textarea name="description" rows={3} placeholder="Beli token listrik 50rb..." className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:border-transparent outline-none"></textarea>
+              <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="description">Keterangan</label>
+              <textarea name="description" id="description" rows={3} placeholder="Beli token listrik 50rb..." className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:border-transparent outline-none"></textarea>
             </div>
             <button 
               type="submit" 

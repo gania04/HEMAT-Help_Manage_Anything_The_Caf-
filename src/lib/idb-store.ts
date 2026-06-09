@@ -8,7 +8,7 @@ export function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1);
 
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(new Error(String()));
     request.onsuccess = () => resolve(request.result);
 
     request.onupgradeneeded = (event: any) => {
@@ -35,7 +35,7 @@ export async function saveOfflineTransaction(cartItems: any[], paymentMethod: st
 
     const request = store.add(data);
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(new Error(String()));
   });
 }
 
@@ -47,7 +47,7 @@ export async function getOfflineTransactions(): Promise<any[]> {
     const request = store.getAll();
 
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(new Error(String()));
   });
 }
 
@@ -59,7 +59,7 @@ export async function deleteOfflineTransaction(id: number) {
     const request = store.delete(id);
 
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
+    request.onerror = () => reject(new Error(String()));
   });
 }
 
@@ -82,7 +82,5 @@ export async function syncOfflineTransactions() {
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }
-  } catch (_error: unknown) {
-    
-  }
+  } catch (_error: unknown) { console.error(_error: unknown); }
 }

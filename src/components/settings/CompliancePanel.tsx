@@ -106,16 +106,16 @@ export function CompliancePanel() {
             ) : (
               <form onSubmit={handleKycSubmit} className="space-y-4 max-w-md">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Nama Pemilik Sesuai KTP</label>
-                  <input type="text" name="owner_name" required className="w-full border rounded p-2 text-sm" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="owner_name">Nama Pemilik Sesuai KTP</label>
+              <input type="text" name="owner_name" id="owner_name" required className="w-full border rounded p-2 text-sm" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Nomor Induk Kependudukan (NIK)</label>
-                  <input type="text" name="nik" required maxLength={16} minLength={16} className="w-full border rounded p-2 text-sm" placeholder="16 Digit NIK" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="nik">Nomor Induk Kependudukan (NIK)</label>
+              <input type="text" name="nik" id="nik" required maxLength={16} minLength={16} className="w-full border rounded p-2 text-sm" placeholder="16 Digit NIK" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Nomor Induk Berusaha (NIB)</label>
-                  <input type="text" name="nib" required className="w-full border rounded p-2 text-sm" placeholder="NIB Bisnis" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="nib">Nomor Induk Berusaha (NIB)</label>
+              <input type="text" name="nib" id="nib" required className="w-full border rounded p-2 text-sm" placeholder="NIB Bisnis" />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Upload KTP & NIB (Foto/PDF)</label>

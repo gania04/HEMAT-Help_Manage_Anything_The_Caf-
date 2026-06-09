@@ -24,18 +24,18 @@ export default function LoginPage() {
           )}
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Username / Email</label>
-            <input 
-              name="username"
+            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="username">Username / Email</label>
+              <input 
+              name="username" id="username"
               type="text" 
               className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
               placeholder="Masukkan username"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <input 
-              name="password"
+            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">Password</label>
+              <input 
+              name="password" id="password"
               type="password" 
               className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
               placeholder="Masukkan password"
