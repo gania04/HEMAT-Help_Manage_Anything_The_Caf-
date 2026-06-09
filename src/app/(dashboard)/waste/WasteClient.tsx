@@ -23,10 +23,10 @@ type InventoryItem = {
 export default function WasteClient({ 
   logs, 
   inventoryItems 
-}: { 
+}: Readonly<{ 
   logs: WasteLog[], 
   inventoryItems: InventoryItem[] 
-}) {
+}>) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedInventory, setSelectedInventory] = useState<string>('');

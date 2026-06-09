@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { requestVoid } from '@/lib/pos-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function HistoryClient({ history }: { history: any[] }) {
+export default function HistoryClient({ history }: Readonly<{ history: any[] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleVoid = async (id: string) => {

@@ -79,7 +79,7 @@ export async function approveVoid(transactionId: string) {
   await supabase.from('audit_logs').insert({
     user_id: userId,
     action: `Approve Void Transaksi ${trx.order_number}`,
-    old_value: { status: 'pending_void' },
+    old_value: Readonly<{ status: 'pending_void' }>,
     new_value: { status: 'voided' }
   });
 

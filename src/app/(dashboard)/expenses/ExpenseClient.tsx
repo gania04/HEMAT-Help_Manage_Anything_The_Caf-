@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { addExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-function BudgetAlertCard({ budget, idx }: { budget: any, idx: number }) {
+function BudgetAlertCard({ budget, idx }: Readonly<{ budget: any, idx: number }>) {
   const ratioPercent = Math.min(Math.round(Number(budget.ratio) * 100), 100);
   
   let cardStyle = "bg-white border-green-200 text-green-700";
@@ -39,7 +39,7 @@ function BudgetAlertCard({ budget, idx }: { budget: any, idx: number }) {
   );
 }
 
-function ExpenseHistoryTable({ expenses }: { expenses: any[] }) {
+function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
   return (
     <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-4 border-b border-gray-100 bg-gray-50">
@@ -94,7 +94,7 @@ function ExpenseHistoryTable({ expenses }: { expenses: any[] }) {
   );
 }
 
-export default function ExpenseClient({ expenses, budgetAlerts }: { expenses: any[], budgetAlerts: any[] }) {
+export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ expenses: any[], budgetAlerts: any[] }>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddExpense = async (e: React.FormEvent<HTMLFormElement>) => {

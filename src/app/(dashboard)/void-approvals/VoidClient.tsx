@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { approveVoid } from '@/lib/void-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function VoidClient({ pendingVoids }: { pendingVoids: any[] }) {
+export default function VoidClient({ pendingVoids }: Readonly<{ pendingVoids: any[] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleApprove = async (id: string) => {

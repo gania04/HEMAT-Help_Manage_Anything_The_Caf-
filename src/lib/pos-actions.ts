@@ -5,6 +5,32 @@ import { supabase } from './supabase';
 import { seedPosData } from './seed-actions';
 import { revalidatePath } from 'next/cache';
 
+export function parsePaymentMethod(paymentMethod: string): string {
+  const method = paymentMethod.toLowerCase();
+  if (method.includes('qris')) return 'qris';
+  if (method.includes('debit')) return 'debit';
+  if (method.includes('murabahah')) return 'murabahah';
+  return 'tunai';
+}
+
+async function deductStockForMenuItem(itemId: string, quantity: number) {
+  const { data: recipes } = await supabase.from('menu_recipes').select('inventory_id, qty_needed').eq('menu_id', itemId);
+  
+  if (!recipes || recipes.length === 0) return;
+
+  for (const req of recipes) {
+    const { data: inv } = await supabase.from('inventory').select('quantity').eq('id', req.inventory_id).single();
+    if (inv) {
+      const deduction = req.qty_needed * quantity;
+      let newStock = Number(inv.quantity) - deduction;
+      if (newStock < 0) newStock = 0;
+      newStock = Math.round(newStock * 1000) / 1000;
+      
+      await supabase.from('inventory').update({ quantity: newStock }).eq('id', req.inventory_id);
+    }
+  }
+}
+
 export async function processOrder(cartItems: any[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
   if (cartItems.length === 0) return { success: false, error: 'Keranjang kosong' };
 
@@ -19,9 +45,7 @@ export async function processOrder(cartItems: any[], paymentMethod: string, tota
     order_number: orderNumber,
     created_by: userId,
     channel: channel,
-    payment_method: paymentMethod.toLowerCase().includes('qris') ? 'qris' :
-                    paymentMethod.toLowerCase().includes('debit') ? 'debit' :
-                    paymentMethod.toLowerCase().includes('murabahah') ? 'murabahah' : 'tunai',
+    payment_method: parsePaymentMethod(paymentMethod),
     total_amount: totalAmount,
     status: 'completed'
   }).select('id').single();
@@ -38,23 +62,8 @@ export async function processOrder(cartItems: any[], paymentMethod: string, tota
       price_at_sale: item.price
     });
 
-    // Ambil resep untuk item ini
-    const { data: recipes } = await supabase.from('menu_recipes').select('inventory_id, qty_needed').eq('menu_id', item.id);
-    
-    if (recipes && recipes.length > 0) {
-      for (const req of recipes) {
-        // Ambil stok saat ini
-        const { data: inv } = await supabase.from('inventory').select('quantity').eq('id', req.inventory_id).single();
-        if (inv) {
-          const deduction = req.qty_needed * item.quantity;
-          let newStock = Number(inv.quantity) - deduction;
-          if (newStock < 0) newStock = 0;
-          newStock = Math.round(newStock * 1000) / 1000;
-          
-          await supabase.from('inventory').update({ quantity: newStock }).eq('id', req.inventory_id);
-        }
-      }
-    }
+    // Potong stok
+    await deductStockForMenuItem(item.id, item.quantity);
   }
 
   revalidatePath('/inventory');
@@ -69,7 +78,7 @@ export async function processOrder(cartItems: any[], paymentMethod: string, tota
 
 export async function getPosMenusWithStock() {
   // Cek apakah ada menu
-  let { data: menus, error } = await supabase.from('menus').select(`
+  let { data: menus } = await supabase.from('menus').select(`
     id,
     menu_name,
     icon,
@@ -98,7 +107,7 @@ export async function getPosMenusWithStock() {
       `);
       menus = res.data;
     } catch (_e: unknown) {
-      
+      console.error(_e);
       return [];
     }
   }

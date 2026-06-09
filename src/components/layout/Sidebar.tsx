@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { logoutUser } from '@/lib/auth-actions';
 
-export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: { activeUser?: string, activeRole?: string }) {
+export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Readonly<{ activeUser?: string, activeRole?: string }>) {
   const pathname = usePathname();
 
   const allMenuItems = [

@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 
 export default async function DashboardLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const cookieStore = await cookies();
   const sessionValue = cookieStore.get('hemat_session')?.value;
   

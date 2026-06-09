@@ -3,10 +3,10 @@ import React from 'react';
 export function PosLayout({
   children,
   cartPanel,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   cartPanel: React.ReactNode;
-}) {
+}>) {
   return (
     <div className="flex h-full w-full bg-soft-gray overflow-hidden">
       {/* Product Grid Area */}
