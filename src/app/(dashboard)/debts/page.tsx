@@ -132,6 +132,28 @@ export default function DebtsPage() {
               ) : filteredData.map((item) => {
                 const remaining = item.amount - item.paidAmount;
                 const isPaid = item.status === 'Lunas';
+                
+                let remainingColorClass = 'text-gray-400';
+                if (remaining > 0) {
+                  remainingColorClass = activeTab === 'hutang' ? 'text-red-600' : 'text-green-600';
+                }
+
+                let actionButtonClass = 'bg-[#1E88E5] text-white hover:bg-blue-700';
+                if (isPaid) {
+                  actionButtonClass = 'bg-gray-100 text-gray-400 cursor-not-allowed';
+                } else if (activeTab === 'hutang') {
+                  actionButtonClass = 'bg-[#00875A] text-white hover:bg-green-700';
+                }
+
+                let actionButtonText = '💵 Terima Uang';
+                if (processingId === item.id) {
+                  actionButtonText = 'Memproses...';
+                } else if (isPaid) {
+                  actionButtonText = '✔ Lunas';
+                } else if (activeTab === 'hutang') {
+                  actionButtonText = '💵 Bayar Lunas';
+                }
+
                 return (
                   <tr key={item.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
                     <td className="p-4 font-bold text-gray-800">{item.counterparty}</td>
@@ -142,7 +164,7 @@ export default function DebtsPage() {
                       </span>
                     </td>
                     <td className="p-4 text-right font-medium">{formatRupiah(item.amount)}</td>
-                    <td className={`p-4 text-right font-bold ${remaining > 0 ? (activeTab === 'hutang' ? 'text-red-600' : 'text-green-600') : 'text-gray-400'}`}>
+                    <td className={`p-4 text-right font-bold ${remainingColorClass}`}>
                       {formatRupiah(remaining)}
                     </td>
                     <td className="p-4 text-center">
@@ -156,12 +178,9 @@ export default function DebtsPage() {
                       <button 
                         onClick={() => handlePayment(item.id, remaining)}
                         disabled={isPaid || processingId === item.id}
-                        className={`px-4 py-2 rounded-lg font-bold text-sm shadow-sm transition active:scale-95 flex items-center justify-center gap-2 ml-auto ${
-                          isPaid ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 
-                          activeTab === 'hutang' ? 'bg-[#00875A] text-white hover:bg-green-700' : 'bg-[#1E88E5] text-white hover:bg-blue-700'
-                        }`}
+                        className={`px-4 py-2 rounded-lg font-bold text-sm shadow-sm transition active:scale-95 flex items-center justify-center gap-2 ml-auto ${actionButtonClass}`}
                       >
-                        {processingId === item.id ? 'Memproses...' : (isPaid ? '✔ Lunas' : (activeTab === 'hutang' ? '💵 Bayar Lunas' : '💵 Terima Uang'))}
+                        {actionButtonText}
                       </button>
                     </td>
                   </tr>
