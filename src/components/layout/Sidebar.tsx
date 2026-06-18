@@ -54,14 +54,13 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
 
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity"
+        <button 
+          type="button"
+          className="md:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity w-full h-full cursor-default border-none outline-none"
           onClick={() => setIsOpen(false)}
           onKeyDown={(e) => {
             if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') setIsOpen(false);
           }}
-          role="button"
-          tabIndex={0}
           aria-label="Tutup Sidebar"
         />
       )}

@@ -1,0 +1,23 @@
+[
+  {
+    "message": "Ambiguous spacing before next element input",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/settings/CompliancePanel.tsx",
+    "line": 123,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6772"
+  },
+  {
+    "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/layout/Sidebar.tsx",
+    "line": 57,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6819"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 129,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S3358"
+  }
+]

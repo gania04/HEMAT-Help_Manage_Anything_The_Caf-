@@ -124,12 +124,14 @@ export default function SettingsPage() {
             </div>
             
             <div className="space-y-4">
-              {isLoading ? (
-                <p className="text-sm text-gray-500">Memuat data staf...</p>
-              ) : users.length === 0 ? (
-                <p className="text-sm text-gray-500">Belum ada staf.</p>
-              ) : (
-                users.map(user => {
+              {(() => {
+                if (isLoading) {
+                  return <p className="text-sm text-gray-500">Memuat data staf...</p>;
+                }
+                if (users.length === 0) {
+                  return <p className="text-sm text-gray-500">Belum ada staf.</p>;
+                }
+                return users.map(user => {
                   const displayName = user.name || user.full_name || user.username || 'User';
                   return (
                     <Card key={user.id} className="p-4 flex items-center justify-between hover:shadow-md transition-shadow">
@@ -150,8 +152,8 @@ export default function SettingsPage() {
                       </div>
                     </Card>
                   );
-                })
-              )}
+                });
+              })()}
             </div>
 
             <Card variant="audit" className="mt-6 border-blue-200 bg-blue-50/50">
