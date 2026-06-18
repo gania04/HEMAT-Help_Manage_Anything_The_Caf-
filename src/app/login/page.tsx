@@ -37,8 +37,8 @@ export default function LoginPage() {
   }, [state]);
 
   return (
-    <div className="flex h-screen items-center justify-center bg-soft-gray">
-      <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-soft-gray py-8 px-4 overflow-y-auto">
+      <div className="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100 my-auto">
         <div className="text-center mb-8 flex flex-col items-center">
           <Image src={logoIcon} alt="HEMAT Logo" width={80} height={80} className="mb-4" />
           <h1 className="text-4xl font-bold text-[#00875A] tracking-tight">HEMAT</h1>
@@ -86,9 +86,13 @@ export default function LoginPage() {
           <button 
             type="submit" 
             disabled={isPending}
-            className="w-full bg-[#00875A] text-white py-3 rounded-lg font-bold hover:bg-green-700 transition shadow-lg shadow-green-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-[#006A4E] text-white py-3 rounded-lg font-bold hover:bg-green-800 transition shadow-md disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {isPending ? 'MEMPROSES...' : 'MASUK SEKARANG'}
+            {isPending ? 'MEMPROSES...' : (
+              <>
+                Masuk <span>&gt;</span>
+              </>
+            )}
           </button>
           
           <div className="text-center pt-4">
