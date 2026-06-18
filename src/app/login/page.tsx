@@ -13,17 +13,30 @@ export default function LoginPage() {
   // Redirect jika berhasil login, sekaligus hapus SW
   useEffect(() => {
     if (state && 'redirectTo' in state && state.redirectTo) {
-      router.push(state.redirectTo);
+      // Tunggu sampai SW dihapus, baru force hard reload ke dashboard
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(async (regs) => {
+          for (let reg of regs) {
+            await reg.unregister();
+          }
+          window.location.href = state.redirectTo;
+        }).catch(() => {
+          window.location.href = state.redirectTo;
+        });
+      } else {
+        window.location.href = state.redirectTo;
+      }
+    } else {
+      // Hapus SW saat halaman pertama kali dimuat
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then((regs) => {
+          for (let reg of regs) {
+            reg.unregister();
+          }
+        });
+      }
     }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then((regs) => {
-        for (let reg of regs) {
-          reg.unregister();
-        }
-      });
-    }
-  }, [state, router]);
+  }, [state]);
 
   return (
     <div className="flex h-screen items-center justify-center bg-soft-gray">
