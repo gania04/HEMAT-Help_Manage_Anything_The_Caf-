@@ -22,6 +22,7 @@ export default function HppCalculatorPage() {
   ]);
 
   const [margin, setMargin] = useState(60);
+  const [overhead, setOverhead] = useState(10);
   const [isSaving, setIsSaving] = useState(false);
   const [addToPos, setAddToPos] = useState(false);
 
@@ -46,7 +47,7 @@ export default function HppCalculatorPage() {
     setIsSaving(true);
     
     // Auto calculate
-    const { totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100);
+    const { totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100);
 
     let posMsg = '';
     if (addToPos) {
@@ -65,7 +66,7 @@ export default function HppCalculatorPage() {
   };
 
 // Kalkulasi Otomatis
-  const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100);
+  const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100);
 
   return (
     <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
@@ -155,7 +156,19 @@ export default function HppCalculatorPage() {
             </div>
             <div className="flex justify-between items-center py-3 border-b border-gray-100">
               <span className="text-gray-500 text-sm flex items-center gap-1">
-                Estimasi Overhead <span className="text-[10px] bg-gray-100 px-1 rounded">10%</span>
+                Estimasi Overhead 
+                <select 
+                  value={overhead}
+                  onChange={(e) => setOverhead(Number(e.target.value))}
+                  className="bg-gray-100 text-gray-700 text-[10px] rounded px-1 py-0.5 border-none focus:ring-0 cursor-pointer font-bold"
+                >
+                  <option value={10}>10%</option>
+                  <option value={15}>15%</option>
+                  <option value={20}>20%</option>
+                  <option value={25}>25%</option>
+                  <option value={30}>30%</option>
+                  <option value={35}>35%</option>
+                </select>
               </span>
               <span className="font-bold text-gray-700">{formatRupiah(overheadCost)}</span>
             </div>
@@ -179,8 +192,6 @@ export default function HppCalculatorPage() {
                   <option value={40}>40%</option>
                   <option value={50}>50%</option>
                   <option value={60}>60%</option>
-                  <option value={70}>70%</option>
-                  <option value={80}>80%</option>
                 </select>
               </div>
               <div className="text-center">
