@@ -51,9 +51,9 @@ const filteredData = debts.filter(d => d.type === activeTab);
 
   return (
     <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-[#00875A]">HUTANG & PIUTANG</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#00875A]">HUTANG & PIUTANG</h1>
           <p className="text-gray-500 mt-1">Manajemen tagihan supplier dan piutang pelanggan bebas riba.</p>
         </div>
         <button className="bg-[#00875A] text-white px-5 py-3 rounded-lg font-bold shadow-md hover:bg-green-700 transition flex items-center gap-2 active:scale-95">
@@ -71,10 +71,10 @@ const filteredData = debts.filter(d => d.type === activeTab);
       )}
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
         <button 
           onClick={() => { setActiveTab('hutang'); setNotification(null); }}
-          className={`flex-1 py-4 rounded-xl font-bold text-lg transition shadow-sm border-2 ${
+          className={`flex-1 py-3 md:py-4 rounded-xl font-bold text-sm md:text-lg transition shadow-sm border-2 ${
             activeTab === 'hutang' ? 'bg-white text-[#D32F2F] border-[#D32F2F] shadow-[#D32F2F]/10' : 'bg-gray-50 text-gray-400 border-transparent hover:bg-white hover:text-gray-600'
           }`}
         >
@@ -82,7 +82,7 @@ const filteredData = debts.filter(d => d.type === activeTab);
         </button>
         <button 
           onClick={() => { setActiveTab('piutang'); setNotification(null); }}
-          className={`flex-1 py-4 rounded-xl font-bold text-lg transition shadow-sm border-2 ${
+          className={`flex-1 py-3 md:py-4 rounded-xl font-bold text-sm md:text-lg transition shadow-sm border-2 ${
             activeTab === 'piutang' ? 'bg-white text-[#00875A] border-[#00875A] shadow-[#00875A]/10' : 'bg-gray-50 text-gray-400 border-transparent hover:bg-white hover:text-gray-600'
           }`}
         >
