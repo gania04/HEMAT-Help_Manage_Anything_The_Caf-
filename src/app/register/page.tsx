@@ -84,6 +84,20 @@ export default function RegisterPage() {
               placeholder="Buat password"
             />
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="role">Pilih Peran Akses (Bagian)</label>
+            <select 
+              name="role" id="role"
+              required
+              className="w-full border border-gray-300 px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-white"
+            >
+              <option value="owner">Owner (Akses Penuh / Pemilik)</option>
+              <option value="admin">Admin (Gudang & Operasional)</option>
+              <option value="kasir">Kasir (Transaksi & POS)</option>
+            </select>
+            <p className="text-xs text-gray-500 mt-1">Setiap peran memiliki menu dan hak akses yang berbeda-beda di dalam sistem.</p>
+          </div>
           
           <button 
             type="submit" 

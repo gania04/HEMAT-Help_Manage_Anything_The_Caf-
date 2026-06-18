@@ -90,9 +90,10 @@ export async function registerUser(prevState: any, formData: FormData) {
   const username = formData.get('username') as string;
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const role = formData.get('role') as string || 'owner';
 
-  if (!name || !username || !password) {
-    return { error: 'Nama, username, dan password wajib diisi' };
+  if (!name || !username || !password || !role) {
+    return { error: 'Semua field wajib diisi' };
   }
 
   const { error } = await supabase.from('users').insert({
@@ -101,7 +102,7 @@ export async function registerUser(prevState: any, formData: FormData) {
     username: username,
     email: email || `${username}@hemat.cafe`,
     password: password,
-    role: 'owner' // Default register sebagai owner
+    role: role
   });
 
   if (error) {
