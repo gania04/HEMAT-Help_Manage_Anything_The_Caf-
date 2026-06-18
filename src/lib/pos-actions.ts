@@ -5,7 +5,7 @@ import { supabase } from './supabase';
 import { seedPosData } from './seed-actions';
 import { revalidatePath } from 'next/cache';
 
-export function parsePaymentMethod(paymentMethod: string): string {
+function parsePaymentMethod(paymentMethod: string): string {
   const method = paymentMethod.toLowerCase();
   if (method.includes('qris')) return 'qris';
   if (method.includes('debit')) return 'debit';
@@ -13,21 +13,11 @@ export function parsePaymentMethod(paymentMethod: string): string {
   return 'tunai';
 }
 
-async function deductStockForMenuItem(itemId: string, quantity: number) {
-  const { data: recipes } = await supabase.from('menu_recipes').select('inventory_id, qty_needed').eq('menu_id', itemId);
-  
-  if (!recipes || recipes.length === 0) return;
-
-  for (const req of recipes) {
-    const { data: inv } = await supabase.from('inventory').select('quantity').eq('id', req.inventory_id).single();
-    if (inv) {
-      const deduction = req.qty_needed * quantity;
-      let newStock = Number(inv.quantity) - deduction;
-      if (newStock < 0) newStock = 0;
-      newStock = Math.round(newStock * 1000) / 1000;
-      
-      await supabase.from('inventory').update({ quantity: newStock }).eq('id', req.inventory_id);
-    }
+async function deductStockForProduct(productId: string, quantity: number) {
+  const { data: p } = await supabase.from('products').select('stock').eq('id', productId).single();
+  if (p) {
+    const newStock = Math.max(0, p.stock - quantity);
+    await supabase.from('products').update({ stock: newStock }).eq('id', productId);
   }
 }
 
@@ -52,18 +42,20 @@ export async function processOrder(cartItems: any[], paymentMethod: string, tota
 
   if (trxError) return { success: false, error: 'Gagal membuat transaksi: ' + trxError.message };
 
-  // 3. Loop items dan potong stok
+  // 3. Loop items dan potong stok dari products
   for (const item of cartItems) {
     // Insert detail transaksi
     await supabase.from('transaction_items').insert({
       transaction_id: trxData.id,
-      menu_id: item.id,
+      product_id: item.id, // Menggunakan product_id bukan menu_id
       quantity: item.quantity,
-      price_at_sale: item.price
+      price_at_sale: item.price,
+      sugar_level: item.sugar || 'Normal',
+      ice_level: item.ice || 'Normal Ice'
     });
 
     // Potong stok
-    await deductStockForMenuItem(item.id, item.quantity);
+    await deductStockForProduct(item.id, item.quantity);
   }
 
   revalidatePath('/inventory');
@@ -77,69 +69,24 @@ export async function processOrder(cartItems: any[], paymentMethod: string, tota
 }
 
 export async function getPosMenusWithStock() {
-  // Cek apakah ada menu
-  let { data: menus } = await supabase.from('menus').select(`
-    id,
-    menu_name,
-    icon,
-    menu_prices(channel, price),
-    menu_recipes(
-      inventory_id,
-      qty_needed,
-      inventory(quantity)
-    )
-  `);
+  const { data: products } = await supabase.from('products').select('*');
 
-  if (!menus || menus.length === 0) {
-    try {
-      await seedPosData();
-      // fetch ulang
-      const res = await supabase.from('menus').select(`
-        id,
-        menu_name,
-        icon,
-        menu_prices(channel, price),
-        menu_recipes(
-          inventory_id,
-          qty_needed,
-          inventory(quantity)
-        )
-      `);
-      menus = res.data;
-    } catch (_e: unknown) {
-      console.error(_e);
-      return [];
-    }
+  if (!products || products.length === 0) {
+    return [];
   }
 
-  return (menus || []).map((m: any) => {
-    // Kumpulkan semua harga berdasarkan channel
-    const prices: Record<string, number> = {};
-    if (m.menu_prices && m.menu_prices.length > 0) {
-      m.menu_prices.forEach((mp: any) => {
-        prices[mp.channel] = Number(mp.price);
-      });
-    } else {
-      prices['dine_in'] = 0; // fallback default
-    }
-    
-    let maxPortions = Infinity;
-    if (m.menu_recipes && m.menu_recipes.length > 0) {
-      m.menu_recipes.forEach((req: any) => {
-        const stock = req.inventory?.quantity || 0;
-        const possible = Math.floor(stock / req.qty_needed);
-        if (possible < maxPortions) maxPortions = possible;
-      });
-    } else {
-      maxPortions = 99; // mock jika resep kosong
-    }
-
+  return products.map((p: any) => {
     return {
-      id: m.id,
-      name: m.menu_name,
-      icon: m.icon || '🍵',
-      prices, // Object harga berbagai channel
-      maxPortions
+      id: p.id,
+      name: p.name,
+      icon: p.category === 'Coffee' ? '☕' : '🍵',
+      prices: {
+        'dine_in': Number(p.price),
+        'takeaway': Number(p.price) + 2000,
+        'gojek': Number(p.price) * 1.2
+      },
+      maxPortions: p.stock,
+      options: p.options
     };
   });
 }
@@ -157,18 +104,26 @@ export async function getPosHistory() {
       transaction_items(
         quantity,
         price_at_sale,
-        menus(menu_name)
+        sugar_level,
+        ice_level,
+        products(name)
       )
     `)
     .order('created_at', { ascending: false })
     .limit(50);
 
   if (error) {
-    
     return [];
   }
 
-  return data;
+  // Normalize data to match the old structure expected by frontend (menus(menu_name))
+  return data.map(trx => ({
+    ...trx,
+    transaction_items: trx.transaction_items.map((item: any) => ({
+      ...item,
+      menus: { menu_name: item.products?.name + (item.sugar_level ? ` (${item.sugar_level}, ${item.ice_level})` : '') }
+    }))
+  }));
 }
 
 export async function requestVoid(transactionId: string) {
@@ -181,4 +136,21 @@ export async function requestVoid(transactionId: string) {
 
   revalidatePath('/pos/history');
   revalidatePath('/void-approvals');
+}
+
+export async function createPosProduct(name: string, price: number) {
+  const { error } = await supabase.from('products').insert({
+    name,
+    price,
+    stock: 50, // Default stock for newly created HPP menus
+    category: 'Custom',
+    options: {"sugar": ["Less", "Normal", "High"], "ice": ["Hot", "Normal Ice", "Less Ice"]}
+  });
+  
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath('/pos');
+  return { success: true };
 }

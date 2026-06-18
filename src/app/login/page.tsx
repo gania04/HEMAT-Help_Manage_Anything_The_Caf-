@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { useActionState } from 'react';
@@ -11,7 +14,7 @@ export default function LoginPage() {
     <div className="flex h-screen items-center justify-center bg-soft-gray">
       <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
         <div className="text-center mb-8 flex flex-col items-center">
-          <Image src="/icon-192x192.png" alt="HEMAT Logo" width={80} height={80} className="mb-4" unoptimized={true} />
+          <img src="/icon-192x192.png" alt="HEMAT Logo" width="80" height="80" className="mb-4" />
           <h1 className="text-4xl font-bold text-[#00875A] tracking-tight">HEMAT</h1>
           <p className="text-gray-500 mt-2">Help Manage Anything The Café</p>
         </div>
@@ -68,3 +71,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

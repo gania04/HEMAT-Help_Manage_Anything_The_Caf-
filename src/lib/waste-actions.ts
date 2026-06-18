@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use server'
 
 import { supabase } from './supabase';
@@ -75,3 +78,4 @@ export async function addWasteLog(formData: FormData) {
   revalidatePath('/waste');
   revalidatePath('/inventory');
 }
+

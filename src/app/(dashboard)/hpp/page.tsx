@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { calculateHppSummary } from '@/lib/hpp-calculator';
 import { formatRupiah } from '@/lib/utils';
+import { createPosProduct } from '@/lib/pos-actions';
 
 type Ingredient = {
   id: string;
@@ -19,6 +20,10 @@ export default function HppCalculatorPage() {
     { id: '2', name: 'Susu UHT', quantity: 150, unit: 'ml', pricePerUnit: 20 },
     { id: '3', name: 'Cup Plastik 16oz', quantity: 1, unit: 'Pcs', pricePerUnit: 1500 }
   ]);
+
+  const [margin, setMargin] = useState(60);
+  const [isSaving, setIsSaving] = useState(false);
+  const [addToPos, setAddToPos] = useState(false);
 
   const addIngredient = () => {
     setIngredients([
@@ -37,8 +42,30 @@ export default function HppCalculatorPage() {
     setIngredients(ingredients.filter(ing => ing.id !== id));
   };
 
+  const handleSave = async () => {
+    setIsSaving(true);
+    
+    // Auto calculate
+    const { totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100);
+
+    let posMsg = '';
+    if (addToPos) {
+      const res = await createPosProduct(menuName, recommendedSellingPrice);
+      if (res.success) {
+        posMsg = '\n✅ Berhasil ditambahkan ke daftar Menu Kasir!';
+      } else {
+        posMsg = '\n❌ Gagal menambahkan ke Menu Kasir: ' + res.error;
+      }
+    }
+
+    setTimeout(() => {
+      alert(`Berhasil menyimpan resep "${menuName}"!\nHPP: ${formatRupiah(totalHPP)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
+      setIsSaving(false);
+    }, 500); // reduced timeout for better UX
+  };
+
 // Kalkulasi Otomatis
-  const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients);
+  const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100);
 
   return (
     <main className="h-full overflow-y-auto p-10 bg-soft-gray">
@@ -138,16 +165,54 @@ export default function HppCalculatorPage() {
               <p className="text-4xl font-black text-[#00875A] drop-shadow-sm">{formatRupiah(totalHPP)}</p>
             </div>
 
-            <div className="mt-6 p-4 border border-blue-100 bg-blue-50/50 rounded-xl text-center">
-              <p className="text-xs text-blue-600 font-bold mb-1 flex items-center justify-center gap-1">
-                <span>💡</span> Rekomendasi Harga Jual (Margin 60%)
-              </p>
-              <p className="text-2xl font-bold text-blue-800">{formatRupiah(recommendedSellingPrice)}</p>
+            <div className="mt-6 p-4 border border-blue-100 bg-blue-50/50 rounded-xl">
+              <div className="flex justify-between items-center mb-3 border-b border-blue-200 pb-2">
+                <span className="text-xs text-blue-600 font-bold flex items-center gap-1">
+                  <span>💡</span> Target Margin
+                </span>
+                <select 
+                  value={margin}
+                  onChange={(e) => setMargin(Number(e.target.value))}
+                  className="bg-white border border-blue-200 text-blue-800 text-xs rounded-lg px-2 py-1 font-bold focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                >
+                  <option value={30}>30%</option>
+                  <option value={40}>40%</option>
+                  <option value={50}>50%</option>
+                  <option value={60}>60%</option>
+                  <option value={70}>70%</option>
+                  <option value={80}>80%</option>
+                </select>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-blue-600 font-bold mb-1">Rekomendasi Harga Jual</p>
+                <p className="text-2xl font-bold text-blue-800">{formatRupiah(recommendedSellingPrice)}</p>
+              </div>
             </div>
           </div>
           
-          <button className="w-full mt-8 bg-[#00875A] text-white py-4 rounded-xl font-bold hover:bg-green-700 transition shadow-lg shadow-green-100 active:scale-95 flex items-center justify-center gap-2">
-            <span>💾</span> Simpan Resep & HPP
+          <div className="mt-8 mb-2 flex items-center justify-center gap-2">
+            <input 
+              type="checkbox" 
+              id="addToPos"
+              checked={addToPos}
+              onChange={(e) => setAddToPos(e.target.checked)}
+              className="w-4 h-4 text-[#00875A] bg-gray-100 border-gray-300 rounded focus:ring-[#00875A]"
+            />
+            <label htmlFor="addToPos" className="text-sm font-medium text-gray-700 cursor-pointer">
+              Tambahkan otomatis ke POS Menu Kasir
+            </label>
+          </div>
+
+          <button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-full mt-8 bg-[#00875A] text-white py-4 rounded-xl font-bold hover:bg-green-700 transition shadow-lg shadow-green-100 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isSaving ? (
+              <span>⏳ Menyimpan...</span>
+            ) : (
+              <><span>💾</span> Simpan Resep & HPP</>
+            )}
           </button>
         </div>
       </div>

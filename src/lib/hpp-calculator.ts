@@ -15,15 +15,16 @@ export function calculateTotalHPP(totalMaterialCost: number, overheadCost: numbe
   return totalMaterialCost + overheadCost;
 }
 
-export function calculateRecommendedSellingPrice(totalHPP: number, markupMultiplier: number = 2.5): number {
-  return totalHPP * markupMultiplier;
+export function calculateRecommendedSellingPrice(totalHPP: number, targetMargin: number = 0.6): number {
+  if (targetMargin >= 1) targetMargin = 0.99; // Prevent division by zero or negative prices
+  return totalHPP / (1 - targetMargin);
 }
 
-export function calculateHppSummary(ingredients: IngredientCost[]) {
+export function calculateHppSummary(ingredients: IngredientCost[], targetMargin: number = 0.6) {
   const totalMaterialCost = calculateTotalMaterialCost(ingredients);
   const overheadCost = calculateOverheadCost(totalMaterialCost);
   const totalHPP = calculateTotalHPP(totalMaterialCost, overheadCost);
-  const recommendedSellingPrice = calculateRecommendedSellingPrice(totalHPP);
+  const recommendedSellingPrice = calculateRecommendedSellingPrice(totalHPP, targetMargin);
 
   return {
     totalMaterialCost,

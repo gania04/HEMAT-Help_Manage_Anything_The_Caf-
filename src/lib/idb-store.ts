@@ -82,5 +82,5 @@ export async function syncOfflineTransactions() {
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }
-  } catch (_error: unknown) { console.error(_error: unknown); }
+  } catch (_error: unknown) { console.error(_error); }
 }

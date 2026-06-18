@@ -23,7 +23,7 @@ function BudgetAlertCard({ budget, idx }: Readonly<{ budget: any, idx: number }>
   }
 
   return (
-    <div key={`expense-${exp.id || idx}`} className={`p-4 rounded-xl border shadow-sm ${cardStyle}`}>
+    <div className={`p-4 rounded-xl border shadow-sm ${cardStyle}`}>
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-bold text-sm">{String(budget.category)}</h3>
         <span>{icon}</span>

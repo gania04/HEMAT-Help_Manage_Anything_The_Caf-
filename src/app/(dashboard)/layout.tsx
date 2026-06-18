@@ -16,7 +16,7 @@ export default async function DashboardLayout({
       const parsed = JSON.parse(sessionValue);
       if (parsed.name) activeUser = parsed.name;
       if (parsed.role) activeRole = parsed.role;
-    } catch (_e: unknown) { console.error(_e: unknown); }
+    } catch (_e: unknown) { console.error(_e); }
   }
 
   return (
