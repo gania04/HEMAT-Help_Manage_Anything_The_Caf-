@@ -1,0 +1,128 @@
+[
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/expenses/ExpenseClient.tsx",
+    "line": 60,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/history/HistoryClient.tsx",
+    "line": 68,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "Prefer `Math.max()` to simplify ternary expressions.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/page.tsx",
+    "line": 95,
+    "type": "CODE_SMELL",
+    "severity": "MINOR"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/page.tsx",
+    "line": 288,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 69,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 77,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 86,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 94,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 181,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 185,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 189,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 193,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 197,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/settings/CompliancePanel.tsx",
+    "line": 121,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/layout/Sidebar.tsx",
+    "line": 57,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/layout/Sidebar.tsx",
+    "line": 57,
+    "type": "BUG",
+    "severity": "MINOR"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 126,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 145,
+    "type": "CODE_SMELL",
+    "severity": "MAJOR"
+  }
+]

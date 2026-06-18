@@ -57,6 +57,12 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
         <div 
           className="md:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity"
           onClick={() => setIsOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') setIsOpen(false);
+          }}
+          role="button"
+          tabIndex={0}
+          aria-label="Tutup Sidebar"
         />
       )}
 
