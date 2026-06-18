@@ -1,5 +1,4 @@
-'use client';
-import React, { useState } from 'react';
+import React from 'react';
 
 export function PosLayout({
   children,
@@ -8,8 +7,6 @@ export function PosLayout({
   children: React.ReactNode;
   cartPanel: React.ReactNode;
 }>) {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
   return (
     <div className="flex flex-col lg:flex-row w-full lg:h-full bg-soft-gray lg:overflow-hidden relative min-h-screen lg:min-h-0">
       {/* Product Grid Area */}
@@ -24,37 +21,14 @@ export function PosLayout({
         <div className="flex-1 p-4 md:p-6 lg:overflow-y-auto custom-scrollbar">
           {children}
         </div>
-
-        {/* Sticky Bottom Bar for Mobile */}
-        <div className="lg:hidden sticky bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] shrink-0 z-40">
-          <button 
-            onClick={() => setIsCartOpen(true)}
-            className="w-full bg-[#00875A] text-white py-3 md:py-4 rounded-xl font-black shadow-md shadow-[#00875A]/20 text-lg flex justify-center items-center gap-2 active:scale-95 transition-transform"
-          >
-            <span className="text-2xl">🛒</span> BUKA KERANJANG BELANJA
-          </button>
-        </div>
       </main>
 
-      {/* Payment/Cart Panel Area (Drawer on Mobile, Sidebar on Desktop) */}
-      <aside className={`
-        fixed inset-0 z-50 bg-white flex flex-col transition-transform duration-300 ease-in-out
-        ${isCartOpen ? 'translate-y-0' : 'translate-y-full'}
-        lg:static lg:translate-y-0 lg:w-[400px] lg:h-full lg:border-l lg:border-gray-200 lg:shadow-xl lg:z-20 shrink-0
-      `}>
-        {/* Mobile Close Button Header */}
-        <div className="lg:hidden p-4 bg-white border-b border-gray-100 flex justify-between items-center shadow-sm shrink-0">
-          <h2 className="font-bold text-xl text-gray-800 flex items-center gap-2"><span>🛒</span> Keranjang Anda</h2>
-          <button 
-            onClick={() => setIsCartOpen(false)} 
-            className="bg-red-50 text-red-500 w-10 h-10 rounded-full font-bold text-lg hover:bg-red-100 active:scale-95 transition-transform"
-          >
-            ✕
-          </button>
+      {/* Payment/Cart Panel Area */}
+      <aside className="w-full lg:w-[400px] lg:h-full bg-white border-t-4 border-[#00875A] lg:border-t-0 lg:border-l lg:border-gray-200 flex flex-col shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.1)] lg:shadow-xl lg:z-20 shrink-0 relative">
+        <div className="lg:hidden text-center py-2 bg-green-50 text-[#00875A] font-bold text-sm tracking-widest border-b border-green-100 flex justify-center items-center gap-2">
+          <span>👇</span> SCROLL KE ATAS UNTUK LIHAT MENU <span>👇</span>
         </div>
-        
-        {/* Cart Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 lg:overflow-y-auto">
           {cartPanel}
         </div>
       </aside>
