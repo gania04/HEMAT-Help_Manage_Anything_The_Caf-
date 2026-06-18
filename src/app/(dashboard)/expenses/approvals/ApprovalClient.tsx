@@ -41,7 +41,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
             <span>🛡️</span> Menunggu Persetujuan ({pendingExpenses.length})
           </h2>
         </div>
-        <table className="w-full text-left border-collapse">
+        <div className="w-full overflow-x-auto mb-4"><table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-white border-b border-gray-100 text-gray-500 text-sm">
               <th className="p-4 font-medium">Tanggal</th>
@@ -89,7 +89,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
               </tr>
             )}
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
   );

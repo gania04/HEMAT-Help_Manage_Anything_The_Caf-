@@ -45,7 +45,7 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
       <div className="p-4 border-b border-gray-100 bg-gray-50">
         <h2 className="font-bold text-gray-700">Riwayat Pengeluaran</h2>
       </div>
-      <table className="w-full text-left border-collapse">
+      <div className="w-full overflow-x-auto mb-4"><table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-white border-b border-gray-100 text-gray-500 text-sm">
             <th className="p-4 font-medium">Tanggal</th>
@@ -89,7 +89,7 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
             </tr>
           )}
         </tbody>
-      </table>
+      </table></div>
     </div>
   );
 }

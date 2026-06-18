@@ -65,11 +65,11 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
       {/* Sidebar */}
       <aside className={`
         fixed md:static inset-y-0 left-0 z-50
-        w-64 bg-[#00875A] text-white flex flex-col h-full
+        w-64 bg-[#00875A] text-white flex flex-col h-[100dvh] md:h-full
         transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3">
+        <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3 flex-shrink-0">
           <div className="flex items-center gap-3">
             <Image src="/icon-192x192.png" alt="HEMAT Logo" width={40} height={40} className="bg-white p-1 rounded-lg" unoptimized={true} />
             <div>
@@ -80,7 +80,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
           <button className="md:hidden text-white/70 text-2xl" onClick={() => setIsOpen(false)}>✕</button>
         </div>
 
-        <nav className="flex-1 px-4 space-y-2 overflow-y-auto pb-6">
+        <nav className="flex-1 px-4 space-y-2 overflow-y-auto pb-6 min-h-0">
           {menuItems.map((item) => {
             const isActive = pathname === item.path;
             return (
