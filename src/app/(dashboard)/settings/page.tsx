@@ -83,7 +83,7 @@ export default function SettingsPage() {
                   className="w-full px-4 py-2 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors resize-none"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
                   <input 

@@ -91,7 +91,7 @@ const filteredData = debts.filter(d => d.type === activeTab);
       </div>
 
       {/* KPI Summary */}
-      <div className="grid grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-gray-500 font-medium mb-1">Total Keseluruhan {activeTab === 'hutang' ? 'Hutang' : 'Piutang'}</p>

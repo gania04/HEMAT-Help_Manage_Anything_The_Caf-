@@ -98,22 +98,22 @@ export default function HppCalculatorPage() {
             {ingredients.map((ing, index) => (
               <div key={ing.id} className="flex gap-4 items-start">
                 <div className="w-8 h-10 flex items-center justify-center font-bold text-gray-400">{index + 1}.</div>
-                <div className="flex-1 grid grid-cols-12 gap-3">
-                  <div className="col-span-5">
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-3">
+                  <div className="md:col-span-5">
                     <input 
                       type="text" placeholder="Nama Bahan" value={ing.name}
                       onChange={(e) => updateIngredient(ing.id, 'name', e.target.value)}
                       className="w-full border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#00875A]"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="md:col-span-2">
                     <input 
                       type="number" placeholder="Qty" value={ing.quantity || ''}
                       onChange={(e) => updateIngredient(ing.id, 'quantity', Number(e.target.value))}
                       className="w-full border border-gray-300 px-3 py-2 rounded-lg text-sm text-center focus:outline-none focus:ring-1 focus:ring-[#00875A]"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="md:col-span-2">
                     <select 
                       value={ing.unit} onChange={(e) => updateIngredient(ing.id, 'unit', e.target.value)}
                       className="w-full border border-gray-300 px-2 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#00875A]"
@@ -121,7 +121,7 @@ export default function HppCalculatorPage() {
                       <option>Gram</option><option>ml</option><option>Pcs</option><option>Kg</option>
                     </select>
                   </div>
-                  <div className="col-span-3 relative">
+                  <div className="md:col-span-3 relative">
                     <span className="absolute left-3 top-2 text-gray-400 text-sm font-bold">Rp</span>
                     <input 
                       type="number" placeholder="Biaya/Unit" value={ing.pricePerUnit || ''}

@@ -138,7 +138,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
               <input required type="text" name="name" id="name" defaultValue={editingItem?.name} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
               </div>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="category">Kategori</label>
               <select name="category" id="category" defaultValue={editingItem?.category || 'Bahan Baku'} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none">
@@ -159,7 +159,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1" htmlFor="stock">Kuantitas Stok</label>
               <input required type="number" step="0.01" name="stock" id="stock" defaultValue={editingItem?.stock} className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-[#00875A] outline-none" />
