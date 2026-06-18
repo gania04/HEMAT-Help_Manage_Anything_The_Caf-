@@ -50,7 +50,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
             </tr>
           </thead>
           <tbody>
-            {pendingExpenses.map((exp) => (
+            {pendingExpenses.map((exp: any) => (
               <tr key={exp.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
                 <td className="p-4 text-sm text-gray-600">
                   {new Date(exp.created_at).toLocaleString('id-ID')}
