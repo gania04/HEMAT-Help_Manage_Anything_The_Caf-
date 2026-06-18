@@ -1,12 +1,23 @@
 'use client'
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import Image from 'next/image';
 import { loginUser } from '@/lib/auth-actions';
 import logoIcon from '../../../public/icon-192x192.png';
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
+
+  // Hapus Service Worker segera saat halaman login dimuat
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        for (let reg of regs) {
+          reg.unregister();
+        }
+      });
+    }
+  }, []);
 
   return (
     <div className="flex h-screen items-center justify-center bg-soft-gray">
