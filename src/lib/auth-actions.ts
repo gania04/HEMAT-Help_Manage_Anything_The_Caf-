@@ -42,7 +42,7 @@ export async function loginUser(prevState: unknown, formData: FormData) {
 
   // Membuat cookie sesi yang menyimpan data role dan name
   const cookieStore = await cookies();
-  cookieStore.set('hemat_session', JSON.stringify({ role: user.role, name: displayName, username: user.username || user.email }), {
+  cookieStore.set('hemat_session', JSON.stringify({ role: validUser.role, name: displayName, username: validUser.username || validUser.email }), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
@@ -50,7 +50,7 @@ export async function loginUser(prevState: unknown, formData: FormData) {
     path: '/',
   });
 
-  redirect('/');
+  return { success: true, redirectTo: '/' };
 }
 
 export async function logoutUser() {

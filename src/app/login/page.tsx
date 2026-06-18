@@ -2,14 +2,20 @@
 
 import { useActionState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { loginUser } from '@/lib/auth-actions';
 import logoIcon from '../../../public/icon-192x192.png';
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
+  const router = useRouter();
 
-  // Hapus Service Worker segera saat halaman login dimuat
+  // Redirect jika berhasil login, sekaligus hapus SW
   useEffect(() => {
+    if (state && 'redirectTo' in state && state.redirectTo) {
+      router.push(state.redirectTo);
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then((regs) => {
         for (let reg of regs) {
@@ -17,7 +23,7 @@ export default function LoginPage() {
         }
       });
     }
-  }, []);
+  }, [state, router]);
 
   return (
     <div className="flex h-screen items-center justify-center bg-soft-gray">
