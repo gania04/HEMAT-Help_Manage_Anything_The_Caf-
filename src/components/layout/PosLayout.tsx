@@ -8,7 +8,7 @@ export function PosLayout({
   cartPanel: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col lg:flex-row h-full w-full bg-soft-gray overflow-hidden">
+    <div className="flex-1 flex flex-col lg:flex-row w-full h-full bg-soft-gray overflow-hidden">
       {/* Product Grid Area */}
       <main className="flex-1 flex flex-col min-h-0">
         <header className="bg-primary-green text-white p-4 flex justify-between items-center shadow-md z-10 shrink-0">
