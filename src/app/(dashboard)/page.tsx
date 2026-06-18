@@ -18,7 +18,7 @@ return (
     <main className="h-full overflow-y-auto p-4 md:p-10">
       <h1 className="text-3xl font-bold text-primary-green mb-6">DASHBOARD PERFORMA</h1>
       
-      <div className="grid grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         <Card className="border-l-4 border-l-[#00875A] shadow-sm">
           <h3 className="text-gray-500 text-sm font-medium mb-1">Total Kas</h3>
           <p className="text-2xl font-bold">{formatRupiah(stats.totalKas)}</p>
@@ -37,8 +37,8 @@ return (
         </Card>
       </div>
 
-      <div className="grid grid-cols-3 gap-6 mb-8">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div className="lg:col-span-2">
           <Card variant="audit" className="h-full border-2 border-dashed border-[#00875A] bg-[#E6F4EA]/30 shadow-sm flex flex-col justify-center">
             <div className="flex items-center justify-between">
               <div>
@@ -51,16 +51,16 @@ return (
             </div>
           </Card>
         </div>
-        <div className="col-span-1">
+        <div className="lg:col-span-1">
           <ZakatWidget initialData={zakatData} />
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6 pb-10">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 pb-10">
+        <div className="lg:col-span-2">
           <RevenueChart data={trendData} />
         </div>
-        <div className="col-span-1">
+        <div className="lg:col-span-1">
           <PaymentRatioChart data={ratioData} />
         </div>
       </div>
