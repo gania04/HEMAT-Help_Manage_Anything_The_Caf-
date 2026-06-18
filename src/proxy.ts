@@ -7,6 +7,8 @@ export function proxy(request: NextRequest) {
   
   // Rute yang public (tidak perlu login)
   const isPublicPath = request.nextUrl.pathname.startsWith('/login') || 
+                       request.nextUrl.pathname.startsWith('/register') ||
+                       request.nextUrl.pathname.startsWith('/api/') ||
                        request.nextUrl.pathname.startsWith('/_next') || 
                        request.nextUrl.pathname.startsWith('/favicon.ico');
 

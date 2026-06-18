@@ -84,3 +84,30 @@ export async function createStaff(formData: FormData) {
 
   return { success: true };
 }
+
+export async function registerUser(prevState: any, formData: FormData) {
+  const name = formData.get('name') as string;
+  const username = formData.get('username') as string;
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+
+  if (!name || !username || !password) {
+    return { error: 'Nama, username, dan password wajib diisi' };
+  }
+
+  const { error } = await supabase.from('users').insert({
+    name: name,
+    full_name: name,
+    username: username,
+    email: email || `${username}@hemat.cafe`,
+    password: password,
+    role: 'owner' // Default register sebagai owner
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // Langsung login setelah register
+  return await loginUser(prevState, formData);
+}

@@ -90,6 +90,13 @@ export default function LoginPage() {
           >
             {isPending ? 'MEMPROSES...' : 'MASUK SEKARANG'}
           </button>
+          
+          <div className="text-center pt-2">
+            <span className="text-sm text-gray-600">Belum punya akun? </span>
+            <a href="/register" className="text-sm font-bold text-[#00875A] hover:underline">
+              Buat akun sekarang
+            </a>
+          </div>
         </form>
         
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
