@@ -7,6 +7,13 @@ export const metadata: Metadata = {
   description: "Help Manage Anything The Café",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
