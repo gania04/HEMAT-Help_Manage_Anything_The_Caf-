@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { requestVoid } from '@/lib/pos-actions';
 import { formatRupiah } from '@/lib/utils';
 
-  const getStatusTextClass = (status: unknown) => {
+  const getStatusTextClass = (status: any) => {
     if (status === 'completed') return 'text-green-500';
     if (status === 'pending_void') return 'text-yellow-500';
     return 'text-red-500';
   };
 
-export default function HistoryClient({ history }: Readonly<{ history: unknown[] }>) {
+export default function HistoryClient({ history }: Readonly<{ history: any[] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleVoid = async (id: string) => {
@@ -21,7 +21,7 @@ const handleVoid = async (id: string) => {
       await requestVoid(id);
       alert('Berhasil diajukan! Menunggu persetujuan Manajer.');
       globalThis.location.reload();
-    } catch (_err: unknown) {
+    } catch (_err: any) {
       alert('Gagal: ' + (_err as Error).message);
     } finally {
       setIsProcessing(null);
@@ -57,7 +57,7 @@ const handleVoid = async (id: string) => {
                 </td>
                 <td className="p-4">
                   <ul className="text-sm text-gray-600 list-disc pl-4">
-                    {trx.transaction_items?.map((item: unknown, idx: number) => (
+                    {trx.transaction_items?.map((item: any, idx: number) => (
                       <li key={`history-${item.id || idx}`}>
                         {item.quantity}x {item.menus?.menu_name || 'Item'}
                       </li>

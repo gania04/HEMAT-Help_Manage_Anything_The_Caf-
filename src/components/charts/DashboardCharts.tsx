@@ -24,7 +24,7 @@ const formatRupiah = (value: number) => {
   }).format(value);
 };
 
-export function RevenueChart({ data }: Readonly<{ data: unknown[] }>) {
+export function RevenueChart({ data }: Readonly<{ data: any[] }>) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 w-full flex flex-col">
       <h3 className="font-bold text-gray-700 mb-4">Tren Omzet 7 Hari Terakhir</h3>
@@ -41,7 +41,7 @@ export function RevenueChart({ data }: Readonly<{ data: unknown[] }>) {
               dx={-10}
             />
             <Tooltip 
-              formatter={(value: unknown) => [formatRupiah(Number(value)), 'Omzet']}
+              formatter={(value: any) => [formatRupiah(Number(value)), 'Omzet']}
               contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
             />
             <Line 
@@ -61,7 +61,7 @@ export function RevenueChart({ data }: Readonly<{ data: unknown[] }>) {
 
 const COLORS = ['#00875A', '#E3A300', '#1E88E5', '#8E24AA'];
 
-export function PaymentRatioChart({ data }: Readonly<{ data: unknown[] }>) {
+export function PaymentRatioChart({ data }: Readonly<{ data: any[] }>) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 w-full flex flex-col">
       <h3 className="font-bold text-gray-700 mb-4">Rasio Metode Pembayaran</h3>
@@ -82,7 +82,7 @@ export function PaymentRatioChart({ data }: Readonly<{ data: unknown[] }>) {
               ))}
             </Pie>
             <Tooltip 
-              formatter={(value: unknown) => [formatRupiah(Number(value)), 'Total']}
+              formatter={(value: any) => [formatRupiah(Number(value)), 'Total']}
               contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
             />
             <Legend verticalAlign="bottom" height={36} iconType="circle" />

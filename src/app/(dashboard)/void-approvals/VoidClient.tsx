@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { approveVoid } from '@/lib/void-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function VoidClient({ pendingVoids }: Readonly<{ pendingVoids: unknown[] }>) {
+export default function VoidClient({ pendingVoids }: Readonly<{ pendingVoids: any[] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleApprove = async (id: string) => {
@@ -15,7 +15,7 @@ const handleApprove = async (id: string) => {
       await approveVoid(id);
       alert('Void berhasil disetujui! Stok telah dikembalikan.');
       globalThis.location.reload();
-    } catch (_err: unknown) {
+    } catch (_err: any) {
       alert('Gagal menyetujui void: ' + (_err as Error).message);
     } finally {
       setIsProcessing(null);
@@ -53,7 +53,7 @@ const handleApprove = async (id: string) => {
                 </td>
                 <td className="p-4">
                   <ul className="text-sm text-gray-600 list-disc pl-4">
-                    {trx.transaction_items?.map((item: unknown, idx: number) => (
+                    {trx.transaction_items?.map((item: any, idx: number) => (
                       <li key={`void-${item.product_id || item.menus?.menu_name || idx}`}>
                         {item.quantity}x {item.menus?.menu_name || 'Item'}
                       </li>

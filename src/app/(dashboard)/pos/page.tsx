@@ -147,7 +147,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
         });
       }
-    } catch (_error: unknown) {
+    } catch (_error: any) {
       console.error('POS Checkout Error:', _error);
       setNotification({
         type: 'error',

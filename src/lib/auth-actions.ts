@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { supabase } from './supabase'
 
-export async function loginUser(prevState: unknown, formData: FormData) {
+export async function loginUser(prevState: any, formData: FormData) {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
 

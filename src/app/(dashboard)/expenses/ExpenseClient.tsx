@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { addExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-function BudgetAlertCard({ budget, idx }: Readonly<{ budget: unknown, idx: number }>) {
+function BudgetAlertCard({ budget, idx }: Readonly<{ budget: any, idx: number }>) {
   const ratioPercent = Math.min(Math.round(Number(budget.ratio) * 100), 100);
   
   let cardStyle = "bg-white border-green-200 text-green-700";
@@ -38,7 +38,7 @@ function BudgetAlertCard({ budget, idx }: Readonly<{ budget: unknown, idx: numbe
   );
 }
 
-function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: unknown[] }>) {
+function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
   return (
     <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-4 border-b border-gray-100 bg-gray-50">
@@ -95,7 +95,7 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: unknown[] }>) {
     return 'bg-yellow-100 text-yellow-700';
   };
 
-export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ expenses: unknown[], budgetAlerts: unknown[] }>) {
+export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ expenses: any[], budgetAlerts: any[] }>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddExpense = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -116,7 +116,7 @@ export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ exp
         alert('Pengeluaran berhasil dicatat!');
       }
       (e.target as HTMLFormElement).reset();
-    } catch (_err: unknown) {
+    } catch (_err: any) {
       alert((_err as Error).message);
     } finally {
       setIsSubmitting(false);

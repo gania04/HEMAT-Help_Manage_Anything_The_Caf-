@@ -10,7 +10,7 @@ export function openDB(): Promise<IDBDatabase> {
     request.onerror = () => reject(new Error('IDB Error'));
     request.onsuccess = () => resolve(request.result);
 
-    request.onupgradeneeded = (event: unknown) => {
+    request.onupgradeneeded = (event: any) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
@@ -19,7 +19,7 @@ export function openDB(): Promise<IDBDatabase> {
   });
 }
 
-export async function saveOfflineTransaction(cartItems: unknown[], paymentMethod: string, totalAmount: number) {
+export async function saveOfflineTransaction(cartItems: any[], paymentMethod: string, totalAmount: number) {
   const db = await openDB();
   return new Promise<void>((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
@@ -81,5 +81,5 @@ export async function syncOfflineTransactions() {
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }
-  } catch (_error: unknown) { console.error(_error); }
+  } catch (_error: any) { console.error(_error); }
 }

@@ -14,7 +14,7 @@ export async function getInventoryItems() {
     return [];
   }
 
-  return data.map((item: unknown) => ({
+  return data.map((item: any) => ({
     id: item.id,
     name: item.item_name,
     category: item.category,
