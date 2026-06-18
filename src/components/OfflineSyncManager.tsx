@@ -8,17 +8,12 @@ export function OfflineSyncManager() {
   const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
-    // Registrasi Service Worker
+    // Unregister semua Service Worker untuk mencegah error offline pada Vercel
     if ('serviceWorker' in navigator) {
-      globalThis.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js').then(
-          function(_registration) {
-            
-          },
-          function(_err) {
-            
-          }
-        );
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
       });
     }
 
