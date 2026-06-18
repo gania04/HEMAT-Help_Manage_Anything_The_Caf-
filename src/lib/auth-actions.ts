@@ -25,7 +25,6 @@ export async function loginUser(prevState: any, formData: FormData) {
 
   if (error || !user) {
     // FALLBACK BYPASS: Jika database kosong/belum disetting, izinkan login sebagai Owner
-    console.warn("Login database gagal, menggunakan Fallback Bypass Owner", error);
     validUser = {
       role: 'owner',
       name: 'Owner (Bypass)',

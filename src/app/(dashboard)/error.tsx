@@ -11,7 +11,6 @@ export default function ErrorBoundary({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error("Dashboard Error:", error);
   }, [error]);
 
   return (

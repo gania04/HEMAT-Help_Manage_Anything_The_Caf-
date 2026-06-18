@@ -20,12 +20,12 @@ export async function GET() {
         <script>
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(regs) {
-              for (let reg of regs) {
+              for (const reg of regs) {
                 reg.unregister();
               }
               // Hapus semua cache terkait PWA
               caches.keys().then(function(names) {
-                for (let name of names) {
+                for (const name of names) {
                   caches.delete(name);
                 }
                 // Redirect kembali ke login setelah dibersihkan

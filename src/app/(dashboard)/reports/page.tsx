@@ -15,7 +15,7 @@ return (
 
       <div className="grid grid-cols-1 gap-4">
         {reports.map((report, index) => (
-          <ReportCard key={report.id || `report-${report.period || index}`} report={report} />
+          <ReportCard key={`report-${report.period || index}`} report={report} />
         ))}
       </div>
     </main>

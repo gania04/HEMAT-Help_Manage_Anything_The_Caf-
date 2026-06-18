@@ -11,7 +11,7 @@ export function OfflineSyncManager() {
     // Unregister semua Service Worker untuk mencegah error offline pada Vercel
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for (let registration of registrations) {
+        for (const registration of registrations) {
           registration.unregister();
         }
       });

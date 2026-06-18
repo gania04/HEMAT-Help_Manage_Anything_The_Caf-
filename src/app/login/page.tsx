@@ -16,7 +16,7 @@ export default function LoginPage() {
       // Tunggu sampai SW dihapus, baru force hard reload ke dashboard
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(async (regs) => {
-          for (let reg of regs) {
+          for (const reg of regs) {
             await reg.unregister();
           }
           window.location.href = state.redirectTo;
@@ -30,7 +30,7 @@ export default function LoginPage() {
       // Hapus SW saat halaman pertama kali dimuat
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then((regs) => {
-          for (let reg of regs) {
+          for (const reg of regs) {
             reg.unregister();
           }
         });
