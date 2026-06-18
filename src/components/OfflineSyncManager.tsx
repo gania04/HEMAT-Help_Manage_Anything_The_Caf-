@@ -14,6 +14,8 @@ export function OfflineSyncManager() {
         for (const registration of registrations) {
           registration.unregister();
         }
+      }).catch(function() {
+        // Abaikan error saat unregister
       });
     }
 

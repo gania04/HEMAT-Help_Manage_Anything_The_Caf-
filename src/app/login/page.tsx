@@ -2,13 +2,11 @@
 
 import { useActionState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { loginUser } from '@/lib/auth-actions';
 import logoIcon from '../../../public/icon-192x192.png';
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
-  const router = useRouter();
 
   // Redirect jika berhasil login, sekaligus hapus SW
   useEffect(() => {
@@ -33,7 +31,7 @@ export default function LoginPage() {
           for (const reg of regs) {
             reg.unregister();
           }
-        });
+        }).catch(() => {});
       }
     }
   }, [state]);
