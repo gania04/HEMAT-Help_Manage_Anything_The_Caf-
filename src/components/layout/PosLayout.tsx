@@ -11,9 +11,9 @@ export function PosLayout({
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <div className="flex h-full w-full bg-soft-gray overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row w-full lg:h-full bg-soft-gray lg:overflow-hidden relative min-h-screen lg:min-h-0">
       {/* Product Grid Area */}
-      <main className="flex-1 flex flex-col h-full min-w-0">
+      <main className="flex-1 flex flex-col lg:h-full min-w-0">
         <header className="bg-primary-green text-white p-4 flex justify-between items-center shadow-md z-10 shrink-0">
           <h1 className="text-xl font-bold">HEMAT POS</h1>
           <div className="text-sm bg-white/20 px-3 py-1 rounded-full">
@@ -21,17 +21,17 @@ export function PosLayout({
           </div>
         </header>
         
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 lg:pb-6 custom-scrollbar">
+        <div className="flex-1 p-4 md:p-6 lg:overflow-y-auto custom-scrollbar">
           {children}
         </div>
 
-        {/* Floating Action Button for Mobile */}
-        <div className="lg:hidden absolute bottom-6 left-6 right-6 z-30">
+        {/* Sticky Bottom Bar for Mobile */}
+        <div className="lg:hidden sticky bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] shrink-0 z-40">
           <button 
             onClick={() => setIsCartOpen(true)}
-            className="w-full bg-[#00875A] text-white py-4 rounded-xl font-black shadow-xl shadow-[#00875A]/30 text-lg flex justify-center items-center gap-2 border-2 border-white active:scale-95 transition-transform"
+            className="w-full bg-[#00875A] text-white py-3 md:py-4 rounded-xl font-black shadow-md shadow-[#00875A]/20 text-lg flex justify-center items-center gap-2 active:scale-95 transition-transform"
           >
-            <span className="text-2xl">🛒</span> LIHAT KERANJANG & BAYAR
+            <span className="text-2xl">🛒</span> BUKA KERANJANG BELANJA
           </button>
         </div>
       </main>
