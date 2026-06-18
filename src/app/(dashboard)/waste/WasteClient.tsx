@@ -39,11 +39,15 @@ export default function WasteClient({
     const formData = new FormData(e.currentTarget);
 
     try {
-      await addWasteLog(formData);
-      setIsModalOpen(false);
-      globalThis.location.reload(); // Refresh the data
+      const res = await addWasteLog(formData);
+      if (res?.error) {
+        alert(res.error);
+      } else {
+        setIsModalOpen(false);
+        globalThis.location.reload(); // Refresh the data
+      }
     } catch (_error: any) {
-      alert((_error as Error).message || 'Terjadi kesalahan saat mencatat limbah');
+      alert((_error as Error).message || 'Terjadi kesalahan sistem yang tidak diketahui');
     } finally {
       setIsProcessing(false);
     }

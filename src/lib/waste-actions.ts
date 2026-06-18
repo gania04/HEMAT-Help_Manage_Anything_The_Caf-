@@ -39,7 +39,7 @@ export async function addWasteLog(formData: FormData) {
   const reason = formData.get('reason') as string;
 
   if (!inventory_id || quantity <= 0 || !reason) {
-    throw new Error('Data tidak lengkap');
+    return { error: 'Data tidak lengkap' };
   }
 
   // 1. Dapatkan stok saat ini
@@ -49,7 +49,7 @@ export async function addWasteLog(formData: FormData) {
     .eq('id', inventory_id)
     .single();
 
-  if (fetchError) throw new Error('Gagal memeriksa stok bahan baku');
+  if (fetchError) return { error: 'Gagal memeriksa stok bahan baku: ' + fetchError.message };
 
   const currentStock = Number(currentInventory.quantity);
   const newStock = currentStock - quantity;
@@ -60,7 +60,7 @@ export async function addWasteLog(formData: FormData) {
     .update({ quantity: newStock })
     .eq('id', inventory_id);
 
-  if (updateError) throw new Error('Gagal memotong stok bahan baku');
+  if (updateError) return { error: 'Gagal memotong stok bahan baku: ' + updateError.message };
 
   // 3. Catat di waste_logs
   const { error: insertError } = await supabase
@@ -72,9 +72,15 @@ export async function addWasteLog(formData: FormData) {
       staff_id: null // MVP: blm handle auth spesifik staf
     });
 
-  if (insertError) throw new Error('Gagal mencatat log limbah');
+  if (insertError) {
+    // Kembalikan stok jika gagal catat log (rollback manual)
+    await supabase.from('inventory').update({ quantity: currentStock }).eq('id', inventory_id);
+    return { error: 'Gagal mencatat log limbah: ' + insertError.message };
+  }
 
   revalidatePath('/waste');
   revalidatePath('/inventory');
+  
+  return { success: true };
 }
 
