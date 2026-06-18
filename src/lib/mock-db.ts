@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Mock Database untuk mensimulasikan state global di memori server
 // Menggunakan globalThis agar state tidak tereset saat Next.js melakukan Fast Refresh (Hot Reload) di environment development.
 
@@ -73,13 +72,13 @@ const initialDebts: DebtItem[] = [
 declare global {
   var _globalDb: {
     inventory: InventoryItem[];
-    menus: any[];
-    recipes: any;
+    menus: unknown[];
+    recipes: unknown;
     debts: DebtItem[];
   } | undefined;
 }
 
-if (!globalThis._globalDb) { // NOSONAR
+if (!globalThis._globalDb) {
   // Deep clone agar state aman saat re-inisialisasi
   globalThis._globalDb = {
     inventory: structuredClone(initialInventory),

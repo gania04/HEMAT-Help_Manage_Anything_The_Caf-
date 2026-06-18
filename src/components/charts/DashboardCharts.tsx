@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React from 'react';
@@ -25,7 +24,7 @@ const formatRupiah = (value: number) => {
   }).format(value);
 };
 
-export function RevenueChart({ data }: Readonly<{ data: any[] }>) {
+export function RevenueChart({ data }: Readonly<{ data: unknown[] }>) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 w-full flex flex-col">
       <h3 className="font-bold text-gray-700 mb-4">Tren Omzet 7 Hari Terakhir</h3>
@@ -62,7 +61,7 @@ export function RevenueChart({ data }: Readonly<{ data: any[] }>) {
 
 const COLORS = ['#00875A', '#E3A300', '#1E88E5', '#8E24AA'];
 
-export function PaymentRatioChart({ data }: Readonly<{ data: any[] }>) {
+export function PaymentRatioChart({ data }: Readonly<{ data: unknown[] }>) {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-96 w-full flex flex-col">
       <h3 className="font-bold text-gray-700 mb-4">Rasio Metode Pembayaran</h3>
@@ -79,7 +78,7 @@ export function PaymentRatioChart({ data }: Readonly<{ data: any[] }>) {
               dataKey="value"
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> // NOSONAR
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip 

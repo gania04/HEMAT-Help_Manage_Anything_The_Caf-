@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
 
 import { supabase } from './supabase';
@@ -21,7 +20,7 @@ async function deductStockForProduct(productId: string, quantity: number) {
   }
 }
 
-export async function processOrder(cartItems: any[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
+export async function processOrder(cartItems: unknown[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
   if (cartItems.length === 0) return { success: false, error: 'Keranjang kosong' };
 
   // 1. Dapatkan user admin (untuk simulasi MVP)
@@ -75,7 +74,7 @@ export async function getPosMenusWithStock() {
     return [];
   }
 
-  return products.map((p: any) => {
+  return products.map((p: unknown) => {
     return {
       id: p.id,
       name: p.name,
@@ -119,7 +118,7 @@ export async function getPosHistory() {
   // Normalize data to match the old structure expected by frontend (menus(menu_name))
   return data.map(trx => ({
     ...trx,
-    transaction_items: trx.transaction_items.map((item: any) => ({
+    transaction_items: trx.transaction_items.map((item: unknown) => ({
       ...item,
       menus: { menu_name: item.products?.name + (item.sugar_level ? ` (${item.sugar_level}, ${item.ice_level})` : '') }
     }))

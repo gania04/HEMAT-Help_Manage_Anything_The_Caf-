@@ -6,7 +6,7 @@ type CardProps = {
   variant?: 'default' | 'audit';
 };
 
-export function Card({ children, className = '', variant = 'default' }: Readonly<CardProps>) { // NOSONAR
+export function Card({ children, className = '', variant = 'default' }: Readonly<CardProps>) {
   const baseStyles = "bg-neutral-white rounded-xl shadow-sm p-6";
   const variants = {
     default: "border border-gray-100",

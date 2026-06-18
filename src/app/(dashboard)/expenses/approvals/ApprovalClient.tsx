@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
 import { approveExpense, rejectExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function ApprovalClient({ pendingExpenses }: Readonly<{ pendingExpenses: any[] }>) {
+export default function ApprovalClient({ pendingExpenses }: Readonly<{ pendingExpenses: unknown[] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleAction = async (id: string, action: 'approve' | 'reject') => {

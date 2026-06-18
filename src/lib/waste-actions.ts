@@ -1,5 +1,4 @@
  
-/* eslint-disable @typescript-eslint/no-explicit-any */
  
 'use server'
 
@@ -23,7 +22,7 @@ export async function getWasteLogs() {
     return [];
   }
 
-  return data.map((log: any) => ({
+  return data.map((log: unknown) => ({
     id: log.id,
     quantity: Number(log.quantity),
     reason: log.reason,

@@ -1,10 +1,9 @@
  
  
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { globalDb, DebtItem } from './mock-db'; // NOSONAR
+import { globalDb, DebtItem } from './mock-db';
 
 export async function getDebts() {
   await new Promise((resolve) => setTimeout(resolve, 500));

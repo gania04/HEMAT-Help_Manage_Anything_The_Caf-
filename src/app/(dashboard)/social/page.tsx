@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -17,8 +16,7 @@ export default function SocialFundsPage() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchReports();
+        fetchReports();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

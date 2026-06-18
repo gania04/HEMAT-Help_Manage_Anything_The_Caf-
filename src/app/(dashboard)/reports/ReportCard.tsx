@@ -3,7 +3,7 @@
 import { formatRupiah } from '@/lib/utils';
 import { useState } from 'react';
 
-export default function ReportCard({ report }: { report: any }) {
+export default function ReportCard({ report }: { report: unknown }) {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = () => {

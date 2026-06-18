@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import React from 'react';
@@ -31,9 +30,8 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
   const menuItems = allMenuItems.filter(item => item.roles.includes(activeRole));
 
   // Tutup sidebar di mobile saat pindah halaman
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  React.useEffect(() => {
-    setIsOpen(false);
+    React.useEffect(() => {
+    setTimeout(() => setIsOpen(false), 0);
   }, [pathname]);
 
   const activeMenuName = menuItems.find(m => m.path === pathname)?.name || 'HEMAT';

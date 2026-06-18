@@ -1,5 +1,4 @@
  
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -10,7 +9,7 @@ export function CompliancePanel() {
   const [activeTab, setActiveTab] = useState<'kyc' | 'aml' | 'gdpr'>('kyc');
   
   // KYC State
-  const [kycStatus, setKycStatus] = useState<any>(null);
+  const [kycStatus, setKycStatus] = useState<unknown>(null);
   const [isSubmittingKyc, setIsSubmittingKyc] = useState(false);
 
   // AML State

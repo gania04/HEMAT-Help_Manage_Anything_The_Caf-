@@ -40,8 +40,7 @@ export default function PosPage() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchMenus();
+        fetchMenus();
     
      
     setIsOffline(!navigator.onLine);
@@ -93,7 +92,7 @@ export default function PosPage() {
              setNotification({ type: 'error', message: `Stok ${item.name} hanya tersisa ${item.maxPortions} porsi!` });
              return item;
           }
-          return { ...item, quantity: newQuantity > 0 ? newQuantity : 0 }; // NOSONAR
+          return { ...item, quantity: newQuantity > 0 ? newQuantity : 0 };
         }
         return item;
       }).filter(item => item.quantity > 0);
@@ -286,7 +285,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 if (!isProcessing && !isOutOfStock) addToCart(item);
               }}
               className={`bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center transition relative ${
-                isProcessing ? 'opacity-50 cursor-not-allowed' : (isOutOfStock ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:shadow-md hover:border-[#00875A] hover:bg-green-50/30 cursor-pointer active:scale-95') // NOSONAR
+                isProcessing ? 'opacity-50 cursor-not-allowed' : (isOutOfStock ? 'opacity-50 cursor-not-allowed grayscale' : 'hover:shadow-md hover:border-[#00875A] hover:bg-green-50/30 cursor-pointer active:scale-95')
               }`}
             >
               <div className="absolute top-2 right-2 bg-gray-100 text-xs font-bold px-2 py-1 rounded border border-gray-200">
