@@ -55,11 +55,7 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: unknown[] }>) {
         </thead>
         <tbody>
           {expenses.map((exp) => {
-            const statusClass = exp.status === 'approved' 
-              ? 'bg-green-100 text-green-700' 
-              : exp.status === 'rejected' 
-                ? 'bg-red-100 text-red-700' 
-                : 'bg-yellow-100 text-yellow-700';
+            const statusClass = getStatusClass(String(exp.status));
             const statusText = exp.status === 'pending_approval' ? 'Pending Owner' : String(exp.status).toUpperCase();
 
             return (
@@ -92,6 +88,12 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: unknown[] }>) {
     </div>
   );
 }
+
+  const getStatusClass = (status: string) => {
+    if (status === 'approved') return 'bg-green-100 text-green-700';
+    if (status === 'rejected') return 'bg-red-100 text-red-700';
+    return 'bg-yellow-100 text-yellow-700';
+  };
 
 export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ expenses: unknown[], budgetAlerts: unknown[] }>) {
   const [isSubmitting, setIsSubmitting] = useState(false);

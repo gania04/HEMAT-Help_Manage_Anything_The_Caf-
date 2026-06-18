@@ -1,0 +1,121 @@
+[
+  {
+    "message": "Use <input type=\"button\">, <input type=\"image\">, <input type=\"reset\">, <input type=\"submit\">, or <button> instead of the \"button\" role to ensure accessibility across all devices.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/layout/Sidebar.tsx",
+    "line": 57,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6819"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/expenses/ExpenseClient.tsx",
+    "line": 60,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/history/HistoryClient.tsx",
+    "line": 68,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Prefer `Math.max()` to simplify ternary expressions.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/page.tsx",
+    "line": 95,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S7766"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/page.tsx",
+    "line": 288,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 69,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 77,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 86,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 94,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 181,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 185,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 189,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 193,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 197,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/settings/CompliancePanel.tsx",
+    "line": 121,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 126,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 145,
+    "type": "CODE_SMELL",
+    "rule": "typescript:S3358"
+  }
+]

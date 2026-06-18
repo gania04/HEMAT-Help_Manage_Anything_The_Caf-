@@ -4,6 +4,12 @@ import { useState } from 'react';
 import { requestVoid } from '@/lib/pos-actions';
 import { formatRupiah } from '@/lib/utils';
 
+  const getStatusTextClass = (status: unknown) => {
+    if (status === 'completed') return 'text-green-500';
+    if (status === 'pending_void') return 'text-yellow-500';
+    return 'text-red-500';
+  };
+
 export default function HistoryClient({ history }: Readonly<{ history: unknown[] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
@@ -63,10 +69,7 @@ const handleVoid = async (id: string) => {
                 </td>
                 <td className="p-4">
                   <p className="text-sm font-bold text-gray-700 capitalize">{trx.payment_method}</p>
-                  <p className={`text-xs mt-1 font-bold ${
-                    trx.status === 'completed' ? 'text-green-500' :
-                    trx.status === 'pending_void' ? 'text-yellow-500' : 'text-red-500'
-                  }`}>
+                  <p className={`text-xs mt-1 font-bold ${getStatusTextClass(trx.status)}`}>
                     {trx.status === 'pending_void' ? 'Menunggu Void' : trx.status.toUpperCase()}
                   </p>
                 </td>
