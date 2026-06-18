@@ -9,7 +9,7 @@ export function CompliancePanel() {
   const [activeTab, setActiveTab] = useState<'kyc' | 'aml' | 'gdpr'>('kyc');
   
   // KYC State
-  const [kycStatus, setKycStatus] = useState<unknown>(null);
+  const [kycStatus, setKycStatus] = useState<any>(null);
   const [isSubmittingKyc, setIsSubmittingKyc] = useState(false);
 
   // AML State
