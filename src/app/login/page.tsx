@@ -47,7 +47,13 @@ export default function LoginPage() {
               <input type="checkbox" className="rounded border-gray-300 text-[#00875A] shadow-sm focus:border-[#00875A] focus:ring focus:ring-[#00875A] focus:ring-opacity-50" />
               <span className="ml-2 text-sm text-gray-600">Ingat Saya</span>
             </label>
-            <button type="button" className="text-sm font-medium text-[#00875A] hover:underline">Lupa Password?</button>
+            <button 
+              type="button" 
+              onClick={() => alert("Silakan hubungi Owner (Pemilik Kafe) atau Admin untuk mereset kata sandi Anda.")}
+              className="text-sm font-medium text-[#00875A] hover:underline"
+            >
+              Lupa Password?
+            </button>
           </div>
           <button 
             type="submit" 
