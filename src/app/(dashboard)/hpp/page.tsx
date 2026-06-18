@@ -68,7 +68,7 @@ export default function HppCalculatorPage() {
   const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100);
 
   return (
-    <main className="h-full overflow-y-auto p-10 bg-soft-gray">
+    <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-[#00875A]">KALKULATOR HPP</h1>
@@ -143,7 +143,7 @@ export default function HppCalculatorPage() {
         </div>
 
         {/* Panel Kanan: Hasil Kalkulasi */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col h-fit sticky top-10">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col h-fit sticky top-4 md:p-10">
           <h3 className="font-bold text-gray-800 mb-6 text-center text-xl flex items-center justify-center gap-2">
             <span>🧾</span> Hasil Kalkulasi
           </h3>

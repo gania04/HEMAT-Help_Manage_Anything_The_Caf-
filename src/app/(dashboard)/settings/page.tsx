@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-/* eslint-disable jsx-a11y/label-has-associated-control */
+ 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
@@ -50,7 +51,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto p-10 space-y-8 bg-soft-gray relative">
+    <main className="flex-1 overflow-y-auto p-4 md:p-10 space-y-8 bg-soft-gray relative">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Pengaturan & Kepatuhan</h1>
           <p className="text-gray-500">Pusat kendali operasional kafe, akses staf, dan kepatuhan sistem keamanan (Compliance).</p>

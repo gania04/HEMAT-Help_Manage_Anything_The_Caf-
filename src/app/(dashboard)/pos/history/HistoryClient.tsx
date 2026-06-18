@@ -24,7 +24,7 @@ const handleVoid = async (id: string) => {
   };
 
   return (
-    <div className="flex-1 p-10 bg-soft-gray overflow-y-auto h-full">
+    <div className="flex-1 p-4 md:p-10 bg-soft-gray overflow-y-auto h-full">
       <div className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-[#00875A]">RIWAYAT KASIR</h1>

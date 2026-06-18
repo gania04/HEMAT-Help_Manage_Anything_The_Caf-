@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -43,7 +43,7 @@ export default function PosPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchMenus();
     
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     setIsOffline(!navigator.onLine);
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
@@ -124,7 +124,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             type: 'success',
             message: `${result.message} (Order ID: ${result.orderId})`
           });
-          // eslint-disable-next-line react-hooks/set-state-in-effect
+           
     fetchMenus();
         } else {
           setNotification({

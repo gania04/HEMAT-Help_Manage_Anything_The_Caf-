@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
+ 
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -23,7 +23,7 @@ export default function DebtsPage() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+     
     fetchDebts();
   }, []);
 
@@ -36,7 +36,7 @@ export default function DebtsPage() {
     
     if (result.success) {
       setNotification({ type: 'success', message: result.message || 'Pembayaran berhasil' });
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
     fetchDebts(); // Refresh data
     } else {
       setNotification({ type: 'error', message: result.error || 'Terjadi kesalahan' });
@@ -50,7 +50,7 @@ const filteredData = debts.filter(d => d.type === activeTab);
   const totalUnpaid = filteredData.reduce((sum, item) => sum + (item.amount - item.paidAmount), 0);
 
   return (
-    <main className="h-full overflow-y-auto p-10 bg-soft-gray">
+    <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-[#00875A]">HUTANG & PIUTANG</h1>
@@ -112,7 +112,7 @@ const filteredData = debts.filter(d => d.type === activeTab);
       {/* Data Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {isLoading ? (
-          <div className="p-10 text-center text-gray-500 font-bold flex flex-col items-center gap-3">
+          <div className="p-4 md:p-10 text-center text-gray-500 font-bold flex flex-col items-center gap-3">
              <div className="w-8 h-8 border-4 border-[#00875A] border-t-transparent rounded-full animate-spin"></div>
              Memuat data tagihan...
           </div>
@@ -131,7 +131,7 @@ const filteredData = debts.filter(d => d.type === activeTab);
             </thead>
             <tbody>
               {filteredData.length === 0 ? (
-                <tr><td colSpan={7} className="p-10 text-center text-gray-400 font-medium">Belum ada catatan tagihan di kategori ini.</td></tr>
+                <tr><td colSpan={7} className="p-4 md:p-10 text-center text-gray-400 font-medium">Belum ada catatan tagihan di kategori ini.</td></tr>
               ) : filteredData.map((item) => {
                 const remaining = item.amount - item.paidAmount;
                 const isPaid = item.status === 'Lunas';

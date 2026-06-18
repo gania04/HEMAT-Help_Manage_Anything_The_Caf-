@@ -123,7 +123,7 @@ export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ exp
   };
 
   return (
-    <div className="flex-1 p-10 bg-soft-gray overflow-y-auto h-full">
+    <div className="flex-1 p-4 md:p-10 bg-soft-gray overflow-y-auto h-full">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-[#00875A]">PENCATATAN PENGELUARAN</h1>
         <p className="text-gray-500 mt-1">Catat beban operasional harian kafe dan pantau limit anggarannya.</p>

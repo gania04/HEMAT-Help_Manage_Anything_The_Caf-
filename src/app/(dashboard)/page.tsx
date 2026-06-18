@@ -15,7 +15,7 @@ export default async function Home() {
   const zakatData = await calculateZakatNisab();
 
 return (
-    <main className="h-full overflow-y-auto p-10">
+    <main className="h-full overflow-y-auto p-4 md:p-10">
       <h1 className="text-3xl font-bold text-primary-green mb-6">DASHBOARD PERFORMA</h1>
       
       <div className="grid grid-cols-4 gap-6 mb-8">

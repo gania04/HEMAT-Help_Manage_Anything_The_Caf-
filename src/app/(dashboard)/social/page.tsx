@@ -32,7 +32,7 @@ export default function SocialFundsPage() {
     if (result.success) {
       setMessage({ type: 'success', text: 'Berhasil mencatat penyaluran dana sosial!' });
       (e.target as HTMLFormElement).reset();
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
     fetchReports();
     } else {
       setMessage({ type: 'error', text: result.error || 'Terjadi kesalahan' });
@@ -42,7 +42,7 @@ export default function SocialFundsPage() {
   };
 
 return (
-    <main className="h-full overflow-y-auto p-10 bg-soft-gray">
+    <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-3xl font-bold text-primary-green">Penyaluran Dana Sosial 🤝</h1>

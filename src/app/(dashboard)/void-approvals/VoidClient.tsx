@@ -24,7 +24,7 @@ const handleApprove = async (id: string) => {
   };
 
   return (
-    <div className="flex-1 p-10 bg-soft-gray overflow-y-auto h-full">
+    <div className="flex-1 p-4 md:p-10 bg-soft-gray overflow-y-auto h-full">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-red-600">PERSETUJUAN VOID</h1>
         <p className="text-gray-500 mt-1">Daftar pengajuan pembatalan transaksi dari Kasir. Membutuhkan otorisasi Manajer.</p>

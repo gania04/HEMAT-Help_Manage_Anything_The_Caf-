@@ -29,7 +29,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
   };
 
   return (
-    <div className="flex-1 p-10 bg-soft-gray overflow-y-auto h-full">
+    <div className="flex-1 p-4 md:p-10 bg-soft-gray overflow-y-auto h-full">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-yellow-600">PERSETUJUAN PENGELUARAN (OWNER)</h1>
         <p className="text-gray-500 mt-1">Daftar beban operasional bernilai besar (&gt; Rp 5.000.000) yang tertahan dan wajib di-ACC Owner.</p>

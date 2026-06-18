@@ -16,11 +16,11 @@ export default async function DashboardLayout({
       const parsed = JSON.parse(sessionValue);
       if (parsed.name) activeUser = parsed.name;
       if (parsed.role) activeRole = parsed.role;
-    } catch (_e: unknown) { console.error(_e); }
+    } catch { console.error("Error parsing session"); }
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-soft-gray">
+    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-soft-gray">
       <Sidebar activeUser={activeUser} activeRole={activeRole} />
       <div className="flex-1 overflow-hidden flex flex-col">
         {children}

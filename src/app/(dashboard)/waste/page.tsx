@@ -13,7 +13,7 @@ export default async function WastePage() {
   ]);
 
   return (
-    <main className="h-full overflow-y-auto p-10 bg-soft-gray">
+    <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <WasteClient inventoryItems={inventoryItems} logs={logs} />
     </main>
   );

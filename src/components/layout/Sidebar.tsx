@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client';
 
 import React from 'react';
@@ -30,19 +31,28 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
   const menuItems = allMenuItems.filter(item => item.roles.includes(activeRole));
 
   // Tutup sidebar di mobile saat pindah halaman
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   React.useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
+  const activeMenuName = menuItems.find(m => m.path === pathname)?.name || 'HEMAT';
+
   return (
     <>
-      {/* Mobile Toggle Button */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed bottom-6 right-6 z-50 bg-[#00875A] text-white p-4 rounded-full shadow-2xl transition-transform hover:scale-105 flex items-center justify-center w-14 h-14"
-      >
-        <span className="text-2xl">{isOpen ? '✕' : '☰'}</span>
-      </button>
+      {/* Mobile Top Navigation Bar */}
+      <div className="md:hidden flex items-center justify-between bg-white text-gray-800 px-4 py-3 border-b shadow-sm sticky top-0 z-30">
+        <div className="flex items-center gap-2">
+          <Image src="/icon-192x192.png" alt="Logo" width={32} height={32} unoptimized={true} />
+          <span className="font-bold text-[#00875A]">{activeMenuName}</span>
+        </div>
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 bg-[#E6F4EA] text-[#00875A] rounded-md"
+        >
+          <span className="text-xl">☰</span>
+        </button>
+      </div>
 
       {/* Mobile Overlay */}
       {isOpen && (
@@ -54,17 +64,20 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
 
       {/* Sidebar */}
       <aside className={`
-        fixed md:static inset-y-0 left-0 z-40
+        fixed md:static inset-y-0 left-0 z-50
         w-64 bg-[#00875A] text-white flex flex-col h-full
         transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        <div className="p-6 pb-4 flex items-center gap-3">
-          <Image src="/icon-192x192.png" alt="HEMAT Logo" width={40} height={40} className="bg-white p-1 rounded-lg" unoptimized={true} />
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">HEMAT</h1>
-            <p className="text-[10px] text-[#E6F4EA]/80 leading-tight">Help Manage Anything<br/>The Café</p>
+        <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3">
+          <div className="flex items-center gap-3">
+            <Image src="/icon-192x192.png" alt="HEMAT Logo" width={40} height={40} className="bg-white p-1 rounded-lg" unoptimized={true} />
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">HEMAT</h1>
+              <p className="text-[10px] text-[#E6F4EA]/80 leading-tight">Help Manage Anything<br/>The Café</p>
+            </div>
           </div>
+          <button className="md:hidden text-white/70 text-2xl" onClick={() => setIsOpen(false)}>✕</button>
         </div>
 
         <nav className="flex-1 px-4 space-y-2 overflow-y-auto pb-6">
