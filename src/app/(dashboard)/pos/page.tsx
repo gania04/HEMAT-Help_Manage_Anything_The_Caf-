@@ -201,39 +201,39 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         </div>
       )}
 
-      <div className="mt-4 pt-4 border-t border-gray-200">
-        <div className="flex justify-between items-center mb-4">
+      <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-gray-200 shrink-0">
+        <div className="flex justify-between items-center mb-2 md:mb-4">
           <span className="text-gray-500 font-medium">Total Harga</span>
-          <span className="text-2xl font-bold text-[#00875A]">{formatRupiah(totalHarga)}</span>
+          <span className="text-xl md:text-2xl font-bold text-[#00875A]">{formatRupiah(totalHarga)}</span>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2 md:gap-3">
           <button 
             onClick={() => handleCheckout('Tunai')}
             disabled={cart.length === 0 || isProcessing}
-            className="w-full bg-[#00875A] text-white py-3 rounded-lg font-bold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-green-100 active:scale-95 flex items-center justify-center gap-2 relative"
+            className="w-full bg-[#00875A] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-green-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
-            {isProcessing ? '...' : <><span className="text-xl">💵</span> Tunai</>}
+            {isProcessing ? '...' : <><span className="text-lg md:text-xl">💵</span> Tunai</>}
           </button>
           <button 
             onClick={() => handleCheckout('Debit')}
             disabled={cart.length === 0 || isProcessing}
-            className="w-full bg-[#1E88E5] text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-100 active:scale-95 flex items-center justify-center gap-2 relative"
+            className="w-full bg-[#1E88E5] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
-            {isProcessing ? '...' : <><span className="text-xl">💳</span> Debit</>}
+            {isProcessing ? '...' : <><span className="text-lg md:text-xl">💳</span> Debit</>}
           </button>
           <button 
             onClick={() => handleCheckout('QRIS')}
             disabled={cart.length === 0 || isProcessing}
-            className="w-full bg-[#D32F2F] text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-100 active:scale-95 flex items-center justify-center gap-2 relative"
+            className="w-full bg-[#D32F2F] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
-            {isProcessing ? '...' : <><span className="text-xl">📱</span> QRIS</>}
+            {isProcessing ? '...' : <><span className="text-lg md:text-xl">📱</span> QRIS</>}
           </button>
           <button 
             onClick={() => handleCheckout('Akad Murabahah')}
             disabled={cart.length === 0 || isProcessing}
-            className="w-full bg-[#8E24AA] text-white py-3 rounded-lg font-bold hover:bg-purple-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-purple-100 active:scale-95 flex items-center justify-center gap-2 relative"
+            className="w-full bg-[#8E24AA] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-purple-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-purple-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
-            {isProcessing ? '...' : <><span className="text-xl">🤝</span> Murabahah</>}
+            {isProcessing ? '...' : <><span className="text-lg md:text-xl">🤝</span> Murabahah</>}
           </button>
         </div>
       </div>
