@@ -95,10 +95,15 @@ export default function LoginPage() {
         </form>
         
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-           <div className="inline-block p-3 rounded-xl border border-dashed border-blue-300 bg-blue-50">
+           <div className="inline-block p-3 rounded-xl border border-dashed border-blue-300 bg-blue-50 w-full mb-4">
              <p className="text-xs text-blue-700 flex items-center justify-center gap-2">
                <span>✨</span> Autentikasi terhubung dengan sistem
              </p>
+           </div>
+           <div className="text-center w-full">
+             <a href="/api/clean" className="inline-block w-full py-2 bg-red-100 text-red-700 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-200 transition">
+               🔧 KLIK DI SINI JIKA APLIKASI ERROR / BLANK
+             </a>
            </div>
         </div>
       </div>
