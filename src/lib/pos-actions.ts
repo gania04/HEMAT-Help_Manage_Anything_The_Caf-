@@ -1,7 +1,7 @@
 'use server'
 
 import { supabase } from './supabase';
-import { seedPosData } from './seed-actions';
+
 import { revalidatePath } from 'next/cache';
 
 function parsePaymentMethod(paymentMethod: string): string {

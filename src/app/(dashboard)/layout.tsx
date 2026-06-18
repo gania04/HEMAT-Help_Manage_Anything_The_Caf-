@@ -11,7 +11,7 @@ export default async function DashboardLayout({
   
   let activeUser = "Gania K.";
   let activeRole = "owner";
-  if (sessionValue && sessionValue.startsWith('{')) {
+  if (sessionValue?.startsWith('{')) {
     try {
       const parsed = JSON.parse(sessionValue);
       if (parsed.name) activeUser = parsed.name;

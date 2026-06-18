@@ -54,7 +54,7 @@ const handleApprove = async (id: string) => {
                 <td className="p-4">
                   <ul className="text-sm text-gray-600 list-disc pl-4">
                     {trx.transaction_items?.map((item: unknown, idx: number) => (
-                      <li key={`void-${idx}`}>
+                      <li key={`void-${item.product_id || item.menus?.menu_name || idx}`}>
                         {item.quantity}x {item.menus?.menu_name || 'Item'}
                       </li>
                     ))}

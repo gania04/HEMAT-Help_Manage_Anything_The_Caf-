@@ -7,7 +7,7 @@ export function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1);
 
-    request.onerror = () => reject(new Error(String()));
+    request.onerror = () => reject(new Error('IDB Error'));
     request.onsuccess = () => resolve(request.result);
 
     request.onupgradeneeded = (event: unknown) => {
@@ -34,7 +34,7 @@ export async function saveOfflineTransaction(cartItems: unknown[], paymentMethod
 
     const request = store.add(data);
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(new Error(String()));
+    request.onerror = () => reject(new Error('IDB Error'));
   });
 }
 
@@ -46,7 +46,7 @@ export async function getOfflineTransactions(): Promise<any[]> {
     const request = store.getAll();
 
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(new Error(String()));
+    request.onerror = () => reject(new Error('IDB Error'));
   });
 }
 
@@ -58,7 +58,7 @@ export async function deleteOfflineTransaction(id: number) {
     const request = store.delete(id);
 
     request.onsuccess = () => resolve();
-    request.onerror = () => reject(new Error(String()));
+    request.onerror = () => reject(new Error('IDB Error'));
   });
 }
 

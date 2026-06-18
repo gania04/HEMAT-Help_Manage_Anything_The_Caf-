@@ -78,14 +78,11 @@ declare global {
   } | undefined;
 }
 
-if (!globalThis._globalDb) {
-  // Deep clone agar state aman saat re-inisialisasi
-  globalThis._globalDb = {
-    inventory: structuredClone(initialInventory),
-    menus: structuredClone(initialMenus),
-    recipes: structuredClone(initialRecipes),
-    debts: structuredClone(initialDebts)
-  };
-}
+globalThis._globalDb ??= {
+  inventory: structuredClone(initialInventory),
+  menus: structuredClone(initialMenus),
+  recipes: structuredClone(initialRecipes),
+  debts: structuredClone(initialDebts)
+};
 
 export const globalDb = globalThis._globalDb;

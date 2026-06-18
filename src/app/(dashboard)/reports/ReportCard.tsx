@@ -3,7 +3,7 @@
 import { formatRupiah } from '@/lib/utils';
 import { useState } from 'react';
 
-export default function ReportCard({ report }: { report: unknown }) {
+export default function ReportCard({ report }: Readonly<{ report: any }>) {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = () => {
@@ -21,8 +21,8 @@ export default function ReportCard({ report }: { report: unknown }) {
       csvContent += `01 ${report.period},Penjualan Tunai,${report.omzet},0\n`;
       csvContent += `01 ${report.period},HPP,${report.hpp},0\n`;
       csvContent += `01 ${report.period},Persediaan Barang,0,${report.hpp}\n`;
-      csvContent += `30 ${report.period},Biaya Operasional,${operasional > 0 ? operasional : 0},0\n`;
-      csvContent += `30 ${report.period},Kas (Keluar untuk operasional),0,${operasional > 0 ? operasional : 0}\n`;
+      csvContent += `30 ${report.period},Biaya Operasional,${Math.max(0, operasional)},0\n`;
+      csvContent += `30 ${report.period},Kas (Keluar untuk operasional),0,${Math.max(0, operasional)}\n`;
       
       csvContent += "\n\n";
 
@@ -32,7 +32,7 @@ export default function ReportCard({ report }: { report: unknown }) {
       csvContent += `Pendapatan Penjualan,${report.omzet}\n`;
       csvContent += `Harga Pokok Penjualan (HPP),-${report.hpp}\n`;
       csvContent += `Laba Kotor,${report.omzet - report.hpp}\n`;
-      csvContent += `Biaya Operasional,-${operasional > 0 ? operasional : 0}\n`;
+      csvContent += `Biaya Operasional,-${Math.max(0, operasional)}\n`;
       csvContent += `Laba Bersih,${report.laba}\n`;
 
       // Eksekusi download
@@ -42,7 +42,7 @@ export default function ReportCard({ report }: { report: unknown }) {
       link.setAttribute("download", `Laporan_Keuangan_${report.period.replace(' ', '_')}.csv`);
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
       
     } catch (e) {
       console.error(e);
@@ -53,9 +53,10 @@ export default function ReportCard({ report }: { report: unknown }) {
   };
 
   return (
-    <div 
+    <button 
+      type="button"
       onClick={handleDownload}
-      className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md hover:border-[#00875A] transition cursor-pointer"
+      className="w-full text-left bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md hover:border-[#00875A] transition cursor-pointer"
     >
       <div>
         <h3 className="text-lg font-bold text-gray-800 mb-1 flex items-center gap-2">
@@ -83,6 +84,6 @@ export default function ReportCard({ report }: { report: unknown }) {
           <p className="font-bold text-xl text-[#00875A]">{formatRupiah(report.laba)}</p>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

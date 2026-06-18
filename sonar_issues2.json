@@ -1,0 +1,224 @@
+[
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/expenses/ExpenseClient.tsx",
+    "line": 60,
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/history/HistoryClient.tsx",
+    "line": 68,
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Prefer `Math.max()` to simplify ternary expressions.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/page.tsx",
+    "line": 95,
+    "rule": "typescript:S7766"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/pos/page.tsx",
+    "line": 288,
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Do not use Array index in keys",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/charts/DashboardCharts.tsx",
+    "line": 81,
+    "rule": "typescript:S6479"
+  },
+  {
+    "message": "Remove this unused import of 'DebtItem'.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/debt-actions.ts",
+    "line": 6,
+    "rule": "typescript:S1128"
+  },
+  {
+    "message": "Prefer using nullish coalescing operator (`??=`) instead of an assignment expression, as it is simpler to read.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/mock-db.ts",
+    "line": 81,
+    "rule": "typescript:S6606"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 69,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 77,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 86,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 94,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 181,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 185,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 189,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 193,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 197,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "A form label must be associated with a control.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/settings/CompliancePanel.tsx",
+    "line": 121,
+    "rule": "typescript:S6853"
+  },
+  {
+    "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/layout/Sidebar.tsx",
+    "line": 57,
+    "rule": "typescript:S6848"
+  },
+  {
+    "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/components/layout/Sidebar.tsx",
+    "line": 57,
+    "rule": "typescript:S1082"
+  },
+  {
+    "message": "Mark the props of the component as read-only.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 6,
+    "rule": "typescript:S6759"
+  },
+  {
+    "message": "Prefer `Math.max()` to simplify ternary expressions.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 24,
+    "rule": "typescript:S7766"
+  },
+  {
+    "message": "Prefer `Math.max()` to simplify ternary expressions.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 25,
+    "rule": "typescript:S7766"
+  },
+  {
+    "message": "Prefer `Math.max()` to simplify ternary expressions.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 35,
+    "rule": "typescript:S7766"
+  },
+  {
+    "message": "Prefer `childNode.remove()` over `parentNode.removeChild(childNode)`.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 45,
+    "rule": "typescript:S7762"
+  },
+  {
+    "message": "Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 56,
+    "rule": "typescript:S6848"
+  },
+  {
+    "message": "Visible, non-interactive elements with click handlers must have at least one keyboard listener.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/ReportCard.tsx",
+    "line": 56,
+    "rule": "typescript:S1082"
+  },
+  {
+    "message": "Do not use Array index in keys",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/page.tsx",
+    "line": 19,
+    "rule": "typescript:S6479"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 126,
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Extract this nested ternary operation into an independent statement.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/settings/page.tsx",
+    "line": 145,
+    "rule": "typescript:S3358"
+  },
+  {
+    "message": "Do not use Array index in keys",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/void-approvals/VoidClient.tsx",
+    "line": 57,
+    "rule": "typescript:S6479"
+  },
+  {
+    "message": "Error message should not be an empty string.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/idb-store.ts",
+    "line": 10,
+    "rule": "typescript:S7722"
+  },
+  {
+    "message": "Error message should not be an empty string.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/idb-store.ts",
+    "line": 37,
+    "rule": "typescript:S7722"
+  },
+  {
+    "message": "Error message should not be an empty string.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/idb-store.ts",
+    "line": 49,
+    "rule": "typescript:S7722"
+  },
+  {
+    "message": "Error message should not be an empty string.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/idb-store.ts",
+    "line": 61,
+    "rule": "typescript:S7722"
+  },
+  {
+    "message": "Remove this unused import of 'formatRupiah'.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/reports/page.tsx",
+    "line": 2,
+    "rule": "typescript:S1128"
+  },
+  {
+    "message": "Prefer using an optional chain expression instead, as it's more concise and easier to read.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/app/(dashboard)/layout.tsx",
+    "line": 14,
+    "rule": "typescript:S6582"
+  },
+  {
+    "message": "Remove this unused import of 'seedPosData'.",
+    "component": "gania04_HEMAT-Help_Manage_Anything_The_Caf-:src/lib/pos-actions.ts",
+    "line": 4,
+    "rule": "typescript:S1128"
+  }
+]

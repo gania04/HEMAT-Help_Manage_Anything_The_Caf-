@@ -3,7 +3,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { globalDb, DebtItem } from './mock-db';
+import { globalDb } from './mock-db';
 
 export async function getDebts() {
   await new Promise((resolve) => setTimeout(resolve, 500));

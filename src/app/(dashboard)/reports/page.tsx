@@ -1,5 +1,4 @@
 import { getFinancialReports } from "@/lib/report-actions";
-import { formatRupiah } from '@/lib/utils';
 import ReportCard from './ReportCard';
 
 export default async function ReportsPage() {
@@ -16,7 +15,7 @@ return (
 
       <div className="grid grid-cols-1 gap-4">
         {reports.map((report, index) => (
-          <ReportCard key={`report-${index}`} report={report} />
+          <ReportCard key={report.id || `report-${report.period || index}`} report={report} />
         ))}
       </div>
     </main>
