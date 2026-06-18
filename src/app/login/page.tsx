@@ -6,7 +6,7 @@
 import { useActionState } from 'react';
 import Image from 'next/image';
 import { loginUser } from '@/lib/auth-actions';
-import logoIcon from '../../public/icon-192x192.png';
+import logoIcon from '../../../public/icon-192x192.png';
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
