@@ -211,7 +211,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           <span className="text-gray-500 font-medium">Total Harga</span>
           <span className="text-xl md:text-2xl font-bold text-[#00875A]">{formatRupiah(totalHarga)}</span>
         </div>
-        <div className="grid grid-cols-2 gap-2 md:gap-3">
+        <div className="grid grid-cols-3 gap-2 md:gap-3">
           <button 
             onClick={() => handleCheckout('Tunai')}
             disabled={cart.length === 0 || isProcessing}
@@ -232,13 +232,6 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             className="w-full bg-[#D32F2F] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
             {isProcessing ? '...' : <><span className="text-lg md:text-xl">📱</span> QRIS</>}
-          </button>
-          <button 
-            onClick={() => handleCheckout('Akad Murabahah')}
-            disabled={cart.length === 0 || isProcessing}
-            className="w-full bg-[#8E24AA] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-purple-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-purple-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
-          >
-            {isProcessing ? '...' : <><span className="text-lg md:text-xl">🤝</span> Murabahah</>}
           </button>
         </div>
       </div>

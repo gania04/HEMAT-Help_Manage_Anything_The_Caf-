@@ -8,7 +8,6 @@ function parsePaymentMethod(paymentMethod: string): string {
   const method = paymentMethod.toLowerCase();
   if (method.includes('qris')) return 'qris';
   if (method.includes('debit')) return 'debit';
-  if (method.includes('murabahah')) return 'murabahah';
   return 'tunai';
 }
 
