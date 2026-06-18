@@ -271,7 +271,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         </div>
       </div>
       
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 overflow-y-auto pb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 pb-10">
         {menus.length === 0 ? (
            <p className="text-gray-400 font-bold col-span-4 text-center mt-10">Memuat menu dan stok...</p>
         ) : menus.map((item) => {

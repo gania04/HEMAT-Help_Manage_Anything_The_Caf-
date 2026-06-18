@@ -23,7 +23,7 @@ export function PosLayout({
       </main>
 
       {/* Payment/Cart Panel Area */}
-      <aside className="w-full lg:w-[400px] h-[350px] lg:h-auto bg-white border-t lg:border-t-0 lg:border-l border-gray-200 flex flex-col shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)] lg:shadow-xl z-20 shrink-0">
+      <aside className="w-full lg:w-[400px] h-[45vh] lg:h-auto bg-white border-t lg:border-t-0 lg:border-l border-gray-200 flex flex-col shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)] lg:shadow-xl z-20 shrink-0">
         {cartPanel}
       </aside>
     </div>
