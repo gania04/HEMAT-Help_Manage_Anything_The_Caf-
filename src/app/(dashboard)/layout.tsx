@@ -20,7 +20,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-soft-gray">
+    <div className="flex flex-col md:flex-row h-[100dvh] overflow-hidden bg-soft-gray">
       <Sidebar activeUser={activeUser} activeRole={activeRole} />
       <div className="flex-1 overflow-hidden flex flex-col">
         {children}
