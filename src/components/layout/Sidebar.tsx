@@ -10,7 +10,6 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
   const pathname = usePathname();
 
   const allMenuItems = [
-    { name: 'Menu Utama', path: '/menu', icon: '🏠', roles: ['owner', 'admin', 'kasir'] },
     { name: 'Dashboard', path: '/', icon: '📊', roles: ['owner', 'admin'] },
     { name: 'POS Kasir', path: '/pos', icon: '💻', roles: ['owner', 'kasir', 'admin'] },
     { name: 'Riwayat Kasir', path: '/pos/history', icon: '📜', roles: ['owner', 'kasir', 'admin'] },
@@ -27,6 +26,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
   ];
 
   const [isOpen, setIsOpen] = React.useState(false);
+  const [showMainMenu, setShowMainMenu] = React.useState(false);
 
   const menuItems = allMenuItems.filter(item => item.roles.includes(activeRole));
 
@@ -41,10 +41,10 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
     <>
       {/* Mobile Top Navigation Bar */}
       <div className="md:hidden flex items-center justify-between bg-white text-gray-800 px-4 py-3 border-b shadow-sm sticky top-0 z-30">
-        <Link href="/menu" className="flex items-center gap-2 cursor-pointer">
+        <button onClick={() => setShowMainMenu(true)} className="flex items-center gap-2 cursor-pointer outline-none">
           <Image src="/icon-192x192.png" alt="Logo" width={32} height={32} unoptimized={true} />
           <span className="font-bold text-[#00875A]">{activeMenuName}</span>
-        </Link>
+        </button>
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 bg-[#E6F4EA] text-[#00875A] rounded-md"
@@ -74,14 +74,14 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3 flex-shrink-0">
-          <Link href="/menu" className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition">
+          <button onClick={() => setShowMainMenu(true)} className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition outline-none text-left">
             <Image src="/icon-192x192.png" alt="HEMAT Logo" width={40} height={40} className="bg-white p-1 rounded-lg" unoptimized={true} />
             <div>
               <h1 className="text-2xl font-bold tracking-tight">HEMAT</h1>
               <p className="text-[10px] text-[#E6F4EA]/80 leading-tight">Help Manage Anything<br/>The Café</p>
             </div>
-          </Link>
-          <button className="md:hidden text-white/70 text-2xl" onClick={() => setIsOpen(false)}>✕</button>
+          </button>
+          <button className="md:hidden text-white/70 text-2xl outline-none" onClick={() => setIsOpen(false)}>✕</button>
         </div>
 
         <nav className="flex-1 px-4 space-y-2 overflow-y-auto pb-6 min-h-0">
@@ -115,6 +115,69 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
           </form>
         </div>
       </aside>
+
+      {/* Main Menu Portal (Overlay) */}
+      {showMainMenu && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden relative">
+            <button 
+              onClick={() => setShowMainMenu(false)}
+              className="absolute top-4 right-4 text-white/80 hover:text-white bg-black/20 hover:bg-black/40 rounded-full w-8 h-8 flex items-center justify-center transition z-10"
+            >
+              ✕
+            </button>
+            <div className="bg-[#00875A] p-6 text-white text-center">
+              <div className="flex justify-center mb-3">
+                <Image src="/icon-192x192.png" alt="HEMAT Logo" width={60} height={60} className="bg-white p-2 rounded-xl shadow-lg" unoptimized />
+              </div>
+              <h2 className="text-2xl font-black mb-1">Menu Utama</h2>
+              <p className="text-green-100 text-sm">Pilih modul aplikasi yang ingin dibuka</p>
+            </div>
+
+            <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {['owner', 'kasir', 'admin'].includes(activeRole) && (
+                <Link href="/pos" onClick={() => setShowMainMenu(false)} className="group flex items-start gap-4 p-4 rounded-2xl border-2 border-transparent bg-gray-50 hover:bg-[#E6F4EA] hover:border-[#00875A]/30 transition-all">
+                  <div className="text-4xl group-hover:scale-110 transition-transform">💻</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#00875A]">Kasir (POS)</h3>
+                    <p className="text-gray-500 text-xs">Catat pesanan, proses pembayaran, dan struk.</p>
+                  </div>
+                </Link>
+              )}
+
+              {['owner', 'admin'].includes(activeRole) && (
+                <Link href="/" onClick={() => setShowMainMenu(false)} className="group flex items-start gap-4 p-4 rounded-2xl border-2 border-transparent bg-gray-50 hover:bg-[#E6F4EA] hover:border-[#00875A]/30 transition-all">
+                  <div className="text-4xl group-hover:scale-110 transition-transform">📊</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#00875A]">Dashboard</h3>
+                    <p className="text-gray-500 text-xs">Ringkasan pendapatan, laporan, dan Audit AI.</p>
+                  </div>
+                </Link>
+              )}
+
+              {['owner', 'admin'].includes(activeRole) && (
+                <Link href="/inventory" onClick={() => setShowMainMenu(false)} className="group flex items-start gap-4 p-4 rounded-2xl border-2 border-transparent bg-gray-50 hover:bg-[#E6F4EA] hover:border-[#00875A]/30 transition-all">
+                  <div className="text-4xl group-hover:scale-110 transition-transform">📦</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#00875A]">Inventori & HPP</h3>
+                    <p className="text-gray-500 text-xs">Stok bahan baku, resep menu, limbah.</p>
+                  </div>
+                </Link>
+              )}
+
+              {['owner', 'admin', 'kasir'].includes(activeRole) && (
+                <Link href="/expenses" onClick={() => setShowMainMenu(false)} className="group flex items-start gap-4 p-4 rounded-2xl border-2 border-transparent bg-gray-50 hover:bg-[#E6F4EA] hover:border-[#00875A]/30 transition-all">
+                  <div className="text-4xl group-hover:scale-110 transition-transform">💸</div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#00875A]">Keuangan Lainnya</h3>
+                    <p className="text-gray-500 text-xs">Beban operasional, hutang piutang, zakat.</p>
+                  </div>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
