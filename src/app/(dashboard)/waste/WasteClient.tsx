@@ -30,11 +30,19 @@ export default function WasteClient({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedInventory, setSelectedInventory] = useState<string>('');
+  const [quantity, setQuantity] = useState<string>('');
   
   const selectedItemData = inventoryItems.find(i => i.id === selectedInventory);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    const qtyNumber = Number(quantity);
+    if (selectedItemData && qtyNumber > selectedItemData.stock) {
+      alert(`Jumlah limbah tidak boleh melebihi stok yang ada (${selectedItemData.stock} ${selectedItemData.unit})`);
+      return;
+    }
+
     setIsProcessing(true);
     const formData = new FormData(e.currentTarget);
 
@@ -44,6 +52,8 @@ export default function WasteClient({
         alert(res.error);
       } else {
         setIsModalOpen(false);
+        setQuantity('');
+        setSelectedInventory('');
         globalThis.location.reload(); // Refresh the data
       }
     } catch (_error: any) {
@@ -139,10 +149,12 @@ export default function WasteClient({
                     id="waste_quantity"
                     required 
                     type="number" 
-                    step="0.01" 
+                    step="any" 
                     min="0.01"
-                    max={selectedItemData?.stock || undefined}
+                    max={selectedItemData?.stock ?? undefined}
                     name="quantity" 
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
                     className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-500 outline-none" 
                   />
                   <span className="absolute right-4 top-2 text-gray-400">{selectedItemData?.unit || ''}</span>

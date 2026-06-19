@@ -1,0 +1,5 @@
+-- Disable RLS untuk tabel-tabel penting yang pasti ada
+ALTER TABLE waste_logs DISABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_logs DISABLE ROW LEVEL SECURITY;
+ALTER TABLE operational_expenses DISABLE ROW LEVEL SECURITY;
+ALTER TABLE budget_limits DISABLE ROW LEVEL SECURITY;

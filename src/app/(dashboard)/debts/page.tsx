@@ -3,7 +3,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getDebts, payDebt } from '@/lib/debt-actions';
+import { getDebts, payDebt, addDebt } from '@/lib/debt-actions';
 import { DebtItem } from '@/lib/mock-db';
 
 import { formatRupiah } from '@/lib/utils';
@@ -14,6 +14,16 @@ export default function DebtsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    type: 'hutang' as 'hutang' | 'piutang',
+    counterparty: '',
+    amount: 0,
+    dueDate: '',
+    description: ''
+  });
 
   const fetchDebts = async () => {
     const data = await getDebts();
@@ -44,18 +54,40 @@ export default function DebtsPage() {
     setProcessingId(null);
   };
 
+  const handleAddDebt = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setNotification(null);
+    
+    const result = await addDebt(formData);
+    
+    if (result.success) {
+      setNotification({ type: 'success', message: result.message || 'Berhasil' });
+      setIsModalOpen(false);
+      setFormData({ type: 'hutang', counterparty: '', amount: 0, dueDate: '', description: '' });
+      fetchDebts();
+    } else {
+      setNotification({ type: 'error', message: 'Terjadi kesalahan saat mencatat' });
+    }
+    
+    setIsSubmitting(false);
+  };
+
 const filteredData = debts.filter(d => d.type === activeTab);
   const totalAmount = filteredData.reduce((sum, item) => sum + item.amount, 0);
   const totalUnpaid = filteredData.reduce((sum, item) => sum + (item.amount - item.paidAmount), 0);
 
   return (
+    <>
     <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-[#00875A]">HUTANG & PIUTANG</h1>
           <p className="text-gray-500 mt-1">Manajemen tagihan supplier dan piutang pelanggan bebas riba.</p>
         </div>
-        <button className="bg-[#00875A] text-white px-5 py-3 rounded-lg font-bold shadow-md hover:bg-green-700 transition flex items-center gap-2 active:scale-95">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="bg-[#00875A] text-white px-5 py-3 rounded-lg font-bold shadow-md hover:bg-green-700 transition flex items-center gap-2 active:scale-95">
           <span>➕</span> Catat Tagihan Baru
         </button>
       </div>
@@ -193,6 +225,87 @@ const filteredData = debts.filter(d => d.type === activeTab);
         )}
       </div>
     </main>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <h2 className="text-xl font-bold mb-4">Catat Tagihan Baru</h2>
+            <form onSubmit={handleAddDebt} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Jenis</label>
+                <select 
+                  className="w-full p-2 border rounded"
+                  value={formData.type}
+                  onChange={(e) => setFormData({...formData, type: e.target.value as 'hutang' | 'piutang'})}
+                >
+                  <option value="hutang">Hutang (Ke Supplier)</option>
+                  <option value="piutang">Piutang (Ke Pelanggan)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Pihak Terkait</label>
+                <input 
+                  type="text" 
+                  required
+                  className="w-full p-2 border rounded"
+                  placeholder="Nama Supplier / Pelanggan"
+                  value={formData.counterparty}
+                  onChange={(e) => setFormData({...formData, counterparty: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Jumlah (Rp)</label>
+                <input 
+                  type="number" 
+                  required
+                  min="0"
+                  className="w-full p-2 border rounded"
+                  value={formData.amount || ''}
+                  onChange={(e) => setFormData({...formData, amount: Number(e.target.value)})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Jatuh Tempo</label>
+                <input 
+                  type="date" 
+                  required
+                  className="w-full p-2 border rounded"
+                  value={formData.dueDate}
+                  onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Keterangan</label>
+                <textarea 
+                  required
+                  className="w-full p-2 border rounded"
+                  placeholder="Deskripsi tagihan"
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                />
+              </div>
+              <div className="flex gap-2 justify-end mt-6">
+                <button 
+                  type="button" 
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 border rounded hover:bg-gray-50"
+                >
+                  Batal
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="px-4 py-2 bg-[#00875A] text-white rounded hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+                >
+                  {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

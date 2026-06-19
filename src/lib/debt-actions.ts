@@ -32,3 +32,19 @@ export async function payDebt(id: string, amount: number) {
   return { success: true, message: `Berhasil mencatat pembayaran sejumlah Rp ${amount.toLocaleString('id-ID')}` };
 }
 
+export async function addDebt(data: Omit<import('./mock-db').DebtItem, 'id' | 'paidAmount' | 'status'>) {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  
+  const newDebt: import('./mock-db').DebtItem = {
+    ...data,
+    id: `DBT-${Date.now()}`,
+    paidAmount: 0,
+    status: 'Belum Lunas'
+  };
+  
+  globalDb.debts.push(newDebt);
+  revalidatePath('/debts');
+  
+  return { success: true, message: `Berhasil mencatat ${data.type} baru` };
+}
+
