@@ -19,7 +19,7 @@ export default async function MainMenuPage() {
   }
 
   return (
-    <div className="min-h-screen bg-soft-gray p-4 md:p-6 flex flex-col items-center justify-center">
+    <div className="h-full overflow-y-auto bg-soft-gray p-4 md:p-10 flex flex-col items-center justify-center">
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden">
         <div className="bg-[#00875A] p-8 text-white text-center relative">
           <div className="flex justify-center mb-4">

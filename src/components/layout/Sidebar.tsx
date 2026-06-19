@@ -40,10 +40,10 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
     <>
       {/* Mobile Top Navigation Bar */}
       <div className="md:hidden flex items-center justify-between bg-white text-gray-800 px-4 py-3 border-b shadow-sm sticky top-0 z-30">
-        <div className="flex items-center gap-2">
+        <Link href="/menu" className="flex items-center gap-2 cursor-pointer">
           <Image src="/icon-192x192.png" alt="Logo" width={32} height={32} unoptimized={true} />
           <span className="font-bold text-[#00875A]">{activeMenuName}</span>
-        </div>
+        </Link>
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 bg-[#E6F4EA] text-[#00875A] rounded-md"
@@ -73,13 +73,13 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3 flex-shrink-0">
-          <div className="flex items-center gap-3">
+          <Link href="/menu" className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition">
             <Image src="/icon-192x192.png" alt="HEMAT Logo" width={40} height={40} className="bg-white p-1 rounded-lg" unoptimized={true} />
             <div>
               <h1 className="text-2xl font-bold tracking-tight">HEMAT</h1>
               <p className="text-[10px] text-[#E6F4EA]/80 leading-tight">Help Manage Anything<br/>The Café</p>
             </div>
-          </div>
+          </Link>
           <button className="md:hidden text-white/70 text-2xl" onClick={() => setIsOpen(false)}>✕</button>
         </div>
 
