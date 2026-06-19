@@ -20,16 +20,18 @@ export function calculateRecommendedSellingPrice(totalHPP: number, targetMargin:
   return totalHPP / (1 - targetMargin);
 }
 
-export function calculateHppSummary(ingredients: IngredientCost[], targetMargin: number = 0.6, overheadPercentage: number = 0.1) {
+export function calculateHppSummary(ingredients: IngredientCost[], targetMargin: number = 0.6, overheadPercentage: number = 0.1, yieldQuantity: number = 1) {
   const totalMaterialCost = calculateTotalMaterialCost(ingredients);
   const overheadCost = calculateOverheadCost(totalMaterialCost, overheadPercentage);
   const totalHPP = calculateTotalHPP(totalMaterialCost, overheadCost);
-  const recommendedSellingPrice = calculateRecommendedSellingPrice(totalHPP, targetMargin);
+  const hppPerUnit = totalHPP / (yieldQuantity > 0 ? yieldQuantity : 1);
+  const recommendedSellingPrice = calculateRecommendedSellingPrice(hppPerUnit, targetMargin);
 
   return {
     totalMaterialCost,
     overheadCost,
     totalHPP,
+    hppPerUnit,
     recommendedSellingPrice
   };
 }

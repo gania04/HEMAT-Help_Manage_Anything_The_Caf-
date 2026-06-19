@@ -23,6 +23,7 @@ export default function HppCalculatorPage() {
 
   const [margin, setMargin] = useState(60);
   const [overhead, setOverhead] = useState(10);
+  const [yieldQuantity, setYieldQuantity] = useState(1);
   const [isSaving, setIsSaving] = useState(false);
   const [addToPos, setAddToPos] = useState(false);
 
@@ -47,7 +48,7 @@ export default function HppCalculatorPage() {
     setIsSaving(true);
     
     // Auto calculate
-    const { totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100);
+    const { hppPerUnit, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100, yieldQuantity);
 
     let posMsg = '';
     if (addToPos) {
@@ -60,13 +61,13 @@ export default function HppCalculatorPage() {
     }
 
     setTimeout(() => {
-      alert(`Berhasil menyimpan resep "${menuName}"!\nHPP: ${formatRupiah(totalHPP)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
+      alert(`Berhasil menyimpan resep "${menuName}"!\nHPP Per Unit: ${formatRupiah(hppPerUnit)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
       setIsSaving(false);
     }, 500); // reduced timeout for better UX
   };
 
 // Kalkulasi Otomatis
-  const { totalMaterialCost, overheadCost, totalHPP, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100);
+  const { totalMaterialCost, overheadCost, totalHPP, hppPerUnit, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100, yieldQuantity);
 
   return (
     <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
@@ -81,13 +82,26 @@ export default function HppCalculatorPage() {
         {/* Panel Kiri: Input Komposisi */}
         <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="mb-6">
-            <label htmlFor="menuName" className="block text-sm font-bold text-gray-700 mb-2">Nama Menu</label>
+            <label htmlFor="menuName" className="block text-sm font-bold text-gray-700 mb-2">Nama Menu / Produk</label>
             <input 
               id="menuName"
               type="text" 
               value={menuName}
               onChange={(e) => setMenuName(e.target.value)}
               className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A]"
+            />
+          </div>
+
+          <div className="mb-6 border-t pt-4">
+            <label htmlFor="yieldQuantity" className="block text-sm font-bold text-gray-700 mb-2">Jumlah Porsi / Hasil Satuan (Yield)</label>
+            <p className="text-xs text-gray-500 mb-2">Berapa banyak porsi/unit yang dihasilkan dari resep di bawah ini?</p>
+            <input 
+              id="yieldQuantity"
+              type="number" 
+              min="1"
+              value={yieldQuantity || ''}
+              onChange={(e) => setYieldQuantity(Number(e.target.value))}
+              className="w-full md:w-1/3 border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A]"
             />
           </div>
 
@@ -174,8 +188,12 @@ export default function HppCalculatorPage() {
             </div>
             
             <div className="mt-6 pt-4 bg-[#E6F4EA] rounded-xl p-5 text-center border border-[#00875A]/20 shadow-inner">
-              <p className="text-sm text-[#00875A] font-bold mb-1">Total HPP Akhir</p>
-              <p className="text-4xl font-black text-[#00875A] drop-shadow-sm">{formatRupiah(totalHPP)}</p>
+              <p className="text-sm text-[#00875A] font-bold mb-1">Total HPP 1 Resep (Satu Batch)</p>
+              <p className="text-2xl font-black text-[#00875A] drop-shadow-sm mb-2">{formatRupiah(totalHPP)}</p>
+              <div className="border-t border-[#00875A]/20 pt-2 mt-2">
+                <p className="text-sm text-[#00875A] font-bold mb-1">HPP per Unit (Porsi)</p>
+                <p className="text-4xl font-black text-[#00875A] drop-shadow-sm">{formatRupiah(hppPerUnit)}</p>
+              </div>
             </div>
 
             <div className="mt-6 p-4 border border-blue-100 bg-blue-50/50 rounded-xl">
