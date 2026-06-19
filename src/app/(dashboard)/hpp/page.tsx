@@ -206,12 +206,17 @@ export default function HppCalculatorPage() {
             </div>
             
             <div className="mt-6 pt-4 bg-[#E6F4EA] rounded-xl p-5 text-center border border-[#00875A]/20 shadow-inner">
-              <p className="text-sm text-[#00875A] font-bold mb-1">Total HPP 1 Resep (Satu Batch)</p>
-              <p className="text-2xl font-black text-[#00875A] drop-shadow-sm mb-2">{formatRupiah(totalHPP)}</p>
-              <div className="border-t border-[#00875A]/20 pt-2 mt-2">
-                <p className="text-sm text-[#00875A] font-bold mb-1">HPP per Unit (Porsi)</p>
-                <p className="text-4xl font-black text-[#00875A] drop-shadow-sm">{formatRupiah(hppPerUnit)}</p>
-              </div>
+              {yieldQuantity > 1 && (
+                <>
+                  <p className="text-sm text-[#00875A] font-bold mb-1">Total HPP 1 Resep ({yieldQuantity} Porsi)</p>
+                  <p className="text-2xl font-black text-[#00875A] drop-shadow-sm mb-2">{formatRupiah(totalHPP)}</p>
+                  <div className="border-t border-[#00875A]/20 pt-3 mt-3"></div>
+                </>
+              )}
+              <p className="text-sm text-[#00875A] font-bold mb-1">
+                {yieldQuantity > 1 ? 'HPP per Unit (1 Porsi)' : 'Total HPP Akhir'}
+              </p>
+              <p className="text-4xl font-black text-[#00875A] drop-shadow-sm">{formatRupiah(hppPerUnit)}</p>
             </div>
 
             <div className="mt-6 p-4 border border-blue-100 bg-blue-50/50 rounded-xl">
