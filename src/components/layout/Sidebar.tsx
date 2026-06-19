@@ -10,6 +10,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
   const pathname = usePathname();
 
   const allMenuItems = [
+    { name: 'Menu Utama', path: '/menu', icon: '🏠', roles: ['owner', 'admin', 'kasir'] },
     { name: 'Dashboard', path: '/', icon: '📊', roles: ['owner', 'admin'] },
     { name: 'POS Kasir', path: '/pos', icon: '💻', roles: ['owner', 'kasir', 'admin'] },
     { name: 'Riwayat Kasir', path: '/pos/history', icon: '📜', roles: ['owner', 'kasir', 'admin'] },
