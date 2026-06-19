@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { CompliancePanel } from "@/components/settings/CompliancePanel";
-import { createStaff } from "@/lib/auth-actions";
+import { createStaff, deleteStaff } from "@/lib/auth-actions";
 import { supabase } from "@/lib/supabase";
 
 export default function SettingsPage() {
@@ -51,6 +51,20 @@ export default function SettingsPage() {
       fetchUsers(); // Refresh list
     } else {
       alert("Gagal menambahkan staf: " + res.error);
+    }
+  };
+
+  const handleDeleteStaff = async (userId: string, userName: string) => {
+    if (!window.confirm(`Yakin ingin menghapus staf ${userName}? Tindakan ini tidak dapat dibatalkan.`)) return;
+
+    setIsLoading(true);
+    const res = await deleteStaff(userId);
+    if (res.success) {
+      alert("Staf berhasil dihapus!");
+      fetchUsers(); // Refresh list
+    } else {
+      alert("Gagal menghapus staf: " + res.error);
+      setIsLoading(false);
     }
   };
 
@@ -154,7 +168,14 @@ export default function SettingsPage() {
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-1 ${getRoleClass(String(user.role))}`}>
                           {user.role}
                         </span>
-                        <p className="text-xs text-gray-400">Aktif: Tercatat</p>
+                        <div className="flex gap-2 justify-end mt-2">
+                          <button 
+                            onClick={() => handleDeleteStaff(user.id, displayName)} 
+                            className="text-xs text-red-500 border border-red-200 px-3 py-1 rounded-full hover:bg-red-50 transition font-medium"
+                          >
+                            Hapus
+                          </button>
+                        </div>
                       </div>
                     </Card>
                   );

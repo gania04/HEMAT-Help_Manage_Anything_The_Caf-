@@ -85,6 +85,18 @@ export async function createStaff(formData: FormData) {
   return { success: true };
 }
 
+export async function deleteStaff(userId: string) {
+  if (!userId) return { success: false, error: 'ID tidak valid' };
+
+  const { error } = await supabase.from('users').delete().eq('id', userId);
+  
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
 export async function registerUser(prevState: any, formData: FormData) {
   const name = formData.get('name') as string;
   const username = formData.get('username') as string;
