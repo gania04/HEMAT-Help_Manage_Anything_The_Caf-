@@ -49,7 +49,7 @@ export async function loginUser(prevState: any, formData: FormData) {
     path: '/',
   });
 
-  return { success: true, redirectTo: '/' };
+  return { success: true, redirectTo: '/pos' };
 }
 
 export async function logoutUser() {
