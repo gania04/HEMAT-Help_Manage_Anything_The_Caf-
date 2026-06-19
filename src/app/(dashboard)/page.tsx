@@ -4,6 +4,7 @@ import { RevenueChart, PaymentRatioChart } from "@/components/charts/DashboardCh
 import { calculateZakatNisab } from "@/lib/zakat-actions";
 import { ZakatWidget } from "@/components/dashboard/ZakatWidget";
 import { formatRupiah } from '@/lib/utils';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -47,7 +48,7 @@ return (
                 </h3>
                 <p className="text-sm text-gray-700">{stats.audit.message}</p>
               </div>
-              <button className="text-sm text-primary-green font-bold underline">Lihat Detail</button>
+              <Link href="/reports" className="text-sm text-primary-green font-bold underline hover:opacity-80">Lihat Detail</Link>
             </div>
           </Card>
         </div>
