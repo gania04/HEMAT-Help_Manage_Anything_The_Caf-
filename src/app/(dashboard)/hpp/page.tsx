@@ -26,6 +26,7 @@ export default function HppCalculatorPage() {
   const [yieldQuantity, setYieldQuantity] = useState(1);
   const [isSaving, setIsSaving] = useState(false);
   const [addToPos, setAddToPos] = useState(false);
+  const [calcModalFor, setCalcModalFor] = useState<string | null>(null);
 
   const addIngredient = () => {
     setIngredients([
@@ -70,6 +71,7 @@ export default function HppCalculatorPage() {
   const { totalMaterialCost, overheadCost, totalHPP, hppPerUnit, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100, yieldQuantity);
 
   return (
+    <>
     <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -137,13 +139,22 @@ export default function HppCalculatorPage() {
                         <option>Gram</option><option>ml</option><option>Pcs</option><option>Kg</option>
                       </select>
                     </div>
-                    <div className="md:col-span-4 relative">
-                      <span className="absolute left-3 top-2 text-gray-400 text-sm font-bold">Rp</span>
-                      <input 
-                        type="number" placeholder="Biaya/Unit" value={ing.pricePerUnit || ''}
-                        onChange={(e) => updateIngredient(ing.id, 'pricePerUnit', Number(e.target.value))}
-                        className="w-full border border-gray-300 pl-8 pr-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#00875A]"
-                      />
+                    <div className="md:col-span-4 relative flex items-center gap-1">
+                      <div className="relative flex-1">
+                        <span className="absolute left-3 top-2 text-gray-400 text-sm font-bold">Rp</span>
+                        <input 
+                          type="number" placeholder="Biaya/Unit" value={ing.pricePerUnit || ''}
+                          onChange={(e) => updateIngredient(ing.id, 'pricePerUnit', Number(e.target.value))}
+                          className="w-full border border-gray-300 pl-8 pr-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#00875A]"
+                        />
+                      </div>
+                      <button 
+                        onClick={() => setCalcModalFor(ing.id)} 
+                        title="Hitung Biaya/Unit dari Harga Kemasan"
+                        className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-gray-100 text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-200 transition active:scale-95 text-lg"
+                      >
+                        🧮
+                      </button>
                     </div>
                   </div>
                   <div className="flex justify-end text-sm text-gray-500 font-medium">
@@ -253,5 +264,46 @@ export default function HppCalculatorPage() {
         </div>
       </div>
     </main>
+    
+      {/* Kalkulator Biaya/Unit Modal */}
+      {calcModalFor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-gray-800">
+              <span>🧮</span> Kalkulator Biaya per Unit
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">Hitung biaya satuan dari harga beli grosir / kemasan besar.</p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold mb-1 text-gray-700">Total Harga Beli (Rp)</label>
+                <input type="number" id="bulkPrice" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:outline-none" placeholder="Contoh: 100000" />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1 text-gray-700">Isi Kemasan (Total Kuantitas)</label>
+                <input type="number" id="bulkQty" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:outline-none" placeholder="Contoh: 1000" />
+              </div>
+            </div>
+            <div className="flex gap-3 justify-end mt-6">
+              <button onClick={() => setCalcModalFor(null)} className="px-4 py-2 text-sm font-bold border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition">Batal</button>
+              <button 
+                onClick={() => {
+                  const bulkPrice = Number((document.getElementById('bulkPrice') as HTMLInputElement).value);
+                  const bulkQty = Number((document.getElementById('bulkQty') as HTMLInputElement).value);
+                  if (bulkQty > 0) {
+                    updateIngredient(calcModalFor, 'pricePerUnit', bulkPrice / bulkQty);
+                    setCalcModalFor(null);
+                  } else {
+                    alert('Isi Kemasan harus lebih dari 0');
+                  }
+                }}
+                className="px-4 py-2 text-sm bg-[#00875A] text-white rounded-lg hover:bg-green-700 font-bold transition shadow-md shadow-green-100"
+              >
+                Gunakan Hasil
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
