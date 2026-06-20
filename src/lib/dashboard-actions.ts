@@ -59,7 +59,8 @@ export async function getDashboardStats() {
   }
   
   // Kas riil murni berdasarkan arus kas masuk (omzet) - keluar (pengeluaran)
-  const totalKas = totalOmzet - totalExpense;
+  const kasRiil = totalOmzet - totalExpense;
+  const totalKas = Math.max(0, kasRiil); // Kas tidak boleh negatif
   const labaBersih = totalOmzet - totalHpp - totalExpense;
 
   let auditStatus = 'aman';

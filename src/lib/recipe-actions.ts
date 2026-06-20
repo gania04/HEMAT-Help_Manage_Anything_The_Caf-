@@ -8,7 +8,7 @@ export async function getAllRecipes() {
     .select(`
       id,
       menu_name,
-      menu_prices ( price ),
+      menu_prices ( price, channel ),
       menu_recipes (
         qty_needed,
         inventory (

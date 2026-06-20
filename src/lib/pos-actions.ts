@@ -242,5 +242,6 @@ export async function createPosProduct(
 
   revalidatePath('/pos');
   revalidatePath('/inventory');
+  revalidatePath('/recipes');
   return { success: true };
 }
