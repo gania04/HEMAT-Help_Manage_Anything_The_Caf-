@@ -68,6 +68,7 @@ export default function HppCalculatorPage() {
     setTimeout(() => {
       alert(`Berhasil menyimpan resep "${menuName}"!\nHPP Per Unit: ${formatRupiah(hppPerUnit)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
       setIsSaving(false);
+      window.location.href = '/recipes';
     }, 500); // reduced timeout for better UX
   };
 
