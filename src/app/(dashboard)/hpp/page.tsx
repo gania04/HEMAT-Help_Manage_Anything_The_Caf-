@@ -61,15 +61,17 @@ export default function HppCalculatorPage() {
       } else {
         posMsg = '\n✅ Resep berhasil disimpan di Daftar Resep (Tidak masuk POS).';
       }
+      setTimeout(() => {
+        alert(`Berhasil menyimpan resep "${menuName}"!\nHPP Per Unit: ${formatRupiah(hppPerUnit)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
+        setIsSaving(false);
+        window.location.href = '/recipes';
+      }, 500);
     } else {
-      posMsg = '\n❌ Gagal menyimpan resep: ' + res.error;
+      setTimeout(() => {
+        alert(`❌ Gagal menyimpan resep:\n${res.error}\n\nSilakan perbaiki masalah ini sebelum mencoba lagi.`);
+        setIsSaving(false);
+      }, 500);
     }
-
-    setTimeout(() => {
-      alert(`Berhasil menyimpan resep "${menuName}"!\nHPP Per Unit: ${formatRupiah(hppPerUnit)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
-      setIsSaving(false);
-      window.location.href = '/recipes';
-    }, 500); // reduced timeout for better UX
   };
 
 // Kalkulasi Otomatis
