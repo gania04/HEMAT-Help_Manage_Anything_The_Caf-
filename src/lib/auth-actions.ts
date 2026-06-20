@@ -124,3 +124,41 @@ export async function registerUser(prevState: any, formData: FormData) {
   // Langsung login setelah register
   return await loginUser(prevState, formData);
 }
+
+export async function changePasswordAndLogin(prevState: any, formData: FormData) {
+  const username = formData.get('username') as string;
+  const oldPassword = formData.get('oldPassword') as string;
+  const newPassword = formData.get('newPassword') as string;
+
+  if (!username || !oldPassword || !newPassword) {
+    return { error: 'Semua field wajib diisi' };
+  }
+
+  // Cari user dan verifikasi password lama
+  const { data: user, error: fetchError } = await supabase
+    .from('users')
+    .select('*')
+    .or(`username.eq.${username},email.eq.${username}`)
+    .eq('password', oldPassword)
+    .maybeSingle();
+
+  if (fetchError || !user) {
+    return { error: 'Username atau password lama salah' };
+  }
+
+  // Update ke password baru
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({ password: newPassword })
+    .eq('id', user.id);
+
+  if (updateError) {
+    return { error: 'Gagal mengubah password' };
+  }
+
+  // Login dengan password baru
+  const formDataForLogin = new FormData();
+  formDataForLogin.append('username', username);
+  formDataForLogin.append('password', newPassword);
+  return await loginUser(prevState, formDataForLogin);
+}

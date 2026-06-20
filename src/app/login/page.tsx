@@ -1,12 +1,18 @@
 'use client'
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { loginUser } from '@/lib/auth-actions';
+import { loginUser, changePasswordAndLogin } from '@/lib/auth-actions';
 import logoIcon from '../../../public/icon-192x192.png';
 
 export default function LoginPage() {
-  const [state, formAction, isPending] = useActionState(loginUser, null);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [loginState, loginAction, isLoginPending] = useActionState(loginUser, null);
+  const [resetState, resetAction, isResetPending] = useActionState(changePasswordAndLogin, null);
+
+  const state = isForgotPassword ? resetState : loginState;
+  const isPending = isForgotPassword ? isResetPending : isLoginPending;
+  const formAction = isForgotPassword ? resetAction : loginAction;
 
   // Redirect jika berhasil login, sekaligus hapus SW
   useEffect(() => {
@@ -54,22 +60,46 @@ export default function LoginPage() {
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="username">Username / Email</label>
-              <input 
+            <input 
               name="username" id="username"
               type="text" 
               className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
               placeholder="Masukkan username"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">Password</label>
+
+          {!isForgotPassword ? (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">Password</label>
               <input 
-              name="password" id="password"
-              type="password" 
-              className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
-              placeholder="Masukkan password"
-            />
-          </div>
+                name="password" id="password"
+                type="password" 
+                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
+                placeholder="Masukkan password"
+              />
+            </div>
+          ) : (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="oldPassword">Password Lama</label>
+                <input 
+                  name="oldPassword" id="oldPassword"
+                  type="password" 
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
+                  placeholder="Masukkan password lama"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="newPassword">Password Baru</label>
+                <input 
+                  name="newPassword" id="newPassword"
+                  type="password" 
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
+                  placeholder="Masukkan password baru"
+                />
+              </div>
+            </>
+          )}
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input type="checkbox" className="rounded border-gray-300 text-[#00875A] shadow-sm focus:border-[#00875A] focus:ring focus:ring-[#00875A] focus:ring-opacity-50" />
@@ -77,10 +107,10 @@ export default function LoginPage() {
             </label>
             <button 
               type="button" 
-              onClick={() => alert("Silakan hubungi Owner (Pemilik Kafe) atau Admin untuk mereset kata sandi Anda.")}
+              onClick={() => setIsForgotPassword(!isForgotPassword)}
               className="text-sm font-medium text-[#00875A] hover:underline"
             >
-              Lupa Password?
+              {isForgotPassword ? "Kembali ke Login" : "Lupa Password?"}
             </button>
           </div>
           <button 
@@ -90,16 +120,10 @@ export default function LoginPage() {
           >
             {isPending ? 'MEMPROSES...' : (
               <>
-                Masuk <span>&gt;</span>
+                {isForgotPassword ? "Ubah Password & Masuk" : "Masuk"} <span>&gt;</span>
               </>
             )}
           </button>
-          
-          <div className="text-center pt-4">
-            <a href="/register" className="text-sm text-gray-600 hover:text-gray-900 transition">
-              Belum punya akun? <span className="font-medium text-[#006A4E]">Daftar sekarang</span>
-            </a>
-          </div>
         </form>
         
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
