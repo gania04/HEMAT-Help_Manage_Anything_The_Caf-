@@ -226,6 +226,8 @@ export async function createPosProduct(
         
         if (!invError && newInv) {
           inventoryId = newInv.id;
+        } else if (invError) {
+          return { success: false, error: `Gagal membuat bahan baku baru (${recipe.name}): ` + invError.message };
         }
       }
 
