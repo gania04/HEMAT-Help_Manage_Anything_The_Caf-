@@ -44,6 +44,9 @@ export default function PosPage() {
   const [cashGiven, setCashGiven] = useState<number | ''>('');
   const [debitRef, setDebitRef] = useState<string>('');
   const [receiptData, setReceiptData] = useState<any>(null);
+  const [customerName, setCustomerName] = useState('');
+  const [customerWA, setCustomerWA] = useState('');
+  const [showQRMenu, setShowQRMenu] = useState(false);
 
   const fetchMenus = async () => {
     const data = await getPosMenusWithStock();
@@ -143,10 +146,14 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             method: paymentMethod,
             cashGiven: cashGiven || 0,
             change: (cashGiven && paymentMethod === 'Tunai') ? Number(cashGiven) - totalHarga : 0,
-            date: new Date().toLocaleString('id-ID')
+            date: new Date().toLocaleString('id-ID'),
+            customerName,
+            customerWA
           });
           setCart([]);
           setPaymentMethod(null);
+          setCustomerName('');
+          setCustomerWA('');
           setNotification({
             type: 'success',
             message: `${result.message} (Order ID: ${result.orderId})`
@@ -170,10 +177,14 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           method: paymentMethod,
           cashGiven: cashGiven || 0,
           change: (cashGiven && paymentMethod === 'Tunai') ? Number(cashGiven) - totalHarga : 0,
-          date: new Date().toLocaleString('id-ID')
+          date: new Date().toLocaleString('id-ID'),
+          customerName,
+          customerWA
         });
         setCart([]);
         setPaymentMethod(null);
+        setCustomerName('');
+        setCustomerWA('');
         setNotification({
           type: 'success',
           message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
@@ -239,6 +250,22 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
       )}
 
       <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-gray-200 shrink-0">
+        <div className="mb-4 space-y-2">
+          <input 
+            type="text" 
+            placeholder="Nama Pelanggan (Opsional)" 
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+            className="w-full border border-gray-200 px-3 py-2 rounded-lg text-sm focus:ring-2 focus:ring-[#00875A] focus:outline-none"
+          />
+          <input 
+            type="tel" 
+            placeholder="Nomor WA Pelanggan (Opsional)" 
+            value={customerWA}
+            onChange={(e) => setCustomerWA(e.target.value)}
+            className="w-full border border-gray-200 px-3 py-2 rounded-lg text-sm focus:ring-2 focus:ring-[#00875A] focus:outline-none"
+          />
+        </div>
         <div className="flex justify-between items-center mb-2 md:mb-4">
           <span className="text-gray-500 font-medium">Total Harga</span>
           <span className="text-xl md:text-2xl font-bold text-[#00875A]">{formatRupiah(totalHarga)}</span>
@@ -282,7 +309,15 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
   return (
     <PosLayout cartPanel={cartPanel}>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-[#00875A]">Pilih Menu</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-2xl font-bold text-[#00875A]">Pilih Menu</h2>
+          <button 
+            onClick={() => setShowQRMenu(true)}
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-bold flex items-center gap-2 border border-gray-200 transition"
+          >
+            📱 Tampilkan QR Menu
+          </button>
+        </div>
         <div className="flex items-center gap-4">
           <select
             value={activeChannel}
@@ -443,6 +478,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 <div>
                   <p>Order ID: <b>{receiptData.orderId}</b></p>
                   <p>Kasir: Gania K.</p>
+                  {receiptData.customerName && <p className="mt-1 text-gray-800">Pelanggan: <b>{receiptData.customerName}</b></p>}
                 </div>
                 <div className="text-right">
                   <p>{receiptData.date.split(',')[0]}</p>
@@ -492,14 +528,42 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
               <button 
                 onClick={() => {
                   const itemsText = receiptData.items.map((i: any) => `${i.quantity}x ${i.name} - ${formatRupiah(i.price * i.quantity)}`).join('%0A');
-                  const text = `*Struk Pembelian HEMAT*%0AOrder ID: ${receiptData.orderId}%0ATanggal: ${receiptData.date}%0A%0A*Pesanan:*%0A${itemsText}%0A%0A*Total: ${formatRupiah(receiptData.total)}*%0AMetode: ${receiptData.method}${receiptData.method === 'Tunai' ? `%0ATunai: ${formatRupiah(receiptData.cashGiven)}%0AKembali: ${formatRupiah(receiptData.change)}` : ''}%0A%0ATerima kasih!`;
-                  window.open(`https://wa.me/?text=${text}`, '_blank');
+                  const text = `*Struk Pembelian HEMAT*%0AOrder ID: ${receiptData.orderId}%0ATanggal: ${receiptData.date}${receiptData.customerName ? `%0APelanggan: ${receiptData.customerName}` : ''}%0A%0A*Pesanan:*%0A${itemsText}%0A%0A*Total: ${formatRupiah(receiptData.total)}*%0AMetode: ${receiptData.method}${receiptData.method === 'Tunai' ? `%0ATunai: ${formatRupiah(receiptData.cashGiven)}%0AKembali: ${formatRupiah(receiptData.change)}` : ''}%0A%0ATerima kasih telah berbelanja!`;
+                  
+                  let waUrl = `https://wa.me/?text=${text}`;
+                  if (receiptData.customerWA) {
+                    let phone = receiptData.customerWA.replace(/[^0-9]/g, '');
+                    if (phone.startsWith('0')) phone = '62' + phone.slice(1);
+                    waUrl = `https://wa.me/${phone}?text=${text}`;
+                  }
+                  
+                  window.open(waUrl, '_blank');
                 }}
                 className="px-4 py-3 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 font-bold transition shadow-sm flex items-center justify-center gap-2 flex-1"
               >
                 <span className="text-lg">💬</span> Kirim WA
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showQRMenu && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 text-center animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-2xl font-black text-[#00875A] mb-2">Self-Order Menu</h2>
+            <p className="text-sm text-gray-500 mb-6">Minta pelanggan scan barcode ini menggunakan kamera HP mereka untuk melihat menu dan memesan.</p>
+            
+            <div className="bg-white p-4 rounded-xl border-4 border-[#00875A] inline-block mb-6 shadow-md">
+               <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://hemat.cafe/menu" alt="QR Code Menu" className="w-48 h-48" />
+            </div>
+            
+            <button 
+              onClick={() => setShowQRMenu(false)}
+              className="w-full px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition"
+            >
+              Tutup
+            </button>
           </div>
         </div>
       )}
