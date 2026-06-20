@@ -63,10 +63,10 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
 
       {/* Sidebar Drawer */}
       <aside className={`
-        fixed inset-y-0 right-0 z-50
+        fixed inset-y-0 left-0 z-50
         w-72 bg-[#00875A] text-white flex flex-col h-[100dvh] shadow-2xl
         transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-4 flex items-center justify-between flex-shrink-0 border-b border-white/10">
           <h2 className="font-bold text-xl tracking-tight pl-2">Menu Aplikasi</h2>
