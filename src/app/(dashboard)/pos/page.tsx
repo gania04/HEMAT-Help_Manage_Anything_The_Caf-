@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { PosLayout } from "@/components/layout/PosLayout";
 import { processOrder, getPosMenusWithStock } from '@/lib/pos-actions';
 import { formatRupiah } from '@/lib/utils';
@@ -39,6 +40,9 @@ export default function PosPage() {
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error'} | null>(null);
   const [isOffline, setIsOffline] = useState(false);
   const [activeChannel, setActiveChannel] = useState('dine_in');
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
+  const [cashGiven, setCashGiven] = useState<number | ''>('');
+  const [debitRef, setDebitRef] = useState<string>('');
 
   const fetchMenus = async () => {
     const data = await getPosMenusWithStock();
@@ -107,6 +111,13 @@ export default function PosPage() {
 
 const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.quantity), 0);
 
+  const initiatePayment = (method: string) => {
+    if (cart.length === 0) return;
+    setPaymentMethod(method);
+    setCashGiven('');
+    setDebitRef('');
+  };
+
   const handleCheckout = async (method: string) => {
     if (cart.length === 0) return;
     
@@ -125,6 +136,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         
         if (result.success) {
           setCart([]);
+          setPaymentMethod(null);
           setNotification({
             type: 'success',
             message: `${result.message} (Order ID: ${result.orderId})`
@@ -142,6 +154,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         await saveOfflineTransaction(checkoutCart, method, totalHarga);
         
         setCart([]);
+        setPaymentMethod(null);
         setNotification({
           type: 'success',
           message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
@@ -213,21 +226,21 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         </div>
         <div className="grid grid-cols-3 gap-2 md:gap-3">
           <button 
-            onClick={() => handleCheckout('Tunai')}
+            onClick={() => initiatePayment('Tunai')}
             disabled={cart.length === 0 || isProcessing}
             className="w-full bg-[#00875A] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-green-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
             {isProcessing ? '...' : <><span className="text-lg md:text-xl">💵</span> Tunai</>}
           </button>
           <button 
-            onClick={() => handleCheckout('Debit')}
+            onClick={() => initiatePayment('Debit')}
             disabled={cart.length === 0 || isProcessing}
             className="w-full bg-[#1E88E5] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-blue-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
             {isProcessing ? '...' : <><span className="text-lg md:text-xl">💳</span> Debit</>}
           </button>
           <button 
-            onClick={() => handleCheckout('QRIS')}
+            onClick={() => initiatePayment('QRIS')}
             disabled={cart.length === 0 || isProcessing}
             className="w-full bg-[#D32F2F] text-white py-2 md:py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-100 active:scale-95 flex items-center justify-center gap-2 relative text-sm md:text-base"
           >
@@ -306,6 +319,97 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           );
         })}
       </div>
+      {paymentMethod && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-800">
+              {paymentMethod === 'Tunai' ? '💵 Pembayaran Tunai' : paymentMethod === 'QRIS' ? '📱 Pembayaran QRIS' : '💳 Pembayaran Debit'}
+            </h2>
+            
+            <div className="bg-gray-50 p-4 rounded-lg mb-4 text-center">
+              <p className="text-gray-500 text-sm">Total Tagihan</p>
+              <p className="text-3xl font-black text-[#00875A]">{formatRupiah(totalHarga)}</p>
+            </div>
+
+            {paymentMethod === 'Tunai' && (
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-bold mb-1 text-gray-700">Uang Diterima (Rp)</label>
+                  <input 
+                    type="number" 
+                    value={cashGiven}
+                    onChange={(e) => setCashGiven(Number(e.target.value))}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:outline-none font-bold text-lg" 
+                    placeholder="Masukkan jumlah" 
+                    autoFocus
+                  />
+                </div>
+                {Number(cashGiven) >= totalHarga && (
+                  <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                    <p className="text-sm text-green-700 mb-1">Kembalian</p>
+                    <p className="text-xl font-bold text-[#00875A]">{formatRupiah(Number(cashGiven) - totalHarga)}</p>
+                  </div>
+                )}
+                {Number(cashGiven) > 0 && Number(cashGiven) < totalHarga && (
+                  <p className="text-sm text-red-500 font-bold">Uang kurang {formatRupiah(totalHarga - Number(cashGiven))}!</p>
+                )}
+              </div>
+            )}
+
+            {paymentMethod === 'QRIS' && (
+              <div className="flex flex-col items-center mb-6">
+                <div className="w-48 h-48 bg-gray-100 rounded-xl mb-4 border-4 border-[#00875A] flex flex-col items-center justify-center relative overflow-hidden">
+                   <div className="absolute inset-0 flex flex-col items-center justify-center">
+                     <span className="text-6xl mb-2">📷</span>
+                     <span className="text-xs font-bold text-gray-700 bg-white px-2 py-1 rounded shadow">Scan QRIS</span>
+                   </div>
+                </div>
+                <p className="text-sm text-center text-gray-500">Minta pelanggan memindai kode QRIS ini dengan aplikasi E-Wallet atau M-Banking.</p>
+              </div>
+            )}
+
+            {paymentMethod === 'Debit' && (
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-bold mb-1 text-gray-700">Nomor Referensi EDC / Approval Code</label>
+                  <input 
+                    type="text" 
+                    value={debitRef}
+                    onChange={(e) => setDebitRef(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none font-bold" 
+                    placeholder="Contoh: 123456" 
+                    autoFocus
+                  />
+                </div>
+                <p className="text-xs text-gray-500">Gesek kartu pada mesin EDC dan masukkan kode approval yang muncul pada struk mesin EDC.</p>
+              </div>
+            )}
+
+            <div className="flex gap-3 justify-end">
+              <button 
+                onClick={() => setPaymentMethod(null)} 
+                className="px-4 py-3 text-sm font-bold border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition flex-1"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => {
+                  if (paymentMethod === 'Tunai' && Number(cashGiven) < totalHarga) return;
+                  if (paymentMethod === 'Debit' && !debitRef) {
+                    alert("Masukkan Nomor Referensi EDC!");
+                    return;
+                  }
+                  handleCheckout(paymentMethod);
+                }}
+                disabled={paymentMethod === 'Tunai' && (Number(cashGiven) < totalHarga || !cashGiven)}
+                className="px-4 py-3 text-sm bg-[#00875A] text-white rounded-lg hover:bg-green-700 font-bold transition shadow-md shadow-green-100 flex-1 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isProcessing ? '⏳ Memproses...' : '✅ Selesaikan'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PosLayout>
   );
 }
