@@ -1,7 +1,8 @@
  
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import Image from 'next/image';
 import { PosLayout } from "@/components/layout/PosLayout";
 import { processOrder, getPosMenusWithStock } from '@/lib/pos-actions';
@@ -47,6 +48,40 @@ export default function PosPage() {
   const [customerName, setCustomerName] = useState('');
   const [customerWA, setCustomerWA] = useState('');
   const [showQRMenu, setShowQRMenu] = useState(false);
+  const receiptRef = useRef<HTMLDivElement>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
+
+  const handleShareImage = async () => {
+    if (!receiptRef.current) return;
+    setIsCapturing(true);
+    try {
+      const canvas = await html2canvas(receiptRef.current, { scale: 2, backgroundColor: '#ffffff' });
+      const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) return;
+
+      const file = new File([blob], `Struk-${receiptData.orderId}.png`, { type: 'image/png' });
+      
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Struk Pembelian HEMAT',
+          text: 'Terima kasih telah berbelanja di HEMAT!'
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Struk-${receiptData.orderId}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error('Failed to capture image:', err);
+      alert('Gagal membuat gambar struk.');
+    } finally {
+      setIsCapturing(false);
+    }
+  };
 
   const fetchMenus = async () => {
     const data = await getPosMenusWithStock();
@@ -468,13 +503,15 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
       {receiptData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm flex flex-col animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
-            <div className="p-6 pb-2 text-center border-b border-gray-100 border-dashed">
-              <h2 className="text-2xl font-black text-gray-800 tracking-tight">HEMAT</h2>
-              <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">Struk Pembelian</p>
-            </div>
             
-            <div className="p-6 flex-1 overflow-y-auto">
-              <div className="flex justify-between text-xs text-gray-500 mb-4 pb-4 border-b border-gray-100">
+            <div ref={receiptRef} className="bg-white">
+              <div className="p-6 pb-2 text-center border-b border-gray-100 border-dashed">
+                <h2 className="text-2xl font-black text-gray-800 tracking-tight">HEMAT</h2>
+                <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">Struk Pembelian</p>
+              </div>
+              
+              <div className="p-6">
+                <div className="flex justify-between text-xs text-gray-500 mb-4 pb-4 border-b border-gray-100">
                 <div>
                   <p>Order ID: <b>{receiptData.orderId}</b></p>
                   <p>Kasir: Gania K.</p>
@@ -515,13 +552,22 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 )}
               </div>
               
-              <p className="text-center text-xs text-gray-400 mt-8">Terima kasih atas kunjungan Anda!</p>
+                <p className="text-center text-xs text-gray-400 mt-8">Terima kasih atas kunjungan Anda!</p>
+              </div>
             </div>
             
-            <div className="p-4 bg-gray-50 flex gap-3 border-t border-gray-200">
+            <div className="p-4 bg-gray-50 flex flex-wrap gap-2 border-t border-gray-200">
+              <button 
+                onClick={handleShareImage}
+                disabled={isCapturing}
+                className="w-full py-2 text-sm bg-[#1E88E5] text-white rounded-lg hover:bg-blue-600 font-bold transition shadow-sm flex items-center justify-center gap-2 mb-1"
+              >
+                {isCapturing ? '⏳ Memproses IMG...' : '📸 Bagikan / Unduh IMG'}
+              </button>
+              
               <button 
                 onClick={() => setReceiptData(null)} 
-                className="px-4 py-3 text-sm font-bold border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition flex-1"
+                className="py-2 px-3 text-sm font-bold border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition flex-1"
               >
                 Selesai
               </button>
@@ -539,9 +585,9 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                   
                   window.open(waUrl, '_blank');
                 }}
-                className="px-4 py-3 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 font-bold transition shadow-sm flex items-center justify-center gap-2 flex-1"
+                className="py-2 px-3 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 font-bold transition shadow-sm flex items-center justify-center gap-2 flex-1"
               >
-                <span className="text-lg">💬</span> Kirim WA
+                <span className="text-lg">💬</span> WA Teks
               </button>
             </div>
           </div>
