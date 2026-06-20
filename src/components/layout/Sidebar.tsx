@@ -16,6 +16,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
     { name: 'Riwayat Kasir', path: '/pos/history', icon: '📜', roles: ['owner', 'kasir', 'admin'] },
     { name: 'Persetujuan Void', path: '/void-approvals', icon: '⚠️', roles: ['owner', 'admin', 'kasir'] },
     { name: 'Kalkulator HPP', path: '/hpp', icon: '🧮', roles: ['owner', 'admin'] },
+    { name: 'Daftar Resep', path: '/recipes', icon: '📋', roles: ['owner', 'admin'] },
     { name: 'Inventaris', path: '/inventory', icon: '📦', roles: ['owner', 'admin'] },
     { name: 'Manajemen Limbah', path: '/waste', icon: '🗑️', roles: ['owner', 'admin'] },
     { name: 'Pengeluaran', path: '/expenses', icon: '💸', roles: ['owner', 'admin', 'kasir'] },
