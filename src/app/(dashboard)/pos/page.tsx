@@ -23,7 +23,9 @@ type MenuItem = {
 };
 
 type CartItem = MenuItem & {
+  cartItemId: string;
   quantity: number;
+  selectedOptions?: Record<string, string>;
 };
 
 const CHANNELS = [
@@ -48,6 +50,8 @@ export default function PosPage() {
   const [customerName, setCustomerName] = useState('');
   const [customerWA, setCustomerWA] = useState('');
   const [showQRMenu, setShowQRMenu] = useState(false);
+  const [selectedMenuForOptions, setSelectedMenuForOptions] = useState<MenuItem | null>(null);
+  const [tempOptions, setTempOptions] = useState<Record<string, string>>({});
   const receiptRef = useRef<HTMLDivElement>(null);
   const [isCapturing, setIsCapturing] = useState(false);
 
@@ -109,37 +113,67 @@ export default function PosPage() {
     return item.prices[activeChannel] || item.prices['dine_in'] || 0;
   };
 
-  const addToCart = (item: MenuItem) => {
+  const handleMenuClick = (item: MenuItem) => {
+    if (isProcessing) return;
+    if (item.maxPortions === 0) return;
+    
+    // Check if item has options
+    // @ts-ignore
+    if (item.options && Object.keys(item.options).length > 0) {
+      setSelectedMenuForOptions(item);
+      // Set default options (first choice of each)
+      const defaultOpts: Record<string, string> = {};
+      // @ts-ignore
+      Object.keys(item.options).forEach(key => {
+        // @ts-ignore
+        defaultOpts[key] = item.options[key][0];
+      });
+      setTempOptions(defaultOpts);
+    } else {
+      addToCart(item);
+    }
+  };
+
+  const addToCart = (item: MenuItem, selectedOpts?: Record<string, string>) => {
     setNotification(null);
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      const optsString = selectedOpts ? Object.entries(selectedOpts).sort().map(([k,v]) => `${k}:${v}`).join('|') : '';
+      const cartItemId = item.id + (optsString ? `-${optsString}` : '');
+      const existingItem = prevCart.find((cartItem) => cartItem.cartItemId === cartItemId);
       
-      const currentQty = existingItem ? existingItem.quantity : 0;
-      if (item.maxPortions !== undefined && currentQty >= item.maxPortions) {
+      // Calculate total quantity of this menu item across all variations to check against maxPortions
+      const totalQtyOfThisMenu = prevCart.filter(c => c.id === item.id).reduce((sum, c) => sum + c.quantity, 0);
+      
+      if (item.maxPortions !== undefined && totalQtyOfThisMenu >= item.maxPortions) {
         setNotification({ type: 'error', message: `Stok ${item.name} tidak mencukupi!` });
         return prevCart;
       }
 
       if (existingItem) {
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem.cartItemId === cartItemId
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       }
-      return [...prevCart, { ...item, quantity: 1 }];
+      return [...prevCart, { ...item, cartItemId, quantity: 1, selectedOptions: selectedOpts }];
     });
+    setSelectedMenuForOptions(null);
   };
 
-  const updateQuantity = (id: string, delta: number) => {
+  const updateQuantity = (cartItemId: string, delta: number) => {
     setNotification(null);
     setCart((prevCart) => {
       return prevCart.map((item) => {
-        if (item.id === id) {
+        if (item.cartItemId === cartItemId) {
           const newQuantity = item.quantity + delta;
-          if (delta > 0 && item.maxPortions !== undefined && newQuantity > item.maxPortions) {
-             setNotification({ type: 'error', message: `Stok ${item.name} hanya tersisa ${item.maxPortions} porsi!` });
-             return item;
+          // Check stock
+          if (delta > 0 && item.maxPortions !== undefined) {
+             const totalQtyOfThisMenu = prevCart.filter(c => c.id === item.id).reduce((sum, c) => sum + c.quantity, 0);
+             if (totalQtyOfThisMenu >= item.maxPortions) {
+               setNotification({ type: 'error', message: `Stok ${item.name} hanya tersisa ${item.maxPortions} porsi!` });
+               return item;
+             }
           }
           return { ...item, quantity: Math.max(0, newQuantity) };
         }
@@ -257,14 +291,19 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
       ) : (
         <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
           {cart.map((item) => (
-            <div key={item.id} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm flex items-center justify-between">
+            <div key={item.cartItemId} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm flex items-center justify-between">
               <div className="flex-1 pr-2">
                 <p className="font-bold text-sm leading-tight mb-1">{item.name}</p>
+                {item.selectedOptions && (
+                  <p className="text-[10px] text-gray-500 mb-1 leading-tight">
+                    {Object.entries(item.selectedOptions).map(([k,v]) => `${v}`).join(', ')}
+                  </p>
+                )}
                 <p className="text-xs text-[#00875A] font-bold">{formatRupiah(getPrice(item))}</p>
               </div>
               <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1 border border-gray-100">
                 <button 
-                  onClick={() => updateQuantity(item.id, -1)}
+                  onClick={() => updateQuantity(item.cartItemId, -1)}
                   disabled={isProcessing}
                   className="w-8 h-8 flex items-center justify-center bg-white rounded-md text-gray-600 shadow-sm hover:bg-gray-100 font-bold active:scale-95 transition-transform border border-gray-200 disabled:opacity-50"
                 >
@@ -272,7 +311,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 </button>
                 <span className="w-5 text-center font-bold text-sm">{item.quantity}</span>
                 <button 
-                  onClick={() => updateQuantity(item.id, 1)}
+                  onClick={() => updateQuantity(item.cartItemId, 1)}
                   disabled={isProcessing}
                   className="w-8 h-8 flex items-center justify-center bg-[#00875A] rounded-md text-white shadow-sm hover:bg-green-700 font-bold active:scale-95 transition-transform disabled:opacity-50"
                 >
@@ -383,7 +422,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
               type="button"
               key={item.id}
               onClick={() => {
-                if (!isProcessing && !isOutOfStock) addToCart(item);
+                if (!isProcessing && !isOutOfStock) handleMenuClick(item);
               }}
               className={`bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center transition relative ${getProductClass(isProcessing, isOutOfStock)}`}
             >
@@ -408,6 +447,59 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           );
         })}
       </div>
+
+      {/* MODAL PILIHAN VARIAN/OPSI MENU */}
+      {selectedMenuForOptions && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-800">
+              Pilihan: {selectedMenuForOptions.name}
+            </h2>
+            
+            <div className="space-y-4 mb-6">
+              {/* @ts-ignore */}
+              {Object.keys(selectedMenuForOptions.options).map((optKey) => (
+                <div key={optKey}>
+                  <label className="block text-sm font-bold mb-2 text-gray-700 capitalize">
+                    {optKey === 'ice' ? 'Suhu / Es' : optKey === 'sugar' ? 'Tingkat Gula' : optKey}
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {/* @ts-ignore */}
+                    {selectedMenuForOptions.options[optKey].map((val: string) => (
+                      <button
+                        key={val}
+                        onClick={() => setTempOptions({ ...tempOptions, [optKey]: val })}
+                        className={`py-2 px-1 text-xs font-bold rounded-lg border transition ${
+                          tempOptions[optKey] === val 
+                            ? 'bg-[#E6F4EA] border-[#00875A] text-[#00875A]' 
+                            : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        {val}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex gap-3 justify-end">
+              <button 
+                onClick={() => setSelectedMenuForOptions(null)} 
+                className="px-4 py-3 text-sm font-bold border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition flex-1"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={() => addToCart(selectedMenuForOptions, tempOptions)}
+                className="px-4 py-3 text-sm bg-[#00875A] text-white rounded-lg hover:bg-green-700 font-bold transition shadow-md shadow-green-100 flex-1 flex items-center justify-center gap-2"
+              >
+                ➕ Tambah
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {paymentMethod && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
@@ -527,6 +619,11 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 {receiptData.items.map((item: any, idx: number) => (
                   <div key={idx} className="text-sm">
                     <p className="font-bold text-gray-800">{item.name}</p>
+                    {item.selectedOptions && (
+                      <p className="text-[10px] text-gray-500 mt-0.5">
+                        {Object.entries(item.selectedOptions).map(([k,v]) => `${v}`).join(', ')}
+                      </p>
+                    )}
                     <div className="flex justify-between text-gray-600 mt-1">
                       <span>{item.quantity} x {formatRupiah(item.price)}</span>
                       <span className="font-medium text-gray-900">{formatRupiah(item.price * item.quantity)}</span>
@@ -573,7 +670,14 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
               </button>
               <button 
                 onClick={() => {
-                  const itemsText = receiptData.items.map((i: any) => `${i.quantity}x ${i.name} - ${formatRupiah(i.price * i.quantity)}`).join('%0A');
+                  const itemsText = receiptData.items.map((i: any) => {
+                    let text = `${i.quantity}x ${i.name}`;
+                    if (i.selectedOptions) {
+                      text += ` (${Object.entries(i.selectedOptions).map(([k,v]) => v).join(', ')})`;
+                    }
+                    text += ` - ${formatRupiah(i.price * i.quantity)}`;
+                    return text;
+                  }).join('%0A');
                   const text = `*Struk Pembelian HEMAT*%0AOrder ID: ${receiptData.orderId}%0ATanggal: ${receiptData.date}${receiptData.customerName ? `%0APelanggan: ${receiptData.customerName}` : ''}%0A%0A*Pesanan:*%0A${itemsText}%0A%0A*Total: ${formatRupiah(receiptData.total)}*%0AMetode: ${receiptData.method}${receiptData.method === 'Tunai' ? `%0ATunai: ${formatRupiah(receiptData.cashGiven)}%0AKembali: ${formatRupiah(receiptData.change)}` : ''}%0A%0ATerima kasih telah berbelanja!`;
                   
                   let waUrl = `https://wa.me/?text=${text}`;
