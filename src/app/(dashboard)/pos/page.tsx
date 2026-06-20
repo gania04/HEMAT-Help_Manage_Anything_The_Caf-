@@ -43,6 +43,7 @@ export default function PosPage() {
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [cashGiven, setCashGiven] = useState<number | ''>('');
   const [debitRef, setDebitRef] = useState<string>('');
+  const [receiptData, setReceiptData] = useState<any>(null);
 
   const fetchMenus = async () => {
     const data = await getPosMenusWithStock();
@@ -135,6 +136,15 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         const result = await processOrder(checkoutCart, method, totalHarga, activeChannel);
         
         if (result.success) {
+          setReceiptData({
+            orderId: result.orderId,
+            items: [...checkoutCart],
+            total: totalHarga,
+            method: paymentMethod,
+            cashGiven: cashGiven || 0,
+            change: (cashGiven && paymentMethod === 'Tunai') ? Number(cashGiven) - totalHarga : 0,
+            date: new Date().toLocaleString('id-ID')
+          });
           setCart([]);
           setPaymentMethod(null);
           setNotification({
@@ -153,6 +163,15 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         const { saveOfflineTransaction } = await import('@/lib/idb-store');
         await saveOfflineTransaction(checkoutCart, method, totalHarga);
         
+        setReceiptData({
+          orderId: 'OFFLINE-' + Date.now().toString().slice(-6),
+          items: [...checkoutCart],
+          total: totalHarga,
+          method: paymentMethod,
+          cashGiven: cashGiven || 0,
+          change: (cashGiven && paymentMethod === 'Tunai') ? Number(cashGiven) - totalHarga : 0,
+          date: new Date().toLocaleString('id-ID')
+        });
         setCart([]);
         setPaymentMethod(null);
         setNotification({
@@ -405,6 +424,80 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 className="px-4 py-3 text-sm bg-[#00875A] text-white rounded-lg hover:bg-green-700 font-bold transition shadow-md shadow-green-100 flex-1 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isProcessing ? '⏳ Memproses...' : '✅ Selesaikan'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {receiptData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-sm flex flex-col animate-in fade-in zoom-in-95 duration-200 overflow-hidden">
+            <div className="p-6 pb-2 text-center border-b border-gray-100 border-dashed">
+              <h2 className="text-2xl font-black text-gray-800 tracking-tight">HEMAT</h2>
+              <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">Struk Pembelian</p>
+            </div>
+            
+            <div className="p-6 flex-1 overflow-y-auto">
+              <div className="flex justify-between text-xs text-gray-500 mb-4 pb-4 border-b border-gray-100">
+                <div>
+                  <p>Order ID: <b>{receiptData.orderId}</b></p>
+                  <p>Kasir: Gania K.</p>
+                </div>
+                <div className="text-right">
+                  <p>{receiptData.date.split(',')[0]}</p>
+                  <p>{receiptData.date.split(',')[1]}</p>
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                {receiptData.items.map((item: any, idx: number) => (
+                  <div key={idx} className="text-sm">
+                    <p className="font-bold text-gray-800">{item.name}</p>
+                    <div className="flex justify-between text-gray-600 mt-1">
+                      <span>{item.quantity} x {formatRupiah(item.price)}</span>
+                      <span className="font-medium text-gray-900">{formatRupiah(item.price * item.quantity)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t-2 border-dashed border-gray-200 pt-4 space-y-2 text-sm">
+                <div className="flex justify-between font-black text-lg">
+                  <span>TOTAL</span>
+                  <span>{formatRupiah(receiptData.total)}</span>
+                </div>
+                <div className="flex justify-between text-gray-600 pt-2">
+                  <span>Metode ({receiptData.method})</span>
+                  <span>{receiptData.method === 'Tunai' ? formatRupiah(receiptData.cashGiven) : formatRupiah(receiptData.total)}</span>
+                </div>
+                {receiptData.method === 'Tunai' && (
+                  <div className="flex justify-between text-gray-600">
+                    <span>Kembalian</span>
+                    <span>{formatRupiah(receiptData.change)}</span>
+                  </div>
+                )}
+              </div>
+              
+              <p className="text-center text-xs text-gray-400 mt-8">Terima kasih atas kunjungan Anda!</p>
+            </div>
+            
+            <div className="p-4 bg-gray-50 flex gap-3 border-t border-gray-200">
+              <button 
+                onClick={() => setReceiptData(null)} 
+                className="px-4 py-3 text-sm font-bold border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition flex-1"
+              >
+                Selesai
+              </button>
+              <button 
+                onClick={() => {
+                  const itemsText = receiptData.items.map((i: any) => `${i.quantity}x ${i.name} - ${formatRupiah(i.price * i.quantity)}`).join('%0A');
+                  const text = `*Struk Pembelian HEMAT*%0AOrder ID: ${receiptData.orderId}%0ATanggal: ${receiptData.date}%0A%0A*Pesanan:*%0A${itemsText}%0A%0A*Total: ${formatRupiah(receiptData.total)}*%0AMetode: ${receiptData.method}${receiptData.method === 'Tunai' ? `%0ATunai: ${formatRupiah(receiptData.cashGiven)}%0AKembali: ${formatRupiah(receiptData.change)}` : ''}%0A%0ATerima kasih!`;
+                  window.open(`https://wa.me/?text=${text}`, '_blank');
+                }}
+                className="px-4 py-3 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 font-bold transition shadow-sm flex items-center justify-center gap-2 flex-1"
+              >
+                <span className="text-lg">💬</span> Kirim WA
               </button>
             </div>
           </div>
