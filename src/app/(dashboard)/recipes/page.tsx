@@ -1,6 +1,7 @@
 import { getAllRecipes } from '@/lib/recipe-actions';
 import { formatRupiah } from '@/lib/utils';
 import Link from 'next/link';
+import RecipeClient from './RecipeClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,66 +30,7 @@ export default async function RecipesPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recipes.map((menu) => {
-            // Calculate total HPP for this recipe
-            let totalHpp = 0;
-            const ingredients = menu.menu_recipes.map((recipe: any) => {
-              const qty = Number(recipe.qty_needed);
-              const price = Number(recipe.inventory?.unit_price || 0);
-              const cost = qty * price;
-              totalHpp += cost;
-              return {
-                name: recipe.inventory?.item_name || 'Bahan Tidak Ditemukan',
-                qty,
-                unit: recipe.inventory?.unit || 'Unit',
-                cost
-              };
-            });
-
-            // Get selling price
-            const sellingPrice = menu.menu_prices && menu.menu_prices.length > 0 
-              ? Number(menu.menu_prices[0].price) 
-              : 0;
-
-            const margin = sellingPrice > 0 ? ((sellingPrice - totalHpp) / sellingPrice) * 100 : 0;
-
-            return (
-              <div key={menu.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow flex flex-col">
-                <div className="bg-[#00875A] p-4 text-white">
-                  <h2 className="text-xl font-bold truncate" title={menu.menu_name}>{menu.menu_name}</h2>
-                  <div className="flex justify-between items-center mt-2 text-sm text-green-100">
-                    <span>Harga Jual: {formatRupiah(sellingPrice)}</span>
-                    <span className="bg-white/20 px-2 py-0.5 rounded font-bold">
-                      Margin: {margin.toFixed(0)}%
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-4 flex-1 flex flex-col">
-                  <h3 className="text-xs font-bold text-gray-500 uppercase mb-3 pb-2 border-b border-gray-100">Komposisi Bahan</h3>
-                  
-                  <ul className="space-y-3 flex-1">
-                    {ingredients.map((ing: any, idx: number) => (
-                      <li key={idx} className="flex justify-between items-start text-sm">
-                        <div>
-                          <p className="font-medium text-gray-800">{ing.name}</p>
-                          <p className="text-xs text-gray-500">{ing.qty} {ing.unit}</p>
-                        </div>
-                        <span className="font-semibold text-gray-700">{formatRupiah(ing.cost)}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center bg-gray-50 -mx-4 -mb-4 p-4 rounded-b-xl">
-                    <span className="text-sm font-bold text-gray-600">Total Biaya Resep</span>
-                    <span className="text-lg font-black text-[#00875A]">{formatRupiah(totalHpp)}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <RecipeClient initialRecipes={recipes} />
       )}
     </main>
   );

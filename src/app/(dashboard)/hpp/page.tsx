@@ -51,14 +51,18 @@ export default function HppCalculatorPage() {
     // Auto calculate
     const { hppPerUnit, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100, yieldQuantity);
 
+    // Always save the recipe, but mark it as recipe_only if addToPos is false
+    const res = await createPosProduct(menuName, recommendedSellingPrice, ingredients, addToPos);
     let posMsg = '';
-    if (addToPos) {
-      const res = await createPosProduct(menuName, recommendedSellingPrice, ingredients);
-      if (res.success) {
+    
+    if (res.success) {
+      if (addToPos) {
         posMsg = '\n✅ Berhasil ditambahkan ke daftar Menu Kasir beserta Resepnya!';
       } else {
-        posMsg = '\n❌ Gagal menambahkan ke Menu Kasir: ' + res.error;
+        posMsg = '\n✅ Resep berhasil disimpan di Daftar Resep (Tidak masuk POS).';
       }
+    } else {
+      posMsg = '\n❌ Gagal menyimpan resep: ' + res.error;
     }
 
     setTimeout(() => {

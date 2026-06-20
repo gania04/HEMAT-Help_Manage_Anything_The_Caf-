@@ -92,15 +92,19 @@ export async function getPosMenusWithStock() {
     return [];
   }
 
-  return menusData.map((m: any) => {
-    const prices: Record<string, number> = {};
-    if (m.menu_prices) {
-      m.menu_prices.forEach((mp: any) => {
-        prices[mp.channel] = Number(mp.price);
-      });
-    }
+  return menusData
+    .filter((m: any) => m.menu_prices && m.menu_prices.some((p: any) => p.channel !== 'recipe_only'))
+    .map((m: any) => {
+      const prices: Record<string, number> = {};
+      if (m.menu_prices) {
+        m.menu_prices.forEach((mp: any) => {
+          if (mp.channel !== 'recipe_only') {
+            prices[mp.channel] = Number(mp.price);
+          }
+        });
+      }
 
-    let maxPortions = 99999;
+      let maxPortions = 99999;
     if (m.menu_recipes && m.menu_recipes.length > 0) {
       m.menu_recipes.forEach((mr: any) => {
         const invQty = Number(mr.inventory?.quantity || 0);
@@ -173,7 +177,8 @@ export async function requestVoid(transactionId: string) {
 export async function createPosProduct(
   name: string, 
   price: number,
-  recipes?: { name: string; quantity: number; unit: string; pricePerUnit: number; }[]
+  recipes?: { name: string; quantity: number; unit: string; pricePerUnit: number; }[],
+  addToPos: boolean = true
 ) {
   const { data: menuData, error: menuError } = await supabase.from('menus').insert({
     menu_name: name,
@@ -187,7 +192,7 @@ export async function createPosProduct(
 
   await supabase.from('menu_prices').insert({
     menu_id: menuData.id,
-    channel: 'dine_in',
+    channel: addToPos ? 'dine_in' : 'recipe_only',
     price: price
   });
 
@@ -206,6 +211,8 @@ export async function createPosProduct(
         
       if (existingInv) {
         inventoryId = existingInv.id;
+        // Update the unit price to match the new recipe input
+        await supabase.from('inventory').update({ unit_price: recipe.pricePerUnit }).eq('id', inventoryId);
       } else {
         // Create new inventory item
         const { data: newInv, error: invError } = await supabase.from('inventory').insert({
