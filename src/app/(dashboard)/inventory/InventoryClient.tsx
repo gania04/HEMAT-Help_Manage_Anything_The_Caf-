@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { addInventoryItem, updateInventoryItem, deleteInventoryItem } from '@/lib/inventory-actions';
+import { addInventoryItem, updateInventoryItem, deleteInventoryItem, getInventoryMovements } from '@/lib/inventory-actions';
 
 type InventoryItem = {
   id: string;
@@ -19,6 +19,22 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [historyItem, setHistoryItem] = useState<InventoryItem | null>(null);
+  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
+  const handleViewHistory = async (item: InventoryItem) => {
+    setHistoryItem(item);
+    setIsLoadingHistory(true);
+    try {
+      const movements = await getInventoryMovements(item.id);
+      setHistoryData(movements);
+    } catch {
+      setHistoryData([]);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
 
   const handleOpenModal = (item?: InventoryItem) => {
     if (item) {
@@ -108,6 +124,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
                   </span>
                 </td>
                 <td className="p-4 text-right">
+                  <button onClick={() => handleViewHistory(item)} className="text-[#1E88E5] font-bold text-sm hover:underline mr-4">Riwayat</button>
                   <button onClick={() => handleOpenModal(item)} className="text-[#00875A] font-bold text-sm hover:underline mr-4">Edit</button>
                   <button onClick={() => handleDelete(item.id)} className="text-red-500 font-bold text-sm hover:underline">Hapus</button>
                 </td>
@@ -182,6 +199,63 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {historyItem && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[80vh]">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 shrink-0">
+              <div>
+                <h2 className="text-xl font-bold text-[#00875A]">Riwayat Stok: {historyItem.name}</h2>
+                <p className="text-sm text-gray-500 mt-1">Stok Saat Ini: <b>{historyItem.stock} {historyItem.unit}</b></p>
+              </div>
+              <button onClick={() => setHistoryItem(null)} className="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+            </div>
+            
+            <div className="p-6 flex-1 overflow-y-auto">
+              {isLoadingHistory ? (
+                <div className="flex justify-center items-center py-10">
+                   <div className="w-8 h-8 border-4 border-[#00875A] border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              ) : historyData.length === 0 ? (
+                <div className="text-center py-10">
+                  <p className="text-gray-500 mb-2">Riwayat belum tersedia.</p>
+                  <p className="text-xs text-gray-400">Hubungi admin untuk menjalankan sistem pelacakan otomatis (Migration 008).</p>
+                </div>
+              ) : (
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
+                      <th className="p-3 font-medium">Tanggal</th>
+                      <th className="p-3 font-medium">Jenis</th>
+                      <th className="p-3 font-medium">Jumlah</th>
+                      <th className="p-3 font-medium">Sisa Stok</th>
+                      <th className="p-3 font-medium">Keterangan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {historyData.map((h: any) => (
+                      <tr key={h.id} className="border-b border-gray-50 text-sm hover:bg-gray-50/50">
+                        <td className="p-3 text-gray-600">{h.date}</td>
+                        <td className="p-3">
+                          <span className={`px-2 py-1 rounded text-xs font-bold ${h.type === 'IN' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                            {h.type === 'IN' ? '+ MASUK' : '- KELUAR'}
+                          </span>
+                        </td>
+                        <td className="p-3 font-bold">{h.quantity} {historyItem.unit}</td>
+                        <td className="p-3 font-bold text-[#00875A]">{h.balance}</td>
+                        <td className="p-3 text-gray-500">{h.reference || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+            <div className="p-4 bg-gray-50 border-t border-gray-200 shrink-0 text-right">
+              <button onClick={() => setHistoryItem(null)} className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition">Tutup</button>
+            </div>
           </div>
         </div>
       )}

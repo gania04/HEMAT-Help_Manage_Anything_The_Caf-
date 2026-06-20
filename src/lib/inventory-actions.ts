@@ -65,3 +65,25 @@ export async function deleteInventoryItem(id: string) {
   if (error) throw new Error(error.message);
   revalidatePath('/inventory');
 }
+
+export async function getInventoryMovements(inventoryId: string) {
+  const { data, error } = await supabase
+    .from('inventory_movements')
+    .select('*')
+    .eq('inventory_id', inventoryId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    // Jika tabel belum ada atau error lain, kembalikan array kosong
+    return [];
+  }
+
+  return data.map((m: any) => ({
+    id: m.id,
+    type: m.movement_type,
+    quantity: Number(m.qty),
+    balance: Number(m.balance_after),
+    reference: m.reference,
+    date: new Date(m.created_at).toLocaleString('id-ID')
+  }));
+}
