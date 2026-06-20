@@ -1,5 +1,4 @@
 import { getAllRecipes } from '@/lib/recipe-actions';
-import { formatRupiah } from '@/lib/utils';
 import Link from 'next/link';
 import RecipeClient from './RecipeClient';
 
