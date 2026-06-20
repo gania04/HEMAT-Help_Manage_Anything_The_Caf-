@@ -36,10 +36,12 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
     setTimeout(() => setIsOpen(false), 0);
   }, [pathname]);
 
+  const isBeranda = pathname === '/';
+
   return (
     <>
-      {/* Global Top Right Logo Trigger */}
-      <div className="fixed top-4 right-4 z-40">
+      {/* Global Top Left Logo Trigger */}
+      <div className={`fixed top-4 left-4 z-40 ${!isBeranda ? 'md:hidden' : ''}`}>
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-center p-1 bg-white shadow-lg rounded-2xl hover:scale-105 transition-transform"
@@ -53,7 +55,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
       {isOpen && (
         <button 
           type="button"
-          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity w-full h-full cursor-default border-none outline-none"
+          className={`fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity w-full h-full cursor-default border-none outline-none ${!isBeranda ? 'md:hidden' : ''}`}
           onClick={() => setIsOpen(false)}
           onKeyDown={(e) => {
             if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') setIsOpen(false);
@@ -62,16 +64,23 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
         />
       )}
 
-      {/* Sidebar Drawer */}
+      {/* Sidebar Drawer / Persistent Sidebar */}
       <aside className={`
         fixed inset-y-0 left-0 z-50
         w-72 bg-[#00875A] text-white flex flex-col h-[100dvh] shadow-2xl
         transition-transform duration-300 ease-in-out
+        ${!isBeranda ? 'md:static md:translate-x-0 md:h-full md:shadow-none' : ''}
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="p-4 flex items-center justify-between flex-shrink-0 border-b border-white/10">
-          <h2 className="font-bold text-xl tracking-tight pl-2">Menu Aplikasi</h2>
-          <button className="text-white hover:text-white/70 text-2xl p-2 rounded-lg hover:bg-white/10 transition-colors" onClick={() => setIsOpen(false)}>✕</button>
+        <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3 flex-shrink-0 border-b border-white/10">
+          <Link href="/" className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition">
+            <Image src="/icon-192x192.png" alt="HEMAT Logo" width={40} height={40} className="bg-white p-1 rounded-lg" unoptimized={true} />
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">HEMAT</h1>
+              <p className="text-[10px] text-[#E6F4EA]/80 leading-tight">Help Manage Anything<br/>The Café</p>
+            </div>
+          </Link>
+          <button className={`text-white hover:text-white/70 text-2xl p-2 rounded-lg hover:bg-white/10 transition-colors ${!isBeranda ? 'md:hidden' : ''}`} onClick={() => setIsOpen(false)}>✕</button>
         </div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto py-4 min-h-0">
