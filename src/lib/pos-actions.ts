@@ -170,7 +170,11 @@ export async function requestVoid(transactionId: string) {
   revalidatePath('/void-approvals');
 }
 
-export async function createPosProduct(name: string, price: number) {
+export async function createPosProduct(
+  name: string, 
+  price: number,
+  recipes?: { name: string; quantity: number; unit: string; pricePerUnit: number; }[]
+) {
   const { data: menuData, error: menuError } = await supabase.from('menus').insert({
     menu_name: name,
     base_hpp: 0,
@@ -187,6 +191,49 @@ export async function createPosProduct(name: string, price: number) {
     price: price
   });
 
+  if (recipes && recipes.length > 0) {
+    for (const recipe of recipes) {
+      if (!recipe.name) continue;
+      
+      let inventoryId;
+      // Find existing inventory item by name
+      const { data: existingInv } = await supabase
+        .from('inventory')
+        .select('id')
+        .ilike('item_name', recipe.name)
+        .limit(1)
+        .single();
+        
+      if (existingInv) {
+        inventoryId = existingInv.id;
+      } else {
+        // Create new inventory item
+        const { data: newInv, error: invError } = await supabase.from('inventory').insert({
+          item_name: recipe.name,
+          category: 'Bahan Baku',
+          quantity: 0, // Starts at 0, user can restock later
+          unit: recipe.unit,
+          unit_price: recipe.pricePerUnit,
+          min_stock: 0
+        }).select('id').single();
+        
+        if (!invError && newInv) {
+          inventoryId = newInv.id;
+        }
+      }
+
+      // Link recipe to menu
+      if (inventoryId) {
+        await supabase.from('menu_recipes').insert({
+          menu_id: menuData.id,
+          inventory_id: inventoryId,
+          qty_needed: recipe.quantity
+        });
+      }
+    }
+  }
+
   revalidatePath('/pos');
+  revalidatePath('/inventory');
   return { success: true };
 }

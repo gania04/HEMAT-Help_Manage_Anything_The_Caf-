@@ -53,9 +53,9 @@ export default function HppCalculatorPage() {
 
     let posMsg = '';
     if (addToPos) {
-      const res = await createPosProduct(menuName, recommendedSellingPrice);
+      const res = await createPosProduct(menuName, recommendedSellingPrice, ingredients);
       if (res.success) {
-        posMsg = '\n✅ Berhasil ditambahkan ke daftar Menu Kasir!';
+        posMsg = '\n✅ Berhasil ditambahkan ke daftar Menu Kasir beserta Resepnya!';
       } else {
         posMsg = '\n❌ Gagal menambahkan ke Menu Kasir: ' + res.error;
       }
