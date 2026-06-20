@@ -61,11 +61,12 @@ export async function getDashboardStats() {
   // Kas riil murni berdasarkan arus kas masuk (omzet) - keluar (pengeluaran)
   const kasRiil = totalOmzet - totalExpense;
   const totalKas = Math.max(0, kasRiil); // Kas tidak boleh negatif
-  const labaBersih = totalOmzet - totalHpp - totalExpense;
+  const labaBersihRiil = totalOmzet - totalHpp - totalExpense;
+  const labaBersih = Math.max(0, labaBersihRiil); // Laba bersih tidak boleh negatif di UI
 
   let auditStatus = 'aman';
   let auditMsg = 'Keuangan stabil. Laba bersih positif.';
-  if (labaBersih < 0) {
+  if (labaBersihRiil < 0) {
     auditStatus = 'bahaya';
     auditMsg = 'Beban operasional/HPP melebihi pendapatan. Periksa pos pengeluaran dan harga jual!';
   }
