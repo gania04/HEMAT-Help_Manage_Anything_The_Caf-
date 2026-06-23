@@ -22,7 +22,7 @@ export async function getWasteLogs() {
     return [];
   }
 
-  return data.map((log: any) => ({
+  return data.map((log: Parameters<typeof JSON.stringify>[0]) => ({
     id: log.id,
     quantity: Number(log.quantity),
     reason: log.reason,

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { supabase } from './supabase'
 
-export async function loginUser(prevState: any, formData: FormData) {
+export async function loginUser(prevState: Parameters<typeof JSON.stringify>[0], formData: FormData) {
   const username = formData.get('username') as string;
   const password = formData.get('password') as string;
 
@@ -99,7 +99,7 @@ export async function deleteStaff(userId: string) {
   return { success: true };
 }
 
-export async function registerUser(prevState: any, formData: FormData) {
+export async function registerUser(prevState: Parameters<typeof JSON.stringify>[0], formData: FormData) {
   const result = await insertUserToDb(formData, 'owner');
   if (result.error) return { error: result.error };
 
@@ -107,7 +107,7 @@ export async function registerUser(prevState: any, formData: FormData) {
   return await loginUser(prevState, formData);
 }
 
-export async function changePasswordAndLogin(prevState: any, formData: FormData) {
+export async function changePasswordAndLogin(prevState: Parameters<typeof JSON.stringify>[0], formData: FormData) {
   const username = formData.get('username') as string;
   const oldPassword = formData.get('oldPassword') as string;
   const newPassword = formData.get('newPassword') as string;

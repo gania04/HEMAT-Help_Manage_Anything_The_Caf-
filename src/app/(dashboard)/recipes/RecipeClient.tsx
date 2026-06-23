@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { formatRupiah } from '@/lib/utils';
 import { deleteRecipe } from '@/lib/recipe-actions';
 
-export default function RecipeClient({ initialRecipes }: { initialRecipes: any[] }) {
+export default function RecipeClient({ initialRecipes }: { initialRecipes: Parameters<typeof JSON.stringify>[0][] }) {
   const [recipes, setRecipes] = useState(initialRecipes);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
@@ -16,7 +16,7 @@ export default function RecipeClient({ initialRecipes }: { initialRecipes: any[]
       await deleteRecipe(id);
       setRecipes(recipes.filter(r => r.id !== id));
       alert(`Resep "${name}" berhasil dihapus.`);
-    } catch (err: any) {
+    } catch (err: Parameters<typeof JSON.stringify>[0]) {
       alert(err.message);
     } finally {
       setIsDeleting(null);
@@ -27,7 +27,7 @@ export default function RecipeClient({ initialRecipes }: { initialRecipes: any[]
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {recipes.map((menu) => {
         let totalHpp = 0;
-        const ingredients = menu.menu_recipes.map((recipe: any) => {
+        const ingredients = menu.menu_recipes.map((recipe: Parameters<typeof JSON.stringify>[0]) => {
           const qty = Number(recipe.qty_needed);
           const price = Number(recipe.inventory?.unit_price || 0);
           const cost = qty * price;
@@ -45,7 +45,7 @@ export default function RecipeClient({ initialRecipes }: { initialRecipes: any[]
         let isRecipeOnly = false;
         
         if (menu.menu_prices && menu.menu_prices.length > 0) {
-          const validPrice = menu.menu_prices.find((p: any) => p.channel !== 'recipe_only');
+          const validPrice = menu.menu_prices.find((p: Parameters<typeof JSON.stringify>[0]) => p.channel !== 'recipe_only');
           if (validPrice) {
             sellingPrice = Number(validPrice.price);
           } else {
@@ -84,7 +84,7 @@ export default function RecipeClient({ initialRecipes }: { initialRecipes: any[]
               <h3 className="text-xs font-bold text-gray-500 uppercase mb-3 pb-2 border-b border-gray-100">Komposisi Bahan</h3>
               
               <ul className="space-y-3 flex-1">
-                {ingredients.map((ing: any, idx: number) => (
+                {ingredients.map((ing: Parameters<typeof JSON.stringify>[0], idx: number) => (
                   <li key={idx} className="flex justify-between items-start text-sm">
                     <div>
                       <p className="font-medium text-gray-800">{ing.name}</p>

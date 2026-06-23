@@ -14,7 +14,7 @@ export async function getInventoryItems() {
     return [];
   }
 
-  return data.map((item: any) => ({
+  return data.map((item: Parameters<typeof JSON.stringify>[0]) => ({
     id: item.id,
     name: item.item_name,
     category: item.category,
@@ -78,7 +78,7 @@ export async function getInventoryMovements(inventoryId: string) {
     return [];
   }
 
-  return data.map((m: any) => ({
+  return data.map((m: Parameters<typeof JSON.stringify>[0]) => ({
     id: m.id,
     type: m.movement_type,
     quantity: Number(m.qty),

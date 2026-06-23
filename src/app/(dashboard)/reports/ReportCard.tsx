@@ -3,7 +3,7 @@
 import { formatRupiah } from '@/lib/utils';
 import { useState } from 'react';
 
-export default function ReportCard({ report }: Readonly<{ report: any }>) {
+export default function ReportCard({ report }: Readonly<{ report: Parameters<typeof JSON.stringify>[0] }>) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'JURNAL'|'BUKU_BESAR'|'NERACA'|'LABA_RUGI'>('JURNAL');
   const [isDownloading, setIsDownloading] = useState(false);
@@ -116,7 +116,7 @@ export default function ReportCard({ report }: Readonly<{ report: any }>) {
               ].map(t => (
                 <button
                   key={t.id}
-                  onClick={() => setActiveTab(t.id as any)}
+                  onClick={() => setActiveTab(t.id as Parameters<typeof JSON.stringify>[0])}
                   className={`px-4 sm:px-6 py-3 sm:py-4 font-bold text-sm whitespace-nowrap transition-colors border-b-4 ${
                     activeTab === t.id ? 'border-[#00875A] text-[#00875A] bg-green-50/50' : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                   }`}

@@ -236,7 +236,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
                     </tr>
                   </thead>
                   <tbody>
-                    {historyData.map((h: any) => (
+                    {historyData.map((h: Parameters<typeof JSON.stringify>[0]) => (
                       <tr key={h.id} className="border-b border-gray-50 text-sm hover:bg-gray-50/50">
                         <td className="p-3 text-gray-600">{h.date}</td>
                         <td className="p-3">

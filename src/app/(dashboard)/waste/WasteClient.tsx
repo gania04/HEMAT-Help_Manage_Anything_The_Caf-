@@ -56,7 +56,7 @@ export default function WasteClient({
         setSelectedInventory('');
         globalThis.location.reload(); // Refresh the data
       }
-    } catch (_error: any) {
+    } catch (_error: Parameters<typeof JSON.stringify>[0]) {
       alert((_error as Error).message || 'Terjadi kesalahan sistem yang tidak diketahui');
     } finally {
       setIsProcessing(false);

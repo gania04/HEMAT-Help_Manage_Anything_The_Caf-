@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { addExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-function BudgetAlertCard({ budget, idx }: Readonly<{ budget: any, idx: number }>) {
+function BudgetAlertCard({ budget, idx }: Readonly<{ budget: Parameters<typeof JSON.stringify>[0], idx: number }>) {
   const ratioPercent = Math.min(Math.round(Number(budget.ratio) * 100), 100);
   
   let cardStyle = "bg-white border-green-200 text-green-700";
@@ -38,7 +38,7 @@ function BudgetAlertCard({ budget, idx }: Readonly<{ budget: any, idx: number }>
   );
 }
 
-function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
+function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: Parameters<typeof JSON.stringify>[0][] }>) {
   return (
     <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-4 border-b border-gray-100 bg-gray-50">
@@ -98,7 +98,7 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
     return 'bg-yellow-100 text-yellow-700';
   };
 
-export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ expenses: any[], budgetAlerts: any[] }>) {
+export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ expenses: Parameters<typeof JSON.stringify>[0][], budgetAlerts: Parameters<typeof JSON.stringify>[0][] }>) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddExpense = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -119,7 +119,7 @@ export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ exp
         alert('Pengeluaran berhasil dicatat!');
       }
       (e.target as HTMLFormElement).reset();
-    } catch (_err: any) {
+    } catch (_err: Parameters<typeof JSON.stringify>[0]) {
       alert((_err as Error).message);
     } finally {
       setIsSubmitting(false);

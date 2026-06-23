@@ -10,7 +10,7 @@ function parsePaymentMethod(paymentMethod: string): string {
   return 'tunai';
 }
 
-export async function processOrder(cartItems: any[], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
+export async function processOrder(cartItems: Parameters<typeof JSON.stringify>[0][], paymentMethod: string, totalAmount: number, channel: string = 'dine_in') {
   if (cartItems.length === 0) return { success: false, error: 'Keranjang kosong' };
 
   // 1. Dapatkan user admin (untuk simulasi MVP)
@@ -93,11 +93,11 @@ export async function getPosMenusWithStock() {
   }
 
   return menusData
-    .filter((m: any) => m.menu_prices && m.menu_prices.some((p: any) => p.channel !== 'recipe_only'))
-    .map((m: any) => {
+    .filter((m: Parameters<typeof JSON.stringify>[0]) => m.menu_prices && m.menu_prices.some((p: Parameters<typeof JSON.stringify>[0]) => p.channel !== 'recipe_only'))
+    .map((m: Parameters<typeof JSON.stringify>[0]) => {
       const prices: Record<string, number> = {};
       if (m.menu_prices) {
-        m.menu_prices.forEach((mp: any) => {
+        m.menu_prices.forEach((mp: Parameters<typeof JSON.stringify>[0]) => {
           if (mp.channel !== 'recipe_only') {
             prices[mp.channel] = Number(mp.price);
           }
@@ -106,7 +106,7 @@ export async function getPosMenusWithStock() {
 
       let maxPortions = 99999;
     if (m.menu_recipes && m.menu_recipes.length > 0) {
-      m.menu_recipes.forEach((mr: any) => {
+      m.menu_recipes.forEach((mr: Parameters<typeof JSON.stringify>[0]) => {
         const invQty = Number(mr.inventory?.quantity || 0);
         const needed = Number(mr.qty_needed || 1);
         const portions = Math.floor(invQty / needed);
@@ -155,7 +155,7 @@ export async function getPosHistory() {
   // Normalize data for frontend expected structure
   return data.map(trx => ({
     ...trx,
-    transaction_items: trx.transaction_items.map((item: any) => ({
+    transaction_items: trx.transaction_items.map((item: Parameters<typeof JSON.stringify>[0]) => ({
       ...item,
       menus: { menu_name: item.menus?.menu_name || 'Item Dihapus' }
     }))

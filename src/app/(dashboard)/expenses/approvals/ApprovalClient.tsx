@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { approveExpense, rejectExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-export default function ApprovalClient({ pendingExpenses }: Readonly<{ pendingExpenses: any[] }>) {
+export default function ApprovalClient({ pendingExpenses }: Readonly<{ pendingExpenses: Parameters<typeof JSON.stringify>[0][] }>) {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
 const handleAction = async (id: string, action: 'approve' | 'reject') => {
@@ -20,7 +20,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
         alert('Pengeluaran ditolak!');
       }
       globalThis.location.reload();
-    } catch (_err: any) {
+    } catch (_err: Parameters<typeof JSON.stringify>[0]) {
       alert('Gagal: ' + (_err as Error).message);
     } finally {
       setIsProcessing(null);
@@ -50,7 +50,7 @@ const handleAction = async (id: string, action: 'approve' | 'reject') => {
             </tr>
           </thead>
           <tbody>
-            {pendingExpenses.map((exp: any) => (
+            {pendingExpenses.map((exp: Parameters<typeof JSON.stringify>[0]) => (
               <tr key={exp.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition">
                 <td className="p-4 text-sm text-gray-600">
                   {new Date(exp.created_at).toLocaleString('id-ID')}

@@ -46,7 +46,7 @@ export default function PosPage() {
   const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [cashGiven, setCashGiven] = useState<number | ''>('');
   const [debitRef, setDebitRef] = useState<string>('');
-  const [receiptData, setReceiptData] = useState<any>(null);
+  const [receiptData, setReceiptData] = useState<Parameters<typeof JSON.stringify>[0]>(null);
   const [customerName, setCustomerName] = useState('');
   const [customerWA, setCustomerWA] = useState('');
   const [showQRMenu, setShowQRMenu] = useState(false);
@@ -261,7 +261,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
           message: `Mode Offline: Pembayaran ${method} tersimpan sementara.`
         });
       }
-    } catch (_error: any) {
+    } catch (_error: Parameters<typeof JSON.stringify>[0]) {
       console.error('POS Checkout Error:', _error);
       setNotification({
         type: 'error',
@@ -622,7 +622,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
               </div>
 
               <div className="space-y-3 mb-6">
-                {receiptData.items.map((item: any, idx: number) => (
+                {receiptData.items.map((item: Parameters<typeof JSON.stringify>[0], idx: number) => (
                   <div key={idx} className="text-sm">
                     <p className="font-bold text-gray-800">{item.name}</p>
                     {item.selectedOptions && (
@@ -676,7 +676,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
               </button>
               <button 
                 onClick={() => {
-                  const itemsText = receiptData.items.map((i: any) => {
+                  const itemsText = receiptData.items.map((i: Parameters<typeof JSON.stringify>[0]) => {
                     let text = `${i.quantity}x ${i.name}`;
                     if (i.selectedOptions) {
                       text += ` (${Object.entries(i.selectedOptions).map(([k,v]) => v).join(', ')})`;

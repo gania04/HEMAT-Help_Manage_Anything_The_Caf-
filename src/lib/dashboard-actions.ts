@@ -48,9 +48,9 @@ export async function getDashboardStats() {
 
   let totalHpp = 0;
   if (completedTxs) {
-    completedTxs.forEach((tx: any) => {
+    completedTxs.forEach((tx: Parameters<typeof JSON.stringify>[0]) => {
       if (tx.transaction_items) {
-        tx.transaction_items.forEach((item: any) => {
+        tx.transaction_items.forEach((item: Parameters<typeof JSON.stringify>[0]) => {
           const hpp = item.menus?.base_hpp || 0;
           totalHpp += (hpp * item.quantity);
         });

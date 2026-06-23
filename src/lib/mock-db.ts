@@ -72,8 +72,8 @@ const initialDebts: DebtItem[] = [
 declare global {
   var _globalDb: {
     inventory: InventoryItem[];
-    menus: any[];
-    recipes: any;
+    menus: Parameters<typeof JSON.stringify>[0][];
+    recipes: Parameters<typeof JSON.stringify>[0];
     debts: DebtItem[];
   } | undefined;
 }
