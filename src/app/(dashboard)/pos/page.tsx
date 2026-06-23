@@ -239,14 +239,16 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         const { saveOfflineTransaction } = await import('@/lib/idb-store');
         await saveOfflineTransaction(checkoutCart, method, totalHarga);
         
+        const timestamp = Date.now();
+        const dateString = new Date().toLocaleString('id-ID');
         setReceiptData({
-          orderId: 'OFFLINE-' + Date.now().toString().slice(-6),
+          orderId: 'OFFLINE-' + timestamp.toString().slice(-6),
           items: [...checkoutCart],
           total: totalHarga,
           method: paymentMethod,
           cashGiven: cashGiven || 0,
           change: (cashGiven && paymentMethod === 'Tunai') ? Number(cashGiven) - totalHarga : 0,
-          date: new Date().toLocaleString('id-ID'),
+          date: dateString,
           customerName,
           customerWA
         });
@@ -504,7 +506,11 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-lg w-full max-w-sm p-6 animate-in fade-in zoom-in-95 duration-200">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-800">
-              {paymentMethod === 'Tunai' ? '💵 Pembayaran Tunai' : paymentMethod === 'QRIS' ? '📱 Pembayaran QRIS' : '💳 Pembayaran Debit'}
+              {(() => {
+                if (paymentMethod === 'Tunai') return '💵 Pembayaran Tunai';
+                if (paymentMethod === 'QRIS') return '📱 Pembayaran QRIS';
+                return '💳 Pembayaran Debit';
+              })()}
             </h2>
             
             <div className="bg-gray-50 p-4 rounded-lg mb-4 text-center">

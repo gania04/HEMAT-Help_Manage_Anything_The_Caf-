@@ -56,7 +56,10 @@ function ExpenseHistoryTable({ expenses }: Readonly<{ expenses: any[] }>) {
         <tbody>
           {expenses.map((exp) => {
             const statusClass = getStatusClass(String(exp.status));
-            const statusText = exp.status === 'pending_approval' ? 'Pending Owner' : String(exp.status).toUpperCase();
+            let statusText = String(exp.status).toUpperCase();
+            if (exp.status === 'pending_approval') {
+              statusText = 'Pending Owner';
+            }
 
             return (
               <tr key={String(exp.id)} className="border-b border-gray-50 hover:bg-gray-50/50">

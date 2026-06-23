@@ -70,7 +70,10 @@ const handleVoid = async (id: string) => {
                 <td className="p-4">
                   <p className="text-sm font-bold text-gray-700 capitalize">{trx.payment_method}</p>
                   <p className={`text-xs mt-1 font-bold ${getStatusTextClass(trx.status)}`}>
-                    {trx.status === 'pending_void' ? 'Menunggu Void' : trx.status.toUpperCase()}
+                    {(() => {
+                      if (trx.status === 'pending_void') return 'Menunggu Void';
+                      return trx.status.toUpperCase();
+                    })()}
                   </p>
                 </td>
                 <td className="p-4 text-right">

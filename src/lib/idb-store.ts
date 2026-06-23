@@ -76,8 +76,8 @@ export async function syncOfflineTransactions() {
           // Jika sukses disinkronkan, hapus dari IndexedDB
           await deleteOfflineTransaction(tx.id);
         }
-      } catch {
-        
+      } catch (err) {
+        console.warn('Gagal sinkronisasi transaksi offline:', err);
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }

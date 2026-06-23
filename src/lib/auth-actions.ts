@@ -58,30 +58,32 @@ export async function logoutUser() {
   redirect('/login');
 }
 
-export async function createStaff(formData: FormData) {
+async function insertUserToDb(formData: FormData, defaultRole: string = '') {
   const name = formData.get('name') as string;
   const username = formData.get('username') as string;
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const role = formData.get('role') as string;
+  const role = formData.get('role') as string || defaultRole;
 
   if (!name || !username || !password || !role) {
-    return { success: false, error: 'Semua field wajib diisi' };
+    return { error: 'Semua field wajib diisi' };
   }
 
   const { error } = await supabase.from('users').insert({
-    name: name,
+    name,
     full_name: name,
-    username: username,
+    username,
     email: email || `${username}@hemat.cafe`,
-    password: password,
-    role: role
+    password,
+    role
   });
 
-  if (error) {
-    return { success: false, error: error.message };
-  }
+  return { error: error?.message };
+}
 
+export async function createStaff(formData: FormData) {
+  const result = await insertUserToDb(formData);
+  if (result.error) return { success: false, error: result.error };
   return { success: true };
 }
 
@@ -98,28 +100,8 @@ export async function deleteStaff(userId: string) {
 }
 
 export async function registerUser(prevState: any, formData: FormData) {
-  const name = formData.get('name') as string;
-  const username = formData.get('username') as string;
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const role = formData.get('role') as string || 'owner';
-
-  if (!name || !username || !password || !role) {
-    return { error: 'Semua field wajib diisi' };
-  }
-
-  const { error } = await supabase.from('users').insert({
-    name: name,
-    full_name: name,
-    username: username,
-    email: email || `${username}@hemat.cafe`,
-    password: password,
-    role: role
-  });
-
-  if (error) {
-    return { error: error.message };
-  }
+  const result = await insertUserToDb(formData, 'owner');
+  if (result.error) return { error: result.error };
 
   // Langsung login setelah register
   return await loginUser(prevState, formData);

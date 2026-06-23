@@ -77,8 +77,8 @@ export function PaymentRatioChart({ data }: Readonly<{ data: any[] }>) {
               paddingAngle={5}
               dataKey="value"
             >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${entry.name || index}`} fill={COLORS[index % COLORS.length]} />
+              {data.map((entry) => (
+                <Cell key={`cell-${entry.name}`} fill={COLORS[data.indexOf(entry) % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip 
