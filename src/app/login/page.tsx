@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { loginUser, changePasswordAndLogin } from '@/lib/auth-actions';
+import { redirectWithSwCleanup } from '@/lib/utils';
 import logoIcon from '../../../public/icon-192x192.png';
 
 export default function LoginPage() {
@@ -18,18 +19,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (state && 'redirectTo' in state && state.redirectTo) {
       // Tunggu sampai SW dihapus, baru force hard reload ke dashboard
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(async (regs) => {
-          for (const reg of regs) {
-            await reg.unregister();
-          }
-          window.location.href = state.redirectTo;
-        }).catch(() => {
-          window.location.href = state.redirectTo;
-        });
-      } else {
-        window.location.href = state.redirectTo;
-      }
+      redirectWithSwCleanup(state.redirectTo);
     } else {
       // Hapus SW saat halaman pertama kali dimuat
       if ('serviceWorker' in navigator) {

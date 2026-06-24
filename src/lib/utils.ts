@@ -5,3 +5,18 @@ export const formatRupiah = (number: number) => {
     minimumFractionDigits: 0,
   }).format(number);
 };
+
+export const redirectWithSwCleanup = (url: string) => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(async (regs) => {
+      for (const reg of regs) {
+        await reg.unregister();
+      }
+      globalThis.location.href = url;
+    }).catch(() => {
+      globalThis.location.href = url;
+    });
+  } else {
+    globalThis.location.href = url;
+  }
+};

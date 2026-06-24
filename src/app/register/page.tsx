@@ -3,6 +3,7 @@
 import { useActionState, useEffect } from 'react';
 import Image from 'next/image';
 import { registerUser } from '@/lib/auth-actions';
+import { redirectWithSwCleanup } from '@/lib/utils';
 import logoIcon from '../../../public/icon-192x192.png';
 
 export default function RegisterPage() {
@@ -11,18 +12,7 @@ export default function RegisterPage() {
   // Redirect jika berhasil register dan login
   useEffect(() => {
     if (state && 'redirectTo' in state && state.redirectTo) {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(async (regs) => {
-          for (const reg of regs) {
-            await reg.unregister();
-          }
-          window.location.href = state.redirectTo;
-        }).catch(() => {
-          window.location.href = state.redirectTo;
-        });
-      } else {
-        window.location.href = state.redirectTo;
-      }
+      redirectWithSwCleanup(state.redirectTo);
     }
   }, [state]);
 
