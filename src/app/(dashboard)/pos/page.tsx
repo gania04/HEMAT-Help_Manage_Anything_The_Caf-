@@ -20,6 +20,7 @@ type MenuItem = {
   prices: Record<string, number>;
   icon: string;
   maxPortions?: number;
+  options?: Record<string, string[]>;
 };
 
 type CartItem = MenuItem & {
@@ -100,7 +101,7 @@ export default function PosPage() {
         URL.revokeObjectURL(url);
       }
     } catch (err) {
-      console.error('Failed to capture image:', err);
+      console.warn('Failed to capture image:', err);
       alert('Gagal membuat gambar struk.');
     } finally {
       setIsCapturing(false);
@@ -138,15 +139,12 @@ export default function PosPage() {
     if (item.maxPortions === 0) return;
     
     // Check if item has options
-    // @ts-expect-error - options is dynamically added
     if (item.options && Object.keys(item.options).length > 0) {
       setSelectedMenuForOptions(item);
       // Set default options (first choice of each)
       const defaultOpts: Record<string, string> = {};
-      // @ts-expect-error - options is dynamically added
       Object.keys(item.options).forEach(key => {
-        // @ts-expect-error - options is dynamically added
-        defaultOpts[key] = item.options[key][0];
+        defaultOpts[key] = item.options![key][0];
       });
       setTempOptions(defaultOpts);
     } else {
@@ -283,7 +281,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         });
       }
     } catch (_error: Parameters<typeof JSON.stringify>[0]) {
-      console.error('POS Checkout Error:', _error);
+      console.warn('POS Checkout Error:', _error);
       setNotification({
         type: 'error',
         message: 'Gagal memproses pembayaran'
@@ -480,8 +478,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             </h2>
             
             <div className="space-y-4 mb-6">
-              {/* @ts-expect-error - options is dynamically added */}
-              {Object.keys(selectedMenuForOptions.options).map((optKey) => {
+              {Object.keys(selectedMenuForOptions.options!).map((optKey) => {
                 let labelText = optKey;
                 if (optKey === 'ice') labelText = 'Suhu / Es';
                 else if (optKey === 'sugar') labelText = 'Tingkat Gula';
@@ -492,8 +489,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                       {labelText}
                     </p>
                     <div className="grid grid-cols-3 gap-2">
-                      {/* @ts-expect-error - options is dynamically added */}
-                      {selectedMenuForOptions.options[optKey].map((val: string) => (
+                      {selectedMenuForOptions.options![optKey].map((val: string) => (
                         <button
                           key={val}
                           onClick={() => setTempOptions({ ...tempOptions, [optKey]: val })}

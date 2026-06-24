@@ -21,7 +21,7 @@ export async function getAllRecipes() {
     .order('created_at', { ascending: false });
 
   if (error || !data) {
-    console.error('Error fetching recipes:', error);
+    console.warn('Error fetching recipes:', error);
     return [];
   }
 

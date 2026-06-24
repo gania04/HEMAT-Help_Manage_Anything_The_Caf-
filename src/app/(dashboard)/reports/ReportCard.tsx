@@ -41,7 +41,7 @@ export default function ReportCard({ report }: Readonly<{ report: Parameters<typ
       link.click();
       link.remove();
     } catch (e) {
-      console.error(e);
+      console.warn(e);
       alert("Gagal mengunduh laporan.");
     }
 

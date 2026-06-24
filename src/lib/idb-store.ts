@@ -81,5 +81,5 @@ export async function syncOfflineTransactions() {
         // Biarkan di IndexedDB untuk dicoba lagi nanti
       }
     }
-  } catch (_error: Parameters<typeof JSON.stringify>[0]) { console.error(_error); }
+  } catch (_error: Parameters<typeof JSON.stringify>[0]) { console.warn(_error); }
 }
