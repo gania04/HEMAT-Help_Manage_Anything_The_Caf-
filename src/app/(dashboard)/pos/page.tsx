@@ -85,7 +85,7 @@ export default function PosPage() {
 
       const file = new File([blob], `Struk-${receiptData.orderId}.png`, { type: 'image/png' });
       
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      if (navigator.canShare?.({ files: [file] })) {
         await navigator.share({
           files: [file],
           title: 'Struk Pembelian HEMAT',

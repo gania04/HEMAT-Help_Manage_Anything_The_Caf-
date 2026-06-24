@@ -287,11 +287,11 @@ export default function HppCalculatorPage() {
             <p className="text-sm text-gray-500 mb-4">Hitung biaya satuan dari harga beli grosir / kemasan besar.</p>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-bold mb-1 text-gray-700">Total Harga Beli (Rp)</label>
+                <label htmlFor="bulkPrice" className="block text-sm font-bold mb-1 text-gray-700">Total Harga Beli (Rp)</label>
                 <input type="number" id="bulkPrice" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:outline-none" placeholder="Contoh: 100000" />
               </div>
               <div>
-                <label className="block text-sm font-bold mb-1 text-gray-700">Isi Kemasan (Total Kuantitas)</label>
+                <label htmlFor="bulkQty" className="block text-sm font-bold mb-1 text-gray-700">Isi Kemasan (Total Kuantitas)</label>
                 <input type="number" id="bulkQty" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00875A] focus:outline-none" placeholder="Contoh: 1000" />
               </div>
             </div>
