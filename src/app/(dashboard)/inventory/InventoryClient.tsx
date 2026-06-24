@@ -215,43 +215,51 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
             </div>
             
             <div className="p-6 flex-1 overflow-y-auto">
-              {isLoadingHistory ? (
-                <div className="flex justify-center items-center py-10">
-                   <div className="w-8 h-8 border-4 border-[#00875A] border-t-transparent rounded-full animate-spin"></div>
-                </div>
-              ) : historyData.length === 0 ? (
-                <div className="text-center py-10">
-                  <p className="text-gray-500 mb-2">Riwayat belum tersedia.</p>
-                  <p className="text-xs text-gray-400">Hubungi admin untuk menjalankan sistem pelacakan otomatis (Migration 008).</p>
-                </div>
-              ) : (
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
-                      <th className="p-3 font-medium">Tanggal</th>
-                      <th className="p-3 font-medium">Jenis</th>
-                      <th className="p-3 font-medium">Jumlah</th>
-                      <th className="p-3 font-medium">Sisa Stok</th>
-                      <th className="p-3 font-medium">Keterangan</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {historyData.map((h: Parameters<typeof JSON.stringify>[0]) => (
-                      <tr key={h.id} className="border-b border-gray-50 text-sm hover:bg-gray-50/50">
-                        <td className="p-3 text-gray-600">{h.date}</td>
-                        <td className="p-3">
-                          <span className={`px-2 py-1 rounded text-xs font-bold ${h.type === 'IN' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                            {h.type === 'IN' ? '+ MASUK' : '- KELUAR'}
-                          </span>
-                        </td>
-                        <td className="p-3 font-bold">{h.quantity} {historyItem.unit}</td>
-                        <td className="p-3 font-bold text-[#00875A]">{h.balance}</td>
-                        <td className="p-3 text-gray-500">{h.reference || '-'}</td>
+              {(() => {
+                if (isLoadingHistory) {
+                  return (
+                    <div className="flex justify-center items-center py-10">
+                       <div className="w-8 h-8 border-4 border-[#00875A] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  );
+                }
+                if (historyData.length === 0) {
+                  return (
+                    <div className="text-center py-10">
+                      <p className="text-gray-500 mb-2">Riwayat belum tersedia.</p>
+                      <p className="text-xs text-gray-400">Hubungi admin untuk menjalankan sistem pelacakan otomatis (Migration 008).</p>
+                    </div>
+                  );
+                }
+                return (
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
+                        <th className="p-3 font-medium">Tanggal</th>
+                        <th className="p-3 font-medium">Jenis</th>
+                        <th className="p-3 font-medium">Jumlah</th>
+                        <th className="p-3 font-medium">Sisa Stok</th>
+                        <th className="p-3 font-medium">Keterangan</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+                    </thead>
+                    <tbody>
+                      {historyData.map((h: Parameters<typeof JSON.stringify>[0]) => (
+                        <tr key={h.id} className="border-b border-gray-50 text-sm hover:bg-gray-50/50">
+                          <td className="p-3 text-gray-600">{h.date}</td>
+                          <td className="p-3">
+                            <span className={`px-2 py-1 rounded text-xs font-bold ${h.type === 'IN' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                              {h.type === 'IN' ? '+ MASUK' : '- KELUAR'}
+                            </span>
+                          </td>
+                          <td className="p-3 font-bold">{h.quantity} {historyItem.unit}</td>
+                          <td className="p-3 font-bold text-[#00875A]">{h.balance}</td>
+                          <td className="p-3 text-gray-500">{h.reference || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                );
+              })()}
             </div>
             <div className="p-4 bg-gray-50 border-t border-gray-200 shrink-0 text-right">
               <button onClick={() => setHistoryItem(null)} className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition">Tutup</button>
