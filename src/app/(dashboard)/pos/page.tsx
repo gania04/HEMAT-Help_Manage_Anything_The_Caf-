@@ -652,7 +652,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
 
               <div className="space-y-3 mb-6">
                 {receiptData.items.map((item: Parameters<typeof JSON.stringify>[0], idx: number) => (
-                  <div key={idx} className="text-sm">
+                  <div key={item.cartItemId || idx} className="text-sm">
                     <p className="font-bold text-gray-800">{item.name}</p>
                     {item.selectedOptions && (
                       <p className="text-[10px] text-gray-500 mt-0.5">
@@ -713,7 +713,19 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                     text += ` - ${formatRupiah(i.price * i.quantity)}`;
                     return text;
                   }).join('%0A');
-                  const text = `*Struk Pembelian HEMAT*%0AOrder ID: ${receiptData.orderId}%0ATanggal: ${receiptData.date}${receiptData.customerName ? `%0APelanggan: ${receiptData.customerName}` : ''}%0A%0A*Pesanan:*%0A${itemsText}%0A%0A*Total: ${formatRupiah(receiptData.total)}*%0AMetode: ${receiptData.method}${receiptData.method === 'Tunai' ? `%0ATunai: ${formatRupiah(receiptData.cashGiven)}%0AKembali: ${formatRupiah(receiptData.change)}` : ''}%0A%0ATerima kasih telah berbelanja!`;
+                  const textParts = [
+                    '*Struk Pembelian HEMAT*',
+                    `Order ID: ${receiptData.orderId}`,
+                    `Tanggal: ${receiptData.date}`
+                  ];
+                  if (receiptData.customerName) textParts.push(`Pelanggan: ${receiptData.customerName}`);
+                  textParts.push('', '*Pesanan:*', itemsText, '', `*Total: ${formatRupiah(receiptData.total)}*`, `Metode: ${receiptData.method}`);
+                  if (receiptData.method === 'Tunai') {
+                    textParts.push(`Tunai: ${formatRupiah(receiptData.cashGiven)}`, `Kembali: ${formatRupiah(receiptData.change)}`);
+                  }
+                  textParts.push('', 'Terima kasih telah berbelanja!');
+                  
+                  const text = textParts.join('%0A');
                   
                   let waUrl = `https://wa.me/?text=${text}`;
                   if (receiptData.customerWA) {
