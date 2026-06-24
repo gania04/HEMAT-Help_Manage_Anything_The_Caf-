@@ -64,7 +64,7 @@ export default function HppCalculatorPage() {
       setTimeout(() => {
         alert(`Berhasil menyimpan resep "${menuName}"!\nHPP Per Unit: ${formatRupiah(hppPerUnit)}\nRekomendasi Harga Jual (Margin ${margin}%): ${formatRupiah(recommendedSellingPrice)}${posMsg}`);
         setIsSaving(false);
-        window.location.href = '/recipes';
+        globalThis.location.href = '/recipes';
       }, 500);
     } else {
       setTimeout(() => {
@@ -195,7 +195,7 @@ export default function HppCalculatorPage() {
             </div>
             <div className="flex justify-between items-center py-3 border-b border-gray-100">
               <span className="text-gray-500 text-sm flex items-center gap-1">
-                Estimasi Overhead 
+                Estimasi Overhead{' '}
                 <select 
                   value={overhead}
                   onChange={(e) => setOverhead(Number(e.target.value))}
@@ -230,7 +230,7 @@ export default function HppCalculatorPage() {
               <div className="flex justify-between items-center mb-3 border-b border-blue-200 pb-2">
                 <span className="text-xs text-blue-600 font-bold flex items-center gap-1">
                   <span>💡</span> Target Margin
-                </span>
+                </span>{' '}
                 <select 
                   value={margin}
                   onChange={(e) => setMargin(Number(e.target.value))}
