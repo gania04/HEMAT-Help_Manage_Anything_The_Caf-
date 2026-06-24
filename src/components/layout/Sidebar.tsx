@@ -41,7 +41,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
   return (
     <>
       {/* Global Top Left Logo Trigger */}
-      <div className={`fixed top-4 left-4 z-40 ${!isBeranda ? 'md:hidden' : ''}`}>
+      <div className={`fixed top-4 left-4 z-40 ${isBeranda ? '' : 'md:hidden'}`}>
         <button 
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-center p-1 bg-white shadow-lg rounded-2xl hover:scale-105 transition-transform"
@@ -55,7 +55,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
       {isOpen && (
         <button 
           aria-label="Tutup sidebar"
-          className={`fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity w-full h-full cursor-default border-none outline-none ${!isBeranda ? 'md:hidden' : ''}`}
+          className={`fixed inset-0 bg-black/50 z-40 backdrop-blur-sm transition-opacity w-full h-full cursor-default border-none outline-none ${isBeranda ? '' : 'md:hidden'}`}
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -65,7 +65,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
         fixed inset-y-0 left-0 z-50
         w-72 bg-[#00875A] text-white flex flex-col h-[100dvh] shadow-2xl
         transition-transform duration-300 ease-in-out
-        ${!isBeranda ? 'md:static md:translate-x-0 md:h-full md:shadow-none' : ''}
+        ${isBeranda ? '' : 'md:static md:translate-x-0 md:h-full md:shadow-none'}
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-6 pb-4 flex items-center justify-between md:justify-start gap-3 flex-shrink-0 border-b border-white/10">
@@ -76,7 +76,7 @@ export function Sidebar({ activeUser = 'Gania K.', activeRole = 'owner' }: Reado
               <p className="text-[10px] text-[#E6F4EA]/80 leading-tight">Help Manage Anything<br/>The Café</p>
             </div>
           </Link>
-          <button className={`text-white hover:text-white/70 text-2xl p-2 rounded-lg hover:bg-white/10 transition-colors ${!isBeranda ? 'md:hidden' : ''}`} onClick={() => setIsOpen(false)}>✕</button>
+          <button className={`text-white hover:text-white/70 text-2xl p-2 rounded-lg hover:bg-white/10 transition-colors ${isBeranda ? '' : 'md:hidden'}`} onClick={() => setIsOpen(false)}>✕</button>
         </div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto py-4 min-h-0">
