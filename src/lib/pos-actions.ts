@@ -93,7 +93,7 @@ export async function getPosMenusWithStock() {
   }
 
   return menusData
-    .filter((m: Parameters<typeof JSON.stringify>[0]) => m.menu_prices && m.menu_prices.some((p: Parameters<typeof JSON.stringify>[0]) => p.channel !== 'recipe_only'))
+    .filter((m: Parameters<typeof JSON.stringify>[0]) => m.menu_prices?.some((p: Parameters<typeof JSON.stringify>[0]) => p.channel !== 'recipe_only'))
     .map((m: Parameters<typeof JSON.stringify>[0]) => {
       const prices: Record<string, number> = {};
       if (m.menu_prices) {
