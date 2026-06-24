@@ -730,7 +730,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                     waUrl = `https://wa.me/${phone}?text=${text}`;
                   }
                   
-                  window.open(waUrl, '_blank');
+                  globalThis.open(waUrl, '_blank');
                 }}
                 className="py-2 px-3 text-sm bg-green-500 text-white rounded-lg hover:bg-green-600 font-bold transition shadow-sm flex items-center justify-center gap-2 flex-1"
               >

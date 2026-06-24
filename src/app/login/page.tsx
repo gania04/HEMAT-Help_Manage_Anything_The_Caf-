@@ -20,15 +20,13 @@ export default function LoginPage() {
     if (state && 'redirectTo' in state && state.redirectTo) {
       // Tunggu sampai SW dihapus, baru force hard reload ke dashboard
       redirectWithSwCleanup(state.redirectTo);
-    } else {
+    } else if ('serviceWorker' in navigator) {
       // Hapus SW saat halaman pertama kali dimuat
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then((regs) => {
-          for (const reg of regs) {
-            reg.unregister();
-          }
-        }).catch(() => {});
-      }
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        for (const reg of regs) {
+          reg.unregister();
+        }
+      }).catch(() => {});
     }
   }, [state]);
 
@@ -58,17 +56,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {!isForgotPassword ? (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">Password</label>
-              <input 
-                name="password" id="password"
-                type="password" 
-                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
-                placeholder="Masukkan password"
-              />
-            </div>
-          ) : (
+          {isForgotPassword ? (
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="oldPassword">Password Lama</label>
@@ -89,6 +77,16 @@ export default function LoginPage() {
                 />
               </div>
             </>
+          ) : (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="password">Password</label>
+              <input 
+                name="password" id="password"
+                type="password" 
+                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00875A] focus:border-transparent bg-[#F8F9FA]"
+                placeholder="Masukkan password"
+              />
+            </div>
           )}
           <div className="flex items-center justify-between">
             <label className="flex items-center">

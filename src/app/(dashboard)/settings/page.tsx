@@ -55,7 +55,7 @@ export default function SettingsPage() {
   };
 
   const handleDeleteStaff = async (userId: string, userName: string) => {
-    if (!window.confirm(`Yakin ingin menghapus staf ${userName}? Tindakan ini tidak dapat dibatalkan.`)) return;
+    if (!globalThis.confirm(`Yakin ingin menghapus staf ${userName}? Tindakan ini tidak dapat dibatalkan.`)) return;
 
     setIsLoading(true);
     const res = await deleteStaff(userId);
