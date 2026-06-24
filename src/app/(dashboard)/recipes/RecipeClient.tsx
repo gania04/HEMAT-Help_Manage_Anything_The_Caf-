@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { formatRupiah } from '@/lib/utils';
 import { deleteRecipe } from '@/lib/recipe-actions';
 
-export default function RecipeClient({ initialRecipes }: { initialRecipes: Parameters<typeof JSON.stringify>[0][] }) {
+export default function RecipeClient({ initialRecipes }: Readonly<{ initialRecipes: Parameters<typeof JSON.stringify>[0][] }>) {
   const [recipes, setRecipes] = useState(initialRecipes);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
@@ -85,7 +85,7 @@ export default function RecipeClient({ initialRecipes }: { initialRecipes: Param
               
               <ul className="space-y-3 flex-1">
                 {ingredients.map((ing: Parameters<typeof JSON.stringify>[0], idx: number) => (
-                  <li key={idx} className="flex justify-between items-start text-sm">
+                  <li key={`${ing.name}-${idx}`} className="flex justify-between items-start text-sm">
                     <div>
                       <p className="font-medium text-gray-800">{ing.name}</p>
                       <p className="text-xs text-gray-500">{ing.qty} {ing.unit}</p>

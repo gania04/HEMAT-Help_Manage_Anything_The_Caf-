@@ -725,7 +725,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                   
                   let waUrl = `https://wa.me/?text=${text}`;
                   if (receiptData.customerWA) {
-                    let phone = receiptData.customerWA.replace(/[^0-9]/g, '');
+                    let phone = receiptData.customerWA.replace(/\D/g, '');
                     if (phone.startsWith('0')) phone = '62' + phone.slice(1);
                     waUrl = `https://wa.me/${phone}?text=${text}`;
                   }
