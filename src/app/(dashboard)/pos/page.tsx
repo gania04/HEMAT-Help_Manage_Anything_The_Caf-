@@ -159,7 +159,7 @@ export default function PosPage() {
     setCart((prevCart) => {
       const optsString = getOptionsString(selectedOpts);
       const cartItemId = item.id + (optsString ? `-${optsString}` : '');
-      const existingItem = prevCart.find((cartItem) => cartItem.cartItemId === cartItemId);
+      const exists = prevCart.some((cartItem) => cartItem.cartItemId === cartItemId);
       
       const totalQtyOfThisMenu = calculateTotalQty(prevCart, item.id);
       
@@ -168,7 +168,7 @@ export default function PosPage() {
         return prevCart;
       }
 
-      if (existingItem) {
+      if (exists) {
         return prevCart.map((cartItem) =>
           cartItem.cartItemId === cartItemId
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
@@ -481,29 +481,35 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             
             <div className="space-y-4 mb-6">
               {/* @ts-expect-error - options is dynamically added */}
-              {Object.keys(selectedMenuForOptions.options).map((optKey) => (
-                <div key={optKey}>
-                  <label className="block text-sm font-bold mb-2 text-gray-700 capitalize">
-                    {optKey === 'ice' ? 'Suhu / Es' : optKey === 'sugar' ? 'Tingkat Gula' : optKey}
-                  </label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {/* @ts-expect-error - options is dynamically added */}
-                    {selectedMenuForOptions.options[optKey].map((val: string) => (
-                      <button
-                        key={val}
-                        onClick={() => setTempOptions({ ...tempOptions, [optKey]: val })}
-                        className={`py-2 px-1 text-xs font-bold rounded-lg border transition ${
-                          tempOptions[optKey] === val 
-                            ? 'bg-[#E6F4EA] border-[#00875A] text-[#00875A]' 
-                            : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {val}
-                      </button>
-                    ))}
+              {Object.keys(selectedMenuForOptions.options).map((optKey) => {
+                let labelText = optKey;
+                if (optKey === 'ice') labelText = 'Suhu / Es';
+                else if (optKey === 'sugar') labelText = 'Tingkat Gula';
+
+                return (
+                  <div key={optKey}>
+                    <p className="block text-sm font-bold mb-2 text-gray-700 capitalize">
+                      {labelText}
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {/* @ts-expect-error - options is dynamically added */}
+                      {selectedMenuForOptions.options[optKey].map((val: string) => (
+                        <button
+                          key={val}
+                          onClick={() => setTempOptions({ ...tempOptions, [optKey]: val })}
+                          className={`py-2 px-1 text-xs font-bold rounded-lg border transition ${
+                            tempOptions[optKey] === val 
+                              ? 'bg-[#E6F4EA] border-[#00875A] text-[#00875A]' 
+                              : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          {val}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="flex gap-3 justify-end">
