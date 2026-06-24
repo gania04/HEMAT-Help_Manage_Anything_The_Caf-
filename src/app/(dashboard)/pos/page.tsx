@@ -548,8 +548,9 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             {paymentMethod === 'Tunai' && (
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-bold mb-1 text-gray-700">Uang Diterima (Rp)</label>
+                  <label htmlFor="cashGiven" className="block text-sm font-bold mb-1 text-gray-700">Uang Diterima (Rp)</label>
                   <input 
+                    id="cashGiven"
                     type="number" 
                     value={cashGiven}
                     onChange={(e) => setCashGiven(Number(e.target.value))}
@@ -585,8 +586,9 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             {paymentMethod === 'Debit' && (
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-bold mb-1 text-gray-700">Nomor Referensi EDC / Approval Code</label>
+                  <label htmlFor="debitRef" className="block text-sm font-bold mb-1 text-gray-700">Nomor Referensi EDC / Approval Code</label>
                   <input 
+                    id="debitRef"
                     type="text" 
                     value={debitRef}
                     onChange={(e) => setDebitRef(e.target.value)}
