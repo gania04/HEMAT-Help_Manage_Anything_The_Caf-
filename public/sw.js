@@ -1,7 +1,7 @@
 // Kill-switch Service Worker untuk menghapus cache yang rusak dan mengembalikan fetch ke normal
-const CACHE_NAME = 'hemat-pwa-v1';
 
-globalThis.addEventListener('install', (event) => {
+
+globalThis.addEventListener('install', () => {
   globalThis.skipWaiting();
 });
 
@@ -16,7 +16,7 @@ globalThis.addEventListener('activate', (event) => {
   globalThis.clients.claim();
 });
 
-globalThis.addEventListener('fetch', (event) => {
+globalThis.addEventListener('fetch', () => {
   // Biarkan browser menangani semua request secara normal
   return;
 });

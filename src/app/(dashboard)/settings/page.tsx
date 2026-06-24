@@ -86,43 +86,39 @@ export default function SettingsPage() {
             <h2 className="text-xl font-bold text-gray-800 border-b pb-2">Profil Kafe</h2>
             <Card className="p-6 space-y-4">
               <div>
-                <label htmlFor="namaBisnis" className="block text-sm font-medium text-gray-700 mb-1">Nama Bisnis
-                  <input 
-                    id="namaBisnis"
-                    type="text" 
-                    defaultValue="HEMAT Cafe & Resto"
-                    className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors"
-                  />
-                </label>
+                <label htmlFor="namaBisnis" className="block text-sm font-medium text-gray-700 mb-1">Nama Bisnis</label>
+                <input 
+                  id="namaBisnis"
+                  type="text" 
+                  defaultValue="HEMAT Cafe & Resto"
+                  className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors"
+                />
               </div>
               <div>
-                <label htmlFor="alamatBisnis" className="block text-sm font-medium text-gray-700 mb-1">Alamat
-                  <textarea 
-                    id="alamatBisnis"
-                    defaultValue="Jl. Sudirman No. 123, Jakarta"
-                    rows={3}
-                    className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors resize-none"
-                  />
-                </label>
+                <label htmlFor="alamatBisnis" className="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
+                <textarea 
+                  id="alamatBisnis"
+                  defaultValue="Jl. Sudirman No. 123, Jakarta"
+                  rows={3}
+                  className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors resize-none"
+                />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="telpBisnis" className="block text-sm font-medium text-gray-700 mb-1">Telepon
-                    <input 
-                      id="telpBisnis"
-                      type="text" 
-                      defaultValue="0812-3456-7890"
-                      className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors"
-                    />
-                  </label>
+                  <label htmlFor="telpBisnis" className="block text-sm font-medium text-gray-700 mb-1">Telepon</label>
+                  <input 
+                    id="telpBisnis"
+                    type="text" 
+                    defaultValue="0812-3456-7890"
+                    className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors"
+                  />
                 </div>
                 <div>
-                  <label htmlFor="mataUang" className="block text-sm font-medium text-gray-700 mb-1">Mata Uang
-                    <select id="mataUang" className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors bg-white">
-                      <option>IDR - Rupiah</option>
-                      <option>USD - US Dollar</option>
-                    </select>
-                  </label>
+                  <label htmlFor="mataUang" className="block text-sm font-medium text-gray-700 mb-1">Mata Uang</label>
+                  <select id="mataUang" className="w-full px-4 py-2 mt-1 border rounded-lg focus:ring-primary-green focus:border-primary-green outline-none transition-colors bg-white">
+                    <option>IDR - Rupiah</option>
+                    <option>USD - US Dollar</option>
+                  </select>
                 </div>
               </div>
               <div className="pt-4 flex justify-end">
@@ -210,33 +206,28 @@ export default function SettingsPage() {
               <h2 className="text-xl font-bold mb-4">Tambah Staf Baru</h2>
               <form onSubmit={handleAddStaff} className="space-y-4">
                 <div>
-                  <label htmlFor="namaStaff" className="block text-sm font-medium mb-1">Nama Lengkap
-                    <input id="namaStaff" name="name" type="text" required className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="Cth: Budi Santoso" />
-                  </label>
+                  <label htmlFor="namaStaff" className="block text-sm font-medium mb-1">Nama Lengkap</label>
+                  <input id="namaStaff" name="name" type="text" required className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="Cth: Budi Santoso" />
                 </div>
                 <div>
-                  <label htmlFor="usernameStaff" className="block text-sm font-medium mb-1">Username
-                    <input id="usernameStaff" name="username" type="text" required className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="budi_kasir" />
-                  </label>
+                  <label htmlFor="usernameStaff" className="block text-sm font-medium mb-1">Username</label>
+                  <input id="usernameStaff" name="username" type="text" required className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="budi_kasir" />
                 </div>
                 <div>
-                  <label htmlFor="emailStaff" className="block text-sm font-medium mb-1">Email
-                    <input id="emailStaff" name="email" type="email" className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="budi@hemat.cafe" />
-                  </label>
+                  <label htmlFor="emailStaff" className="block text-sm font-medium mb-1">Email</label>
+                  <input id="emailStaff" name="email" type="email" className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="budi@hemat.cafe" />
                 </div>
                 <div>
-                  <label htmlFor="passStaff" className="block text-sm font-medium mb-1">Password
-                    <input id="passStaff" name="password" type="password" required className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="Minimal 6 karakter" />
-                  </label>
+                  <label htmlFor="passStaff" className="block text-sm font-medium mb-1">Password</label>
+                  <input id="passStaff" name="password" type="password" required className="w-full border rounded-lg px-3 py-2 mt-1 outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green" placeholder="Minimal 6 karakter" />
                 </div>
                 <div>
-                  <label htmlFor="roleStaff" className="block text-sm font-medium mb-1">Peran (Role)
-                    <select id="roleStaff" name="role" className="w-full border rounded-lg px-3 py-2 mt-1 bg-white outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green">
-                      <option value="kasir">Kasir (Akses Terbatas)</option>
-                      <option value="admin">Admin (Gudang & Operasional)</option>
-                      <option value="owner">Owner (Akses Penuh)</option>
-                    </select>
-                  </label>
+                  <label htmlFor="roleStaff" className="block text-sm font-medium mb-1">Peran (Role)</label>
+                  <select id="roleStaff" name="role" className="w-full border rounded-lg px-3 py-2 mt-1 bg-white outline-none focus:border-primary-green focus:ring-1 focus:ring-primary-green">
+                    <option value="kasir">Kasir (Akses Terbatas)</option>
+                    <option value="admin">Admin (Gudang & Operasional)</option>
+                    <option value="owner">Owner (Akses Penuh)</option>
+                  </select>
                 </div>
                 <div className="flex gap-3 justify-end mt-6">
                   <Button type="button" onClick={() => setShowAddStaffModal(false)} variant="secondary">Batal</Button>
