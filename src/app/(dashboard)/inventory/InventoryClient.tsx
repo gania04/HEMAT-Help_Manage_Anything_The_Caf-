@@ -20,7 +20,7 @@ export default function InventoryClient({ initialItems }: Readonly<{ initialItem
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [historyItem, setHistoryItem] = useState<InventoryItem | null>(null);
-  const [historyData, setHistoryData] = useState<any[]>([]);
+  const [historyData, setHistoryData] = useState<Parameters<typeof JSON.stringify>[0][]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const handleViewHistory = async (item: InventoryItem) => {

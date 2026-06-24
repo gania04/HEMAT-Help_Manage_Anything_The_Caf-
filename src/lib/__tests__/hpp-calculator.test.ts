@@ -42,6 +42,7 @@ describe('HPP Calculator', () => {
       totalMaterialCost: 12000,
       overheadCost: 1200,
       totalHPP: 13200,
+      hppPerUnit: 13200,
       recommendedSellingPrice: 33000
     });
   });

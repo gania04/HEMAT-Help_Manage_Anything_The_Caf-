@@ -10,7 +10,7 @@ import { supabase } from "@/lib/supabase";
 
 export default function SettingsPage() {
   const [showAddStaffModal, setShowAddStaffModal] = useState(false);
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<Parameters<typeof JSON.stringify>[0][]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
 

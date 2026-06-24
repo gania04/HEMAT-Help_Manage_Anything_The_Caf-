@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { addExpense } from '@/lib/expense-actions';
 import { formatRupiah } from '@/lib/utils';
 
-function BudgetAlertCard({ budget, idx }: Readonly<{ budget: Parameters<typeof JSON.stringify>[0], idx: number }>) {
+function BudgetAlertCard({ budget }: Readonly<{ budget: Parameters<typeof JSON.stringify>[0] }>) {
   const ratioPercent = Math.min(Math.round(Number(budget.ratio) * 100), 100);
   
   let cardStyle = "bg-white border-green-200 text-green-700";
@@ -140,7 +140,7 @@ export default function ExpenseClient({ expenses, budgetAlerts }: Readonly<{ exp
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {budgetAlerts.map((budget, idx) => (
-            <BudgetAlertCard key={String(budget.category) || String(idx)} budget={budget} idx={idx} />
+            <BudgetAlertCard key={String(budget.category) || String(idx)} budget={budget} />
           ))}
           {budgetAlerts.length === 0 && (
             <p className="text-gray-400 text-sm">Belum ada pagu anggaran yang diatur di database.</p>

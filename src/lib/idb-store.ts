@@ -38,7 +38,7 @@ export async function saveOfflineTransaction(cartItems: Parameters<typeof JSON.s
   });
 }
 
-export async function getOfflineTransactions(): Promise<any[]> {
+export async function getOfflineTransactions(): Promise<Parameters<typeof JSON.stringify>[0][]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readonly');

@@ -13,7 +13,7 @@ export function CompliancePanel() {
   const [isSubmittingKyc, setIsSubmittingKyc] = useState(false);
 
   // AML State
-  const [alerts, setAlerts] = useState<any[]>([]);
+  const [alerts, setAlerts] = useState<Parameters<typeof JSON.stringify>[0][]>([]);
   const [isScanning, setIsScanning] = useState(false);
 
   // GDPR State

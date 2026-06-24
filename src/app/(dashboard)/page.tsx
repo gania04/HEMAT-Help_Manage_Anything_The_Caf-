@@ -12,7 +12,7 @@ export default async function WelcomePage() {
     try {
       const parsed = JSON.parse(sessionData);
       name = parsed.name ? `${parsed.name}` : '';
-    } catch(e) {}
+    } catch { }
   }
 
   return (

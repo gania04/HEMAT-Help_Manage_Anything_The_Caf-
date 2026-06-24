@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
-import Image from 'next/image';
+
 import { PosLayout } from "@/components/layout/PosLayout";
 import { processOrder, getPosMenusWithStock } from '@/lib/pos-actions';
 import { formatRupiah } from '@/lib/utils';
@@ -118,14 +118,14 @@ export default function PosPage() {
     if (item.maxPortions === 0) return;
     
     // Check if item has options
-    // @ts-ignore
+    // @ts-expect-error - options is dynamically added
     if (item.options && Object.keys(item.options).length > 0) {
       setSelectedMenuForOptions(item);
       // Set default options (first choice of each)
       const defaultOpts: Record<string, string> = {};
-      // @ts-ignore
+      // @ts-expect-error - options is dynamically added
       Object.keys(item.options).forEach(key => {
-        // @ts-ignore
+        // @ts-expect-error - options is dynamically added
         defaultOpts[key] = item.options[key][0];
       });
       setTempOptions(defaultOpts);
@@ -239,6 +239,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
         const { saveOfflineTransaction } = await import('@/lib/idb-store');
         await saveOfflineTransaction(checkoutCart, method, totalHarga);
         
+        /* eslint-disable-next-line react-hooks/purity */
         const timestamp = Date.now();
         const dateString = new Date().toLocaleString('id-ID');
         setReceiptData({
@@ -298,7 +299,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                 <p className="font-bold text-sm leading-tight mb-1">{item.name}</p>
                 {item.selectedOptions && (
                   <p className="text-[10px] text-gray-500 mb-1 leading-tight">
-                    {Object.entries(item.selectedOptions).map(([k,v]) => `${v}`).join(', ')}
+                    {Object.entries(item.selectedOptions).map(([,v]) => `${v}`).join(', ')}
                   </p>
                 )}
                 <p className="text-xs text-[#00875A] font-bold">{formatRupiah(getPrice(item))}</p>
@@ -459,14 +460,14 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             </h2>
             
             <div className="space-y-4 mb-6">
-              {/* @ts-ignore */}
+              {/* @ts-expect-error - options is dynamically added */}
               {Object.keys(selectedMenuForOptions.options).map((optKey) => (
                 <div key={optKey}>
                   <label className="block text-sm font-bold mb-2 text-gray-700 capitalize">
                     {optKey === 'ice' ? 'Suhu / Es' : optKey === 'sugar' ? 'Tingkat Gula' : optKey}
                   </label>
                   <div className="grid grid-cols-3 gap-2">
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error - options is dynamically added */}
                     {selectedMenuForOptions.options[optKey].map((val: string) => (
                       <button
                         key={val}
@@ -627,7 +628,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                     <p className="font-bold text-gray-800">{item.name}</p>
                     {item.selectedOptions && (
                       <p className="text-[10px] text-gray-500 mt-0.5">
-                        {Object.entries(item.selectedOptions).map(([k,v]) => `${v}`).join(', ')}
+                        {Object.entries(item.selectedOptions).map(([,v]) => `${v}`).join(', ')}
                       </p>
                     )}
                     <div className="flex justify-between text-gray-600 mt-1">
@@ -679,7 +680,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
                   const itemsText = receiptData.items.map((i: Parameters<typeof JSON.stringify>[0]) => {
                     let text = `${i.quantity}x ${i.name}`;
                     if (i.selectedOptions) {
-                      text += ` (${Object.entries(i.selectedOptions).map(([k,v]) => v).join(', ')})`;
+                      text += ` (${Object.entries(i.selectedOptions).map(([,v]) => v).join(', ')})`;
                     }
                     text += ` - ${formatRupiah(i.price * i.quantity)}`;
                     return text;
@@ -711,6 +712,7 @@ const totalHarga = cart.reduce((total, item) => total + (getPrice(item) * item.q
             <p className="text-sm text-gray-500 mb-6">Minta pelanggan scan barcode ini menggunakan kamera HP mereka untuk melihat menu dan memesan.</p>
             
             <div className="bg-white p-4 rounded-xl border-4 border-[#00875A] inline-block mb-6 shadow-md">
+               {/* eslint-disable-next-line @next/next/no-img-element */}
                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://hemat.cafe/menu" alt="QR Code Menu" className="w-48 h-48" />
             </div>
             

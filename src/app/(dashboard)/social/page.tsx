@@ -6,7 +6,7 @@ import { distributeFund, getSocialReport } from "@/lib/social-actions";
 import { formatRupiah } from '@/lib/utils';
 
 export default function SocialFundsPage() {
-  const [reports, setReports] = useState<any[]>([]);
+  const [reports, setReports] = useState<Parameters<typeof JSON.stringify>[0][]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
