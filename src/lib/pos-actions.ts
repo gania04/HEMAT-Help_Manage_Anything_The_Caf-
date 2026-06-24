@@ -174,6 +174,48 @@ export async function requestVoid(transactionId: string) {
   revalidatePath('/void-approvals');
 }
 
+async function processRecipeItem(menuId: string, recipe: { name: string; quantity: number; unit: string; pricePerUnit: number; }) {
+  if (!recipe.name) return { success: true };
+  
+  let inventoryId;
+  const { data: existingInv } = await supabase
+    .from('inventory')
+    .select('id')
+    .ilike('item_name', recipe.name)
+    .limit(1)
+    .single();
+    
+  if (existingInv) {
+    inventoryId = existingInv.id;
+    await supabase.from('inventory').update({ unit_price: recipe.pricePerUnit }).eq('id', inventoryId);
+  } else {
+    const { data: newInv, error: invError } = await supabase.from('inventory').insert({
+      item_name: recipe.name,
+      category: 'Bahan Baku',
+      quantity: 0,
+      unit: recipe.unit,
+      unit_price: recipe.pricePerUnit,
+      min_stock: 0
+    }).select('id').single();
+    
+    if (invError) {
+      return { success: false, error: `Gagal membuat bahan baku baru (${recipe.name}): ` + invError.message };
+    }
+    if (newInv) {
+      inventoryId = newInv.id;
+    }
+  }
+
+  if (inventoryId) {
+    await supabase.from('menu_recipes').insert({
+      menu_id: menuId,
+      inventory_id: inventoryId,
+      qty_needed: recipe.quantity
+    });
+  }
+  return { success: true };
+}
+
 export async function createPosProduct(
   name: string, 
   price: number,
@@ -198,47 +240,8 @@ export async function createPosProduct(
 
   if (recipes && recipes.length > 0) {
     for (const recipe of recipes) {
-      if (!recipe.name) continue;
-      
-      let inventoryId;
-      // Find existing inventory item by name
-      const { data: existingInv } = await supabase
-        .from('inventory')
-        .select('id')
-        .ilike('item_name', recipe.name)
-        .limit(1)
-        .single();
-        
-      if (existingInv) {
-        inventoryId = existingInv.id;
-        // Update the unit price to match the new recipe input
-        await supabase.from('inventory').update({ unit_price: recipe.pricePerUnit }).eq('id', inventoryId);
-      } else {
-        // Create new inventory item
-        const { data: newInv, error: invError } = await supabase.from('inventory').insert({
-          item_name: recipe.name,
-          category: 'Bahan Baku',
-          quantity: 0, // Starts at 0, user can restock later
-          unit: recipe.unit,
-          unit_price: recipe.pricePerUnit,
-          min_stock: 0
-        }).select('id').single();
-        
-        if (!invError && newInv) {
-          inventoryId = newInv.id;
-        } else if (invError) {
-          return { success: false, error: `Gagal membuat bahan baku baru (${recipe.name}): ` + invError.message };
-        }
-      }
-
-      // Link recipe to menu
-      if (inventoryId) {
-        await supabase.from('menu_recipes').insert({
-          menu_id: menuData.id,
-          inventory_id: inventoryId,
-          qty_needed: recipe.quantity
-        });
-      }
+      const result = await processRecipeItem(menuData.id, recipe);
+      if (!result.success) return result;
     }
   }
 
