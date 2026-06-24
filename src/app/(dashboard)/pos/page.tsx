@@ -36,6 +36,26 @@ const CHANNELS = [
   { id: 'shopeefood', label: 'ShopeeFood' }
 ];
 
+function calculateTotalQty(cart: CartItem[], menuId: string) {
+  let sum = 0;
+  for (const c of cart) {
+    if (c.id === menuId) sum += c.quantity;
+  }
+  return sum;
+}
+
+function getOptionsString(opts?: Record<string, string>) {
+  if (!opts) return '';
+  const entries = Object.entries(opts);
+  entries.sort((a, b) => a[0].localeCompare(b[0]));
+  const result: string[] = [];
+  for (const [k, v] of entries) {
+    result.push(`${k}:${v}`);
+  }
+  return result.join('|');
+}
+
+
 export default function PosPage() {
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -137,12 +157,11 @@ export default function PosPage() {
   const addToCart = (item: MenuItem, selectedOpts?: Record<string, string>) => {
     setNotification(null);
     setCart((prevCart) => {
-      const optsString = selectedOpts ? Object.entries(selectedOpts).sort().map(([k,v]) => `${k}:${v}`).join('|') : '';
+      const optsString = getOptionsString(selectedOpts);
       const cartItemId = item.id + (optsString ? `-${optsString}` : '');
       const existingItem = prevCart.find((cartItem) => cartItem.cartItemId === cartItemId);
       
-      // Calculate total quantity of this menu item across all variations to check against maxPortions
-      const totalQtyOfThisMenu = prevCart.filter(c => c.id === item.id).reduce((sum, c) => sum + c.quantity, 0);
+      const totalQtyOfThisMenu = calculateTotalQty(prevCart, item.id);
       
       if (item.maxPortions !== undefined && totalQtyOfThisMenu >= item.maxPortions) {
         setNotification({ type: 'error', message: `Stok ${item.name} tidak mencukupi!` });
@@ -164,21 +183,22 @@ export default function PosPage() {
   const updateQuantity = (cartItemId: string, delta: number) => {
     setNotification(null);
     setCart((prevCart) => {
-      return prevCart.map((item) => {
-        if (item.cartItemId === cartItemId) {
-          const newQuantity = item.quantity + delta;
-          // Check stock
-          if (delta > 0 && item.maxPortions !== undefined) {
-             const totalQtyOfThisMenu = prevCart.filter(c => c.id === item.id).reduce((sum, c) => sum + c.quantity, 0);
-             if (totalQtyOfThisMenu >= item.maxPortions) {
-               setNotification({ type: 'error', message: `Stok ${item.name} hanya tersisa ${item.maxPortions} porsi!` });
-               return item;
-             }
-          }
-          return { ...item, quantity: Math.max(0, newQuantity) };
-        }
-        return item;
-      }).filter(item => item.quantity > 0);
+      const targetItem = prevCart.find(i => i.cartItemId === cartItemId);
+      if (!targetItem) return prevCart;
+
+      if (delta > 0 && targetItem.maxPortions !== undefined) {
+         const totalQtyOfThisMenu = calculateTotalQty(prevCart, targetItem.id);
+         if (totalQtyOfThisMenu >= targetItem.maxPortions) {
+           setNotification({ type: 'error', message: `Stok ${targetItem.name} hanya tersisa ${targetItem.maxPortions} porsi!` });
+           return prevCart;
+         }
+      }
+
+      return prevCart
+        .map(item => item.cartItemId === cartItemId 
+          ? { ...item, quantity: Math.max(0, item.quantity + delta) } 
+          : item)
+        .filter(item => item.quantity > 0);
     });
   };
 
