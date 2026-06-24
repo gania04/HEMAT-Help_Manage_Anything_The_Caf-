@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.56.0",
