@@ -233,8 +233,9 @@ const filteredData = debts.filter(d => d.type === activeTab);
             <h2 className="text-xl font-bold mb-4">Catat Tagihan Baru</h2>
             <form onSubmit={handleAddDebt} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Jenis</label>
+                <label htmlFor="debt-type" className="block text-sm font-medium mb-1">Jenis</label>
                 <select 
+                  id="debt-type"
                   className="w-full p-2 border rounded"
                   value={formData.type}
                   onChange={(e) => setFormData({...formData, type: e.target.value as 'hutang' | 'piutang'})}
@@ -244,8 +245,9 @@ const filteredData = debts.filter(d => d.type === activeTab);
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Pihak Terkait</label>
+                <label htmlFor="debt-counterparty" className="block text-sm font-medium mb-1">Pihak Terkait</label>
                 <input 
+                  id="debt-counterparty"
                   type="text" 
                   required
                   className="w-full p-2 border rounded"
@@ -255,8 +257,9 @@ const filteredData = debts.filter(d => d.type === activeTab);
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Jumlah (Rp)</label>
+                <label htmlFor="debt-amount" className="block text-sm font-medium mb-1">Jumlah (Rp)</label>
                 <input 
+                  id="debt-amount"
                   type="number" 
                   required
                   min="0"
@@ -266,8 +269,9 @@ const filteredData = debts.filter(d => d.type === activeTab);
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Jatuh Tempo</label>
+                <label htmlFor="debt-due-date" className="block text-sm font-medium mb-1">Jatuh Tempo</label>
                 <input 
+                  id="debt-due-date"
                   type="date" 
                   required
                   className="w-full p-2 border rounded"
@@ -276,8 +280,9 @@ const filteredData = debts.filter(d => d.type === activeTab);
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Keterangan</label>
+                <label htmlFor="debt-description" className="block text-sm font-medium mb-1">Keterangan</label>
                 <textarea 
+                  id="debt-description"
                   required
                   className="w-full p-2 border rounded"
                   placeholder="Deskripsi tagihan"
