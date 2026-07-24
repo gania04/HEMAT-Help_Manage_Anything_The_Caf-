@@ -27,6 +27,42 @@ export default function HppCalculatorPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [addToPos, setAddToPos] = useState(false);
   const [calcModalFor, setCalcModalFor] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
+
+  import('react').then((React) => {
+    React.useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('edit');
+      if (id) {
+        setEditId(id);
+        import('@/lib/recipe-actions').then(m => {
+          m.getRecipeById(id).then(data => {
+            if (data) {
+              setMenuName(data.menu_name);
+              let addToP = false;
+              if (data.menu_prices && data.menu_prices.length > 0) {
+                const validPrice = data.menu_prices.find((mp: any) => mp.channel !== 'recipe_only');
+                if (validPrice) {
+                  addToP = true;
+                }
+              }
+              if (data.menu_recipes && data.menu_recipes.length > 0) {
+                const ings = data.menu_recipes.map((r: any, i: number) => ({
+                  id: Date.now().toString() + i,
+                  name: r.inventory?.item_name || 'Bahan',
+                  quantity: Number(r.qty_needed),
+                  unit: r.inventory?.unit || 'Gram',
+                  pricePerUnit: Number(r.inventory?.unit_price || 0)
+                }));
+                setIngredients(ings);
+              }
+              setAddToPos(addToP);
+            }
+          });
+        });
+      }
+    }, []);
+  });
 
   const addIngredient = () => {
     setIngredients([
@@ -52,7 +88,14 @@ export default function HppCalculatorPage() {
     const { hppPerUnit, recommendedSellingPrice } = calculateHppSummary(ingredients, margin / 100, overhead / 100, yieldQuantity);
 
     // Always save the recipe, but mark it as recipe_only if addToPos is false
-    const res = await createPosProduct(menuName, recommendedSellingPrice, ingredients, addToPos);
+    let res;
+    if (editId) {
+      const { updatePosProduct } = await import('@/lib/pos-actions');
+      res = await updatePosProduct(editId, menuName, recommendedSellingPrice, ingredients, addToPos);
+    } else {
+      res = await createPosProduct(menuName, recommendedSellingPrice, ingredients, addToPos);
+    }
+    
     let posMsg = '';
     
     if (res.success) {
@@ -82,7 +125,9 @@ export default function HppCalculatorPage() {
     <main className="h-full overflow-y-auto p-4 md:p-10 bg-soft-gray">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-[#00875A]">KALKULATOR HPP</h1>
+          <h1 className="text-3xl font-bold text-[#00875A]">
+            {editId ? 'EDIT RESEP HPP' : 'KALKULATOR HPP'}
+          </h1>
           <p className="text-gray-500 mt-1">Hitung Harga Pokok Penjualan (COGS) resep menu secara dinamis dan akurat.</p>
         </div>
       </div>
@@ -270,7 +315,7 @@ export default function HppCalculatorPage() {
             {isSaving ? (
               <span>⏳ Menyimpan...</span>
             ) : (
-              <><span>💾</span> Simpan Resep & HPP</>
+              <><span>💾</span> {editId ? 'Perbarui Resep & HPP' : 'Simpan Resep & HPP'}</>
             )}
           </button>
         </div>

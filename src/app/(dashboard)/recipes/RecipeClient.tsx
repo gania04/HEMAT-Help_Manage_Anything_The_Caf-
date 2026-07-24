@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { formatRupiah } from '@/lib/utils';
 import { deleteRecipe } from '@/lib/recipe-actions';
 
@@ -71,14 +72,23 @@ export default function RecipeClient({ initialRecipes }: Readonly<{ initialRecip
               </div>
             </div>
             
-            <button 
-              onClick={() => handleDelete(menu.id, menu.menu_name)}
-              disabled={isDeleting === menu.id}
-              className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/20 text-white rounded-full hover:bg-red-500 transition shadow-sm z-10 disabled:opacity-50"
-              title="Hapus Resep"
-            >
-              {isDeleting === menu.id ? '⌛' : '🗑️'}
-            </button>
+            <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
+              <Link
+                href={`/hpp?edit=${menu.id}`}
+                className="w-8 h-8 flex items-center justify-center bg-black/20 text-white rounded-full hover:bg-blue-500 transition shadow-sm"
+                title="Edit Resep"
+              >
+                ✏️
+              </Link>
+              <button 
+                onClick={() => handleDelete(menu.id, menu.menu_name)}
+                disabled={isDeleting === menu.id}
+                className="w-8 h-8 flex items-center justify-center bg-black/20 text-white rounded-full hover:bg-red-500 transition shadow-sm disabled:opacity-50"
+                title="Hapus Resep"
+              >
+                {isDeleting === menu.id ? '⌛' : '🗑️'}
+              </button>
+            </div>
             
             <div className="p-4 flex-1 flex flex-col">
               <h3 className="text-xs font-bold text-gray-500 uppercase mb-3 pb-2 border-b border-gray-100">Komposisi Bahan</h3>

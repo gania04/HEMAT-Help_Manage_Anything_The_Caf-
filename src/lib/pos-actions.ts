@@ -250,3 +250,37 @@ export async function createPosProduct(
   revalidatePath('/recipes');
   return { success: true };
 }
+
+export async function updatePosProduct(
+  menuId: string,
+  name: string, 
+  price: number,
+  recipes?: { name: string; quantity: number; unit: string; pricePerUnit: number; }[],
+  addToPos: boolean = true
+) {
+  const { error: menuError } = await supabase.from('menus').update({
+    menu_name: name
+  }).eq('id', menuId);
+  
+  if (menuError) return { success: false, error: menuError.message };
+
+  await supabase.from('menu_prices').delete().eq('menu_id', menuId);
+  await supabase.from('menu_prices').insert({
+    menu_id: menuId,
+    channel: addToPos ? 'dine_in' : 'recipe_only',
+    price: price
+  });
+
+  await supabase.from('menu_recipes').delete().eq('menu_id', menuId);
+  if (recipes && recipes.length > 0) {
+    for (const recipe of recipes) {
+      const result = await processRecipeItem(menuId, recipe);
+      if (!result.success) return result;
+    }
+  }
+
+  revalidatePath('/pos');
+  revalidatePath('/inventory');
+  revalidatePath('/recipes');
+  return { success: true };
+}

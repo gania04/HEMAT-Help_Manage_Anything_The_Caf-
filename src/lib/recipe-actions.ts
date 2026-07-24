@@ -29,6 +29,32 @@ export async function getAllRecipes() {
   return data.filter(menu => menu.menu_recipes && menu.menu_recipes.length > 0);
 }
 
+export async function getRecipeById(menuId: string) {
+  const { data, error } = await supabase
+    .from('menus')
+    .select(`
+      id,
+      menu_name,
+      menu_prices ( price, channel ),
+      menu_recipes (
+        qty_needed,
+        inventory (
+          id,
+          item_name,
+          unit,
+          unit_price
+        )
+      )
+    `)
+    .eq('id', menuId)
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+  return data;
+}
+
 import { revalidatePath } from 'next/cache';
 
 export async function deleteRecipe(menuId: string) {
