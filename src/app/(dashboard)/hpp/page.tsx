@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { calculateHppSummary } from '@/lib/hpp-calculator';
 import { formatRupiah } from '@/lib/utils';
 import { createPosProduct, updatePosProduct } from '@/lib/pos-actions';
-import { getRecipeById } from '@/lib/recipe-actions';
+import { supabase } from '@/lib/supabase';
 
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -38,8 +38,35 @@ function HppCalculatorContent() {
   useEffect(() => {
     if (editIdParam) {
       setEditId(editIdParam);
-      getRecipeById(editIdParam).then(data => {
-        if (data) {
+      
+      const fetchRecipe = async () => {
+        try {
+          const { data, error } = await supabase
+            .from('menus')
+            .select(`
+              id,
+              menu_name,
+              menu_prices ( price, channel ),
+              menu_recipes (
+                qty_needed,
+                inventory (
+                  id,
+                  item_name,
+                  unit,
+                  unit_price
+                )
+              )
+            `)
+            .eq('id', editIdParam)
+            .single();
+
+          if (error) {
+            console.error("Error fetching recipe from Supabase:", error);
+            alert("Gagal memuat data resep: " + error.message);
+            return;
+          }
+
+          if (data) {
           setMenuName(data.menu_name);
           let addToP = false;
           if (data.menu_prices && data.menu_prices.length > 0) {
@@ -58,11 +85,14 @@ function HppCalculatorContent() {
             }));
             setIngredients(ings);
           }
-          setAddToPos(addToP);
+          setAddToPos(addToP);          }
+        } catch (err) {
+          console.error("Unexpected error fetching recipe:", err);
+          alert("Terjadi kesalahan sistem saat memuat resep.");
         }
-      }).catch(err => {
-        console.error("Error fetching recipe:", err);
-      });
+      };
+      
+      fetchRecipe();
     } else {
       setEditId(null);
       setMenuName('Menu Baru');
