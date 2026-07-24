@@ -237,12 +237,14 @@ export async function createPosProduct(
     return { success: false, error: menuError.message };
   }
 
-  const { error: priceError } = await supabase.from('menu_prices').insert({
-    menu_id: menuData.id,
-    channel: addToPos ? 'dine_in' : 'recipe_only',
-    price: price
-  });
-  if (priceError) return { success: false, error: 'Gagal menyimpan harga: ' + priceError.message };
+  if (addToPos) {
+    const { error: priceError } = await supabase.from('menu_prices').insert({
+      menu_id: menuData.id,
+      channel: 'dine_in',
+      price: price
+    });
+    if (priceError) return { success: false, error: 'Gagal menyimpan harga: ' + priceError.message };
+  }
 
   if (recipes && recipes.length > 0) {
     for (const recipe of recipes) {
@@ -273,12 +275,14 @@ export async function updatePosProduct(
   const { error: delPriceError } = await supabase.from('menu_prices').delete().eq('menu_id', menuId);
   if (delPriceError) return { success: false, error: 'Gagal menghapus harga lama: ' + delPriceError.message };
   
-  const { error: insPriceError } = await supabase.from('menu_prices').insert({
-    menu_id: menuId,
-    channel: addToPos ? 'dine_in' : 'recipe_only',
-    price: price
-  });
-  if (insPriceError) return { success: false, error: 'Gagal menyimpan harga baru: ' + insPriceError.message };
+  if (addToPos) {
+    const { error: insPriceError } = await supabase.from('menu_prices').insert({
+      menu_id: menuId,
+      channel: 'dine_in',
+      price: price
+    });
+    if (insPriceError) return { success: false, error: 'Gagal menyimpan harga baru: ' + insPriceError.message };
+  }
 
   const { error: delRecipeError } = await supabase.from('menu_recipes').delete().eq('menu_id', menuId);
   if (delRecipeError) return { success: false, error: 'Gagal menghapus resep lama: ' + delRecipeError.message };

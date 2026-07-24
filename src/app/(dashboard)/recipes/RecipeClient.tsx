@@ -53,6 +53,8 @@ export default function RecipeClient({ initialRecipes }: Readonly<{ initialRecip
             sellingPrice = Number(menu.menu_prices[0].price);
             isRecipeOnly = true;
           }
+        } else {
+          isRecipeOnly = true;
         }
 
         const margin = sellingPrice > 0 ? ((sellingPrice - totalHpp) / sellingPrice) * 100 : 0;
