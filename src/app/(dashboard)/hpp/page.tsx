@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { calculateHppSummary } from '@/lib/hpp-calculator';
 import { formatRupiah } from '@/lib/utils';
-import { createPosProduct } from '@/lib/pos-actions';
+import { createPosProduct, updatePosProduct } from '@/lib/pos-actions';
+import { getRecipeById } from '@/lib/recipe-actions';
+
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 type Ingredient = {
   id: string;
@@ -13,7 +17,9 @@ type Ingredient = {
   pricePerUnit: number;
 };
 
-export default function HppCalculatorPage() {
+function HppCalculatorContent() {
+  const searchParams = useSearchParams();
+  const editIdParam = searchParams.get('edit');
   const [menuName, setMenuName] = useState('Menu Baru');
   const [ingredients, setIngredients] = useState<Ingredient[]>([
     { id: '1', name: 'Biji Kopi Arabica', quantity: 15, unit: 'Gram', pricePerUnit: 200 },
@@ -29,40 +35,48 @@ export default function HppCalculatorPage() {
   const [calcModalFor, setCalcModalFor] = useState<string | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
 
-  import('react').then((React) => {
-    React.useEffect(() => {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('edit');
-      if (id) {
-        setEditId(id);
-        import('@/lib/recipe-actions').then(m => {
-          m.getRecipeById(id).then(data => {
-            if (data) {
-              setMenuName(data.menu_name);
-              let addToP = false;
-              if (data.menu_prices && data.menu_prices.length > 0) {
-                const validPrice = data.menu_prices.find((mp: any) => mp.channel !== 'recipe_only');
-                if (validPrice) {
-                  addToP = true;
-                }
-              }
-              if (data.menu_recipes && data.menu_recipes.length > 0) {
-                const ings = data.menu_recipes.map((r: any, i: number) => ({
-                  id: Date.now().toString() + i,
-                  name: r.inventory?.item_name || 'Bahan',
-                  quantity: Number(r.qty_needed),
-                  unit: r.inventory?.unit || 'Gram',
-                  pricePerUnit: Number(r.inventory?.unit_price || 0)
-                }));
-                setIngredients(ings);
-              }
-              setAddToPos(addToP);
+  useEffect(() => {
+    if (editIdParam) {
+      setEditId(editIdParam);
+      getRecipeById(editIdParam).then(data => {
+        if (data) {
+          setMenuName(data.menu_name);
+          let addToP = false;
+          if (data.menu_prices && data.menu_prices.length > 0) {
+            const validPrice = data.menu_prices.find((mp: any) => mp.channel !== 'recipe_only');
+            if (validPrice) {
+              addToP = true;
             }
-          });
-        });
-      }
-    }, []);
-  });
+          }
+          if (data.menu_recipes && data.menu_recipes.length > 0) {
+            const ings = data.menu_recipes.map((r: any, i: number) => ({
+              id: Date.now().toString() + i,
+              name: r.inventory?.item_name || 'Bahan',
+              quantity: Number(r.qty_needed),
+              unit: r.inventory?.unit || 'Gram',
+              pricePerUnit: Number(r.inventory?.unit_price || 0)
+            }));
+            setIngredients(ings);
+          }
+          setAddToPos(addToP);
+        }
+      }).catch(err => {
+        console.error("Error fetching recipe:", err);
+      });
+    } else {
+      setEditId(null);
+      setMenuName('Menu Baru');
+      setIngredients([
+        { id: '1', name: 'Biji Kopi Arabica', quantity: 15, unit: 'Gram', pricePerUnit: 200 },
+        { id: '2', name: 'Susu UHT', quantity: 150, unit: 'ml', pricePerUnit: 20 },
+        { id: '3', name: 'Cup Plastik 16oz', quantity: 1, unit: 'Pcs', pricePerUnit: 1500 }
+      ]);
+      setMargin(60);
+      setOverhead(10);
+      setYieldQuantity(1);
+      setAddToPos(false);
+    }
+  }, [editIdParam]);
 
   const addIngredient = () => {
     setIngredients([
@@ -89,11 +103,14 @@ export default function HppCalculatorPage() {
 
     // Always save the recipe, but mark it as recipe_only if addToPos is false
     let res;
-    if (editId) {
-      const { updatePosProduct } = await import('@/lib/pos-actions');
-      res = await updatePosProduct(editId, menuName, recommendedSellingPrice, ingredients, addToPos);
-    } else {
-      res = await createPosProduct(menuName, recommendedSellingPrice, ingredients, addToPos);
+    try {
+      if (editId) {
+        res = await updatePosProduct(editId, menuName, recommendedSellingPrice, ingredients, addToPos);
+      } else {
+        res = await createPosProduct(menuName, recommendedSellingPrice, ingredients, addToPos);
+      }
+    } catch (err: any) {
+      res = { success: false, error: err.message || "Terjadi kesalahan server" };
     }
     
     let posMsg = '';
@@ -362,5 +379,13 @@ export default function HppCalculatorPage() {
         </div>
       )}
     </>
+  );
+}
+
+export default function HppCalculatorPage() {
+  return (
+    <Suspense fallback={<div className="p-10 flex justify-center items-center h-full text-[#00875A] font-bold text-xl">Loading Kalkulator HPP...</div>}>
+      <HppCalculatorContent />
+    </Suspense>
   );
 }

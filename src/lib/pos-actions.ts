@@ -207,11 +207,16 @@ async function processRecipeItem(menuId: string, recipe: { name: string; quantit
   }
 
   if (inventoryId) {
-    await supabase.from('menu_recipes').insert({
+    const { error: insertError } = await supabase.from('menu_recipes').insert({
       menu_id: menuId,
       inventory_id: inventoryId,
       qty_needed: recipe.quantity
     });
+    
+    if (insertError) {
+      console.error("Failed to insert recipe item:", insertError);
+      return { success: false, error: `Gagal menyimpan bahan baku ${recipe.name}: ` + insertError.message };
+    }
   }
   return { success: true };
 }
@@ -232,11 +237,12 @@ export async function createPosProduct(
     return { success: false, error: menuError.message };
   }
 
-  await supabase.from('menu_prices').insert({
+  const { error: priceError } = await supabase.from('menu_prices').insert({
     menu_id: menuData.id,
     channel: addToPos ? 'dine_in' : 'recipe_only',
     price: price
   });
+  if (priceError) return { success: false, error: 'Gagal menyimpan harga: ' + priceError.message };
 
   if (recipes && recipes.length > 0) {
     for (const recipe of recipes) {
@@ -264,14 +270,19 @@ export async function updatePosProduct(
   
   if (menuError) return { success: false, error: menuError.message };
 
-  await supabase.from('menu_prices').delete().eq('menu_id', menuId);
-  await supabase.from('menu_prices').insert({
+  const { error: delPriceError } = await supabase.from('menu_prices').delete().eq('menu_id', menuId);
+  if (delPriceError) return { success: false, error: 'Gagal menghapus harga lama: ' + delPriceError.message };
+  
+  const { error: insPriceError } = await supabase.from('menu_prices').insert({
     menu_id: menuId,
     channel: addToPos ? 'dine_in' : 'recipe_only',
     price: price
   });
+  if (insPriceError) return { success: false, error: 'Gagal menyimpan harga baru: ' + insPriceError.message };
 
-  await supabase.from('menu_recipes').delete().eq('menu_id', menuId);
+  const { error: delRecipeError } = await supabase.from('menu_recipes').delete().eq('menu_id', menuId);
+  if (delRecipeError) return { success: false, error: 'Gagal menghapus resep lama: ' + delRecipeError.message };
+  
   if (recipes && recipes.length > 0) {
     for (const recipe of recipes) {
       const result = await processRecipeItem(menuId, recipe);
