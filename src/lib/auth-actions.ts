@@ -49,7 +49,7 @@ export async function loginUser(prevState: Parameters<typeof JSON.stringify>[0],
     path: '/',
   });
 
-  return { success: true, redirectTo: '/menu' };
+  return { success: true, redirectTo: '/' };
 }
 
 export async function logoutUser() {
